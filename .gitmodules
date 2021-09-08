@@ -1,0 +1,6 @@
+[submodule "test262-harness"]
+	path = test262-harness
+	url = git@github.com:bterlson/test262-harness.git
+[submodule "test262"]
+	path = test262
+	url = git@github.com:tc39/test262.git
