@@ -1,4 +1,6 @@
 runner="./test262-harness/bin/run.js"
-tests="test262/test/language/keywords/*.js"
+tests="test262/test/**/*.js"
 
-$runner $tests
+date +%"T"
+$runner "$tests" -t 8
+date +%"T"
