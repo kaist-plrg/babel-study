@@ -194,3 +194,7 @@ project/metals.sbt
 
 # temporal files
 temp.js
+
+# My Ignore
+compiled-test/
+result/
