@@ -4,5 +4,6 @@
       "@babel/env",
       {}
     ]
-  ]
+  ],
+  "sourceType": "script"
 }
