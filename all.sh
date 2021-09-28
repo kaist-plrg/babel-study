@@ -9,9 +9,9 @@ echo "running test 262.. (~20 min.)"
 ./run.sh > result/test262.txt
 
 # compile test262
-echo "compiling test 262 with babel.. (~1 min.)"
+echo "compiling test 262 with babel.. (~3 min.)"
 ./compile.sh > result/babel.txt
 
 # run compiled test262
-echo "running compield test 262.. (~?? min.)"
+echo "running compield test 262.. (~20 min.)"
 ./run-compiled.sh > result/compiled-test262.txt

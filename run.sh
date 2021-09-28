@@ -1,6 +1,6 @@
 runner="./test262-harness/bin/run.js"
-tests="test262/test/**/*.js"
+tests="script/**/*.js"
 
 date +%"T"
-$runner "$tests" -t 8
+$runner "$tests" --test262Dir test262 -t 8
 date +%"T"

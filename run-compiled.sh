@@ -9,4 +9,4 @@ function run_compiled () {
 }
 
 run_compiled "compiled-script/**/*.js"
-run_compiled "compiled-module/**/*.js"
+#run_compiled "compiled-module/**/*.js"
