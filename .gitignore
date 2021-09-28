@@ -197,3 +197,5 @@ temp.js
 
 # My Ignore
 compiled-test/
+script
+module
