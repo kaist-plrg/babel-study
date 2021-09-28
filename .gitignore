@@ -197,5 +197,7 @@ temp.js
 
 # My Ignore
 compiled-test/
-script
-module
+script/
+module/
+compiled-script/
+compiled-module/
