@@ -24,10 +24,18 @@
 % basic
 \newcommand{\inred}[1]{{\color{red}{#1}}}
 \newcommand{\todo}{\inred{TODO}}
+
+% tool name
 \newcommand{\name}[1]{\textsf{#1}}
 \newcommand{\sname}[1]{\name{\small #1}}
 \newcommand{\stextbf}[1]{\textbf{\small #1}}
-\definecolor{dkgreen}{rgb}{0,0.5,0}
+\newcommand{\jiset}{\sname{JISET}}
+\newcommand{\lambdajs}{\lambda_\text{JS}}
+\newcommand{\jscert}{\text{JSCert}}
+\newcommand{\jsref}{\text{JSRef}}
+\newcommand{\kjs}{\text{KJS}}
+\newcommand{\javert}{\text{JaVerT}}
+\newcommand{\jsil}{\text{JSIL}}
 
 % JavaScript code style
 \lstdefinelanguage{JavaScript}{
@@ -53,7 +61,7 @@
 \lstdefinestyle{JS}{
   language=JavaScript,
   extendedchars=true,
-  basicstyle=\footnotesize\ttfamily,
+  basicstyle=\small\ttfamily,
   showstringspaces=false,
   showspaces=false,
   tabsize=2,
