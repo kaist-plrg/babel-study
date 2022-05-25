@@ -5,7 +5,7 @@
   - AST, but some nodes are abstract node with type annotation
   - Definition may be modified / extended
 
-*  "Desugarer"란?
+* "Desugarer"란?
   - finite pairs of (syntactic view, syntactic view)
 
 * Verification이란?
