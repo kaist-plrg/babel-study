@@ -1,0 +1,111 @@
+\section{Formalization}
+
+\subsection{Syntax}
+Syntax
+\[
+  \begin{array}{lr@{~}c@{~}c@{~}c@{~}l}
+    \text{Programs} & \progset &\ni& \prog &=& \func^*\\
+
+    \text{Functions} & \funcset &\ni& \func &::=&
+    \kwdef \; \kwrl \varx^* \kwrr \; \kwcl \kwsl \lab : \inst \kwsr^* \kwcr \\
+
+    \text{Variables} & \varset &\ni& \varx\\
+
+    \text{Instructions} & \instset &\ni& \inst &::=&
+    \refer \kweq \expr \mid
+    \varx \kweq \kwcl \kwcr \mid
+    \varx \kweq \expr \kwrl \expr^* \kwrr \mid
+    \kwif \; \expr \; \lab \; \lab \mid
+    \kwret \; \expr\\
+
+    \text{Labels} & \labset &\ni& \lab\\
+
+    \text{Expressions} & \exprset &\ni& \expr &::=&
+    \pval \mid
+    \op \kwrl \expr^* \kwrr \mid
+    \refer\\
+
+    \text{References} & \referset &\ni& \refer &::=&
+    \varx \mid \expr \kwsl \expr \kwsr\\
+  \end{array}
+\]
+
+Helper Functions
+\[
+  \begin{array}{l}
+    \getinst{\prog}: \labset \rightarrow \instset\\
+    \getfunc{\prog}: \labset \rightarrow \funcset\\
+    \getnext{\prog}: \labset \rightarrow \labset\\
+  \end{array}
+\]
+
+\subsection{States}
+\[
+  \begin{array}{lr@{~}c@{~}l@{~}c@{~}l}
+    \text{States} & \st &\in& \stset &=&
+    \labset \times \ctxtset^* \times \heapset \times \envset\\
+
+    \text{Calling Contexts} & \ctxt &\in& \ctxtset &=&
+    \labset \times \envset \times \varset\\
+
+    \text{Heaps} & \heap &\in& \heapset &=&
+    \addrset \finmap \objset\\
+    
+    \text{Addresses} & \addr &\in& \addrset\\
+
+    \text{Objects} & \obj &\in& \objset &=&
+    \strset \finmap \valset\\
+
+    \text{Environments} & \env &\in& \envset &=&
+    \varset \finmap \valset\\
+
+    \text{Values} & \val &\in& \valset &=&
+    \pvalset \uplus \addrset \uplus \treeset \uplus \funcset\\
+
+    \text{Primitive Values} & \pval &\in& \pvalset &=&
+    \boolset \uplus \intset \uplus \strset \uplus \cdots\\
+
+    \text{JavaScript ASTs} & \tree &\in& \treeset\\
+  \end{array}
+\]
+
+\subsection{Concrete Semantics}
+We first define the denotational semantics of expressions
+$\sem{\expr}: \stset \rightarrow \valset$
+and instructions
+$\sem{\inst}: \stset \rightarrow \stset$.
+For brevity, we omit them \inred{(or omit some and express only necessary ones)}
+in this paper and refer the interested readers to a
+companion report~\cite{report}.
+
+Now, we can define the state transistion relation
+of a program $\prog$, $\trans{\prog} \subseteq \stset \times \stset$:
+\[
+  \st \trans{\prog} \st' \iff
+  \st = (\lab, \_, \_, \_) \wedge
+  \sem{\getinst{\prog}(\lab)}(\st) = \st'
+\]
+and the transfer function $\transfer{\prog}: \powerset{\stset} \rightarrow \powerset{\stset}$:
+\[
+  \transfer{\prog}(S) = \{ \st' \in \stset \mid \exists \st \in S. \; \st \trans{\prog} \st' \}
+\]
+
+Using the transfer function, we can define the collecting semantics of the given program $\prog$,
+$\sem{\prog}: \stset \rightarrow \powerset{\stset}$:
+\[
+  \sem{\prog}(\initst) = \lim_{n \rightarrow \infty}\transfer{\prog}^n( \{ \initst \} ) \\
+\]
+This means that, we can view the program $\prog$ as, the function from a initial state
+$\initst$ to the set of all reachable states.
+
+\subsection{$\ires$ program as a JavaScript interpreter}
+Although we can write an arbitrary program using $\ires$, we are specifically interested in
+JavaScript interpreter written in $\ires$. The input of such JavaScript interpreter is a JavaScript AST,
+and this input is reflected in the initial state $\initst$.
+Therefore, we define the restricted semantics,
+$\rsem{\prog}: \treeset \rightarrow \powerset{\stset}$:
+\[
+  \rsem{\prog}(\tree) = \sem{\prog}( \getinitst(\prog, \tree) ) \\
+\]
+so that we can view the program $\prog$ as, the function from a JavaScript AST
+$\tree$ to the set of all reachable states.
