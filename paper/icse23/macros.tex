@@ -220,6 +220,7 @@
 
 % abstract semantics
 \newcommand{\asem}[1]{\abs{\sem{#1}}}
+\newcommand{\rasem}[1]{\asem{#1}_\textbf{R}}
 
 % transformations
 \newcommand{\transform}[1]{\textbf{T}[#1]}
@@ -229,12 +230,17 @@
 
 % transfer function
 \newcommand{\transfer}[1]{F_{#1}}
-\newcommand{\atransfer}{\abs{\transfer}}
+\newcommand{\atransfer}[1]{\abs{\transfer{#1}}}
 
-% abstract states
+% abstract elems
 \newcommand{\aelemset}{\abs{\mathbb{D}}}
 \newcommand{\aelem}{\abs{d}}
 \newcommand{\entryaelem}{\aelem^\name{entry}}
+
+% abstract states
+\newcommand{\astset}{\abs{\stset}}
+\newcommand{\astate}{\abs{\st}}
+\newcommand{\initastate}{\astate^\name{init}}
 
 % abstract calling contexts
 \newcommand{\actxtset}{\abs{\ctxtset}}
@@ -245,6 +251,18 @@
 \newcommand{\adcall}{\abs{\ctxt}_\name{d}}
 \newcommand{\funcbot}{\bot_\funcset}
 \newcommand{\functop}{\top_\funcset}
+
+% abstract heaps
+\newcommand{\aheapset}{\abs{\heapset}}
+\newcommand{\aheap}{\abs{\heap}}
+
+% abstract addresses
+\newcommand{\aaddrset}{\abs{\addrset}}
+\newcommand{\aaddr}{\abs{\addr}}
+
+% abstract objects
+\newcommand{\aobjset}{\abs{\objset}}
+\newcommand{\aobj}{\abs{\obj}}
 
 % function summaries
 \newcommand{\funcsumset}{\abs{\funcset}}
@@ -261,6 +279,10 @@
 \newcommand{\aval}{\abs{\val}}
 \newcommand{\valbot}{\bot_\valset}
 \newcommand{\valtop}{\top_\valset}
+\newcommand{\sdotop}{\top_\text{sdo}}
+
+% abstract functions
+\newcommand{\afuncset}{\abs{\funcset}}
 
 % syntactic views
 \newcommand{\atreeset}{\abs{\treeset}}
