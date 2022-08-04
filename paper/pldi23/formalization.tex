@@ -1,0 +1,562 @@
+\section{Formalization}
+
+\subsection{Syntax}
+Syntax
+\[
+  \begin{array}{lr@{~}c@{~}c@{~}c@{~}l}
+    \text{Programs} & \progset &\ni& \prog &=& \func^*\\
+
+    \text{Functions} & \funcset &\ni& \func &::=&
+    \kwdef \; \kwrl \varx^* \kwrr \; \kwcl \kwsl \lab : \inst \kwsr^* \kwcr \\
+
+    \text{Variables} & \varset &\ni& \varx\\
+
+    \text{Instructions} & \instset &\ni& \inst &::=&
+    \refer \kweq \expr \mid
+    \varx \kweq \kwcl \kwcr \mid
+    \varx \kweq \expr \kwrl \expr^* \kwrr \mid
+    \kwif \; \expr \; \lab \; \lab \mid
+    \kwret \; \expr\\
+
+    \text{Labels} & \labset &\ni& \lab\\
+
+    \text{Expressions} & \exprset &\ni& \expr &::=&
+    \pval \mid
+    \op \kwrl \expr^* \kwrr \mid
+    \refer\\
+
+    \text{References} & \referset &\ni& \refer &::=&
+    \varx \mid \expr \kwsl \expr \kwsr\\
+  \end{array}
+\]
+
+Helper Functions
+\[
+  \begin{array}{l}
+    \getinst{\prog}: \labset \rightarrow \instset\\
+    \getfunc{\prog}: \labset \rightarrow \funcset\\
+    \getnext{\prog}: \labset \rightarrow \labset\\
+  \end{array}
+\]
+
+\subsection{States}
+\[
+  \begin{array}{lr@{~}c@{~}l@{~}c@{~}l}
+    \text{States} & \st &\in& \stset &=&
+    \labset \times \ctxtset^* \times \heapset \times \envset\\
+
+    \text{Calling Contexts} & \ctxt &\in& \ctxtset &=&
+    \labset \times \envset \times \varset\\
+
+    \text{Heaps} & \heap &\in& \heapset &=&
+    \addrset \finmap \objset\\
+
+    \text{Addresses} & \addr &\in& \addrset\\
+
+    \text{Objects} & \obj &\in& \objset &=&
+    \strset \finmap \valset\\
+
+    \text{Environments} & \env &\in& \envset &=&
+    \varset \finmap \valset\\
+
+    \text{Values} & \val &\in& \valset &=&
+    \pvalset \uplus \addrset \uplus \treeset \uplus \funcset\\
+
+    \text{Primitive Values} & \pval &\in& \pvalset &=&
+    \boolset \uplus \intset \uplus \strset \uplus \cdots\\
+
+    \text{JavaScript ASTs} & \tree &\in& \treeset\\
+  \end{array}
+\]
+
+Javascpt ASTs
+\[
+  \treeset \ni \tree ::= \nt_k \langle \treeset^* \rangle \mid \str
+\]
+
+
+\subsection{Concrete Semantics}
+We first define the denotational semantics of expressions
+$\sem{\expr}: \stset \rightarrow \valset$
+and instructions
+$\sem{\inst}: \stset \rightarrow \stset$.
+
+\paragraph{Expressions} We define the denotational semantics of expressions with
+the following form:
+\[
+  \framebox{$\sem{\expr}: \stset \rightarrow \valset$}
+\]
+For each expression $\expr \in \exprset$, its semantics $\sem{\expr}$ takes a
+state and returns a value as the result of expression. We define four different
+cases in the semantics of expressions as
+follows:
+\begin{itemize}
+  \item \underline{Primitive Values}:
+    \[
+      \sem{\pval}(\st) = \pval
+    \]
+
+  \item \underline{Operations}:
+    \[
+      \sem{\op \kwrl \expr_1, \cdots, \expr_n \kwrr}(\st) =
+      \op(\sem{\expr_1}(\st), \cdots, \sem{\expr_n}(\st))
+    \]
+
+  \item \underline{Variable Lookups}:
+    \[
+      \sem{\varx}(\st) = \env(\varx)
+    \]
+    where $\st = (\_, \_, \_, \env)$
+
+  \item \underline{Field Lookups}:
+    \[
+      \sem{\expr_0 \kwsl \expr_1 \kwsr}(\st) = \val
+    \]
+    where
+    \[
+      \begin{array}{l@{~}c@{~}l}
+        \val_0 &=& \sem{\expr_0}(\st)\\
+        \val_1 &=& \sem{\expr_1}(\st)\\
+        \st &=& (\_, \_, \heap, \_)\\
+        \val &=& \left\{
+          \begin{array}{ll}
+            \heap(\addr)(\str)
+            & \text{if} \; \val_0 = \addr \wedge \val_1 = \str\\
+
+            \tree_j
+            & \text{if} \; \val_0 = \nt_k \langle \tree_1, \cdots, \tree_n
+            \rangle \wedge \val_1 = j\\
+
+            \inred{\text{sdo}}(\nt_k, \str)
+            & \text{if} \; \val_0 = \nt_k \langle \tree_1, \cdots, \tree_n
+            \rangle \wedge \val_1 = \str\\
+          \end{array}
+        \right.\\
+      \end{array}
+    \]
+\end{itemize}
+
+\paragraph{Instructions} We define the denotational semantics of instructions
+with the following form:
+\[
+  \framebox{$\sem{\inst}: \stset \rightarrow \stset$}
+\]
+For each instruction $\inst \in \instset$, its semantics $\sem{\inst}$ takes a
+state and returns an updated state. We define six different cases in the
+semantics of instructions as follows:
+
+\begin{itemize}
+  \item \underline{Variable Assignments}:
+    \[
+      \sem{\varx \kweq \expr}(\st) =
+      (\getnext{\prog}(\lab), \ctxts, \heap, \env[\varx \mapsto \val])
+    \]
+    where
+    \[
+      \begin{array}{l@{~}c@{~}l}
+        \sem{\expr}(\st) &=& \val\\
+        \st &=& (\lab, \ctxts, \heap, \env)\\
+      \end{array}
+    \]
+
+  \item \underline{Field Assignments}:
+    \[
+      \sem{\expr_0 \kwsl \expr_1 \kwsr \kweq \expr_2}(\st) =
+      (\getnext{\prog}(\lab), \ctxts, \heap[\addr \mapsto \obj'], \env)
+    \]
+    where
+    \[
+      \begin{array}{l@{~}c@{~}l}
+        \sem{\expr_0}(\st) &=& \addr\\
+        \sem{\expr_1}(\st) &=& \str\\
+        \sem{\expr_2}(\st) &=& \val\\
+        \st &=& (\lab, \ctxts, \heap, \env)\\
+        \obj &=& \heap(\addr)\\
+        \obj' &=& \obj[\str \mapsto \val]\\
+      \end{array}
+    \]
+
+  \item \underline{Object Allocations}:
+    \[
+      \sem{\varx \kweq \kwcl \kwcr}(\st) =
+      (\getnext{\prog}(\lab), \ctxts, \heap[\addr \mapsto \epsilon], \env[\varx \mapsto
+      \addr])
+    \]
+    where $\st = (\lab, \ctxts, \heap, \env) \wedge \addr =
+    \text{Alloc}(\lab, \heap)$
+
+  \item \underline{Function Calls}:
+    \[
+      \sem{\varx \kweq \expr \kwrl \expr_1 \cdots \expr_n \kwrr}(\st) =
+      (\lab_\varf, \ctxt :: \ctxts, \heap, \env')
+    \]
+    where
+    \[
+      \begin{array}{l@{~}c@{~}l}
+        \sem{\expr}(\st) &=& \func\\
+        \func &=& \kwdef \; \kwrl \varx_1, \cdots, \varx_n
+        \kwrr \; \kwcl \lab_\varf: \cdots \kwcr\\
+        \sem{\expr_j}(\st) &=& \val_j \;
+        [\forall 1 \leq j \leq n]\\
+        \st &=& (\lab, \ctxts, \heap, \env)\\
+        \env' &=& [\varx_1 \mapsto \val_1, \cdots, \varx_n \mapsto \val_n]\\
+        \ctxt &=& (\getnext{\prog}(\lab), \env, \varx)\\
+      \end{array}
+    \]
+
+  \item \underline{Branches}:
+    \[
+      \sem{\kwif \; \expr \; \lab_\vart \; \lab_\varf}(\st) =
+      \left\{
+        \begin{array}{ll}
+          (\lab_\vart, \ctxts, \heap, \env) & \text{if} \; \val = \true\\
+          (\lab_\varf, \ctxts, \heap, \env) & \text{if} \; \val = \false\\
+        \end{array}
+      \right.
+    \]
+    where
+    \[
+      \begin{array}{l@{~}c@{~}l}
+      \sem{\expr}(\st) &=& \val\\
+      \st &=& (\lab, \ctxts, \heap, \env)\\
+      \end{array}
+    \]
+
+  \item \underline{Returns}:
+    \[
+      \sem{\kwret \; \expr}(\st) = (\lab, \ctxts, \heap, \env[\varx \mapsto
+      \val])
+    \]
+    where
+    \[
+      \begin{array}{l@{~}c@{~}l}
+      \sem{\expr}(\st) &=& \val\\
+      \st &=& (\_, (\lab, \env, \varx) :: \ctxts, \heap, \_)\\
+      \end{array}
+    \]
+\end{itemize}
+
+Now, we can define the state transistion relation
+of a program $\prog$, $\trans{\prog} \subseteq \stset \times \stset$:
+\[
+  \st \trans{\prog} \st' \iff
+  \st = (\lab, \_, \_, \_) \wedge
+  \sem{\getinst{\prog}(\lab)}(\st) = \st'
+\]
+and the transfer function $\transfer{\prog}: \powerset{\stset} \rightarrow \powerset{\stset}$:
+\[
+  \transfer{\prog}(S) = S \cup \{ \st' \in \stset \mid \exists \st \in S. \; \st \trans{\prog} \st' \}
+\]
+
+Using the transfer function, we can define the collecting semantics of the given program $\prog$,
+$\sem{\prog}: \stset \rightarrow \powerset{\stset}$:
+\[
+  \sem{\prog}(\initst) = \lim_{n \rightarrow \infty}\transfer{\prog}^n( \{ \initst \} ) \\
+\]
+This means that, we can view the program $\prog$ as, the function from a initial state
+$\initst$ to the set of all reachable states.
+
+\subsection{$\ires$ program as a JavaScript interpreter}
+Although we can write an arbitrary program using $\ires$, we are specifically interested in
+JavaScript interpreter written in $\ires$. The input of such JavaScript interpreter is a JavaScript AST,
+and this input is reflected in the initial state $\initst$.
+Therefore, we define the restricted semantics,
+$\rsem{\prog}: \treeset \rightarrow \powerset{\stset}$:
+\[
+  \rsem{\prog}(\tree) = \sem{\prog}( \getinitst(\prog, \tree) ) \\
+\]
+so that we can view the program $\prog$ as, the function from a JavaScript AST
+$\tree$ to the set of all reachable states. The \getinitst function is a function
+that initializes the initial state for the given program with the given JavaScript AST.
+
+\subsection{Abstract States}
+\[
+  \begin{array}{lr@{~}c@{~}l@{~}c@{~}l}
+    \text{Abstract States} & \astate &\in& \astset &=&
+    \labset \rightarrow \actxtset \times \aheapset \times \aenvset\\
+
+    \text{Abstract Calling Contexts} & \actxt &\in& \actxtset &=&
+    \labset \times \aenvset \times \varset\\
+
+    \text{Abstract Heaps} & \aheap &\in& \aheapset &=&
+    \aaddrset \finmap \aobjset\\
+
+    \text{Abstract Addresses} & \aaddr &\in& \aaddrset &=&
+    \labset\\
+
+    \text{Abstract Objects} & \aobj &\in& \aobjset &=&
+    \strset \uplus \{ \top \} \finmap \avalset\\
+
+    \text{Abstract Environments} & \aenv &\in& \aenvset &=&
+    \varset \finmap \avalset\\
+
+    \text{Abstract Values} & \aval &\in& \avalset &=&
+    (\powerset{\pvalset} \times \aaddrset \times \atreeset \times \afuncset)\\
+    &&&&&\uplus \{ \top, \sdotop, \bot \}\\
+
+    \text{Syntactic Views} & \atree &\in& \atreeset\\
+  \end{array}
+\]
+
+Syntactic Views
+\[
+  \atreeset \ni \atree ::= \nt_k \langle \atreeset^* \rangle \mid \abs{\nt} \mid \str
+\]
+
+\inred{TODO: Design and verify concretization functions}
+
+\subsection{Abstract Semantics}
+We first define the denotational abstract semantics of expressions
+$\asem{\expr}: \aheapset \times \aenvset \ \rightarrow \avalset$
+and instructions
+$\asem{\inst}: \labset \times \astset \rightarrow \astset$.
+
+\[
+  \framebox{$\asem{\expr}: \aheapset \times \aenvset \rightarrow \avalset$}
+\]
+\begin{itemize}
+  \item \underline{Primitive Values}:
+    \[
+      \asem{\pval}(\aheap, \aenv) = (\{\pval\}, \bot, \bot, \bot)
+    \]
+  \item \underline{Operations}:
+    \[
+      \asem{\op ( \expr_1, \cdots, \expr_n )}(\aheap, \aenv) =
+        \inred{\abs{\op}} ( \asem{\expr_1}(\aheap, \aenv), \cdots, \asem{\expr_n}(\aheap, \aenv) )
+    \]
+  \item \underline{Variable Lookups}:
+    \[
+      \asem{\varx}(\aheap, \aenv) = \aenv(\varx)
+    \]
+  \item \underline{Field Lookups}:
+    \[
+      \asem{\expr_0 \kwsl \expr_1 \kwsr}(\aheap, \aenv) = \aval
+    \]
+    where
+    \[
+      \begin{array}{lcl}
+        \asem{\expr_0}(\aheap, \aenv) &=& \aval_0\\
+        \asem{\expr_1}(\aheap, \aenv) &=& \aval_1\\
+        \aval &=& \left\{
+          \inred{
+          \begin{array}{ll}
+%            \atree_j & \text{if} \;
+%            \aval_0 = \nt_k \langle \atree_1, \cdots, \atree_n \rangle \wedge
+%            \aval_1 = j\\
+%
+%            \nt_k.\eval & \text{if} \;
+%            \aval_0 = \nt_k \langle \cdots \rangle \wedge
+%            \aval_1 = \code{"eval"}\\
+%
+%            \top & \text{otherwise}\\
+            \cdots\\
+            \sdotop & \text{if} \;
+            \aval_0 = \abs{\nt} \\
+            \cdots\\
+          \end{array}
+          }
+        \right.\\
+      \end{array}
+    \]
+\end{itemize}
+
+\begin{itemize}
+  \item \underline{Variable Assignments}:
+    \[
+      \asem{\varx \kweq \expr}(\lab, \astate) =
+      \bot[\getnext{\prog}(\lab) \mapsto (\actxt, \aheap, \aenv[\varx \mapsto \aval])]
+    \]
+    where
+    \[
+      \begin{array}{lcl}
+        \astate(\lab) &=& (\actxt, \aheap, \aenv)\\
+        \aval &=& \asem{\expr}(\aheap, \aenv)\\
+      \end{array}
+    \]
+
+  \item \underline{Field Assignments}:
+    \[
+      \asem{\expr_0 \kwsl \expr_1 \kwsr \kweq \expr_2}
+      (\lab, \astate) =
+      \bot[\getnext{\prog}(\lab) \mapsto (\actxt, \aheap[\aaddr \mapsto \aobj'], \aenv)]
+    \]
+    where
+    \[
+      \begin{array}{lcl}
+        \astate(\lab) &=& (\actxt, \aheap, \aenv)\\
+        \aval_0 &=& \asem{\expr_0}(\aheap, \aenv)\\
+        \aval_1 &=& \asem{\expr_1}(\aheap, \aenv)\\
+        \aval_2 &=& \asem{\expr_2}(\aheap, \aenv)\\
+        \aval_0 &=& (\_, \_, \aaddr, \_)\\
+        \aobj &=& \aheap(\aaddr)\\
+        \aobj' &=& \inred{\text{update}}(\aobj, \gamma(\aval_1) \cap \strset, \aval_2)\\
+
+      \end{array}
+    \]
+
+  \item \underline{Object Allocations}:
+    \[
+      \asem{\varx \kweq \kwcl \kwcr}(\lab, \astate) =
+      \bot[\getnext{\prog}(\lab) \mapsto (
+        \actxt, \aheap[\lab \mapsto \bot], \aenv[\varx \mapsto \lab]
+      )]]
+    \]
+    where
+    \[
+      \begin{array}{lcl}
+        \astate(\lab) &=& (\actxt, \aheap, \aenv)\\
+        \
+      \end{array}
+    \]
+
+  \item \underline{Function Calls}:
+    \[
+      \asem{\varx \kweq \expr \kwrl \expr_1 \cdots \expr_n \kwrr}(\lab, \astate) = \astate_{in} \join \astate_{out}
+    \]
+    where
+    \newcommand{\lhs}{\bot[\lab_\func \mapsto (\actxt_\func, \aheap, \aenv_\func) \mid}
+    \[
+      \begin{array}{l@{~}c@{~}l}
+        \astate(\lab) &=& (\actxt, \aheap, \aenv)\\
+        \aval &=& \asem{\expr}(\aheap, \aenv)\\
+        \aval_i &=& \asem{\expr_i}(\aenv) \; [\forall 1 \leq i \leq n]\\
+
+        \astate_{in} &=& \lhs
+        \aval = (\_, \_, \afuncset, \_) \wedge\\
+
+        &&\phantom{\lhs \;}
+        \func \in \gamma(\afuncset) \cap \funcset \wedge\\
+
+        &&\phantom{\lhs \;}
+        \func = \kwdef \; \kwrl \varx_1, \cdots, \varx_n \kwrr
+        \; \kwcl \lab_\func : \cdots \kwcr \wedge\\
+
+        &&\phantom{\lhs \;}
+        \actxt_\func = (\lab, \aenv, \varx) \wedge\\
+
+        &&\phantom{\lhs \;}
+        \aenv_\func = [\varx_1 \mapsto \aval_1, \cdots,
+        \varx_n \mapsto \aval_n] ]\\
+
+        \aenv_{out} &=&
+        \left\{
+          \begin{array}{ll}
+            \aenv[\varx \mapsto \sdotop] & \text{if} \; \aval = \sdotop\\
+            \aenv[\varx \mapsto \top] & \text{if} \; \aval = \top\\
+            \aenv & \text{otherwise}\\
+          \end{array}
+        \right.\\
+
+        \astate_{out} &=&
+        \bot[\getnext{\prog}(\lab) \mapsto (\actxt, \bot, \aenv_{out}))]
+
+      \end{array}
+    \]
+
+  \item \underline{Branches}:
+    \[
+      \asem{\kwif \; \expr \; \lab_\vart \; \lab_\varf}(\lab, \astate) = \astate_t \join \astate_f
+    \]
+    where
+    \[
+      \begin{array}{lcl}
+        \astate(\lab) &=& (\actxt, \aheap, \aenv)\\
+        \aval &=& \asem{\expr}(\aheap, \aenv)\\
+
+        \astate_t &=& \left\{
+          \begin{array}{ll}
+            \bot [\lab_\vart \mapsto \astate(\lab)] & \text{if} \; \true \in
+            \avalgamma(\aval)\\
+            \bot & \text{otherwise}\\
+          \end{array}
+        \right.\\
+
+        \astate_f &=& \left\{
+          \begin{array}{ll}
+            \bot[\lab_\varf \mapsto \astate(\lab)] & \text{if} \; \false \in
+            \avalgamma(\aval)\\
+            \bot & \text{otherwise}\\
+          \end{array}
+        \right.\\
+      \end{array}
+    \]
+
+  \item \underline{Returns}:
+    \[
+      \asem{\kwret \; \expr}(\lab, \astate) =
+      \bot[\lab' \mapsto (\bot, \aheap, \aenv'[\varx \mapsto \aval])]
+    \]
+    where
+    \[
+      \begin{array}{lcl}
+        \astate(\lab) &=& ((\lab', \aenv', \varx), \aheap, \aenv)\\
+        \aval &=& \asem{\expr}(\aheap, \aenv)\\
+      \end{array}
+    \]
+\end{itemize}
+
+Now, we can define the abstract transfer function
+$\atransfer{\prog}: \astset \rightarrow \astset $:
+\[
+  \atransfer{\prog}(\astate) =
+    \astate \join
+    \bigjoin_{\lab \in \labset}{\asem{\getinst{\prog}(\lab)}(\lab, \aelem)}
+\]
+
+Using the abstract transfer function, we can define the
+abstract collecting semantics of the given program $\prog$,
+$\asem{\prog}: \astset \rightarrow \astset$:
+\[
+  \asem{\prog}(\initastate) = \lim_{n \rightarrow \infty}\transfer{\prog}^n( \initst ) \\
+\]
+
+and the abstract restricted semantics
+$\rasem{\prog}: \atreeset \rightarrow \astset$:
+\[
+  \rasem{\prog}(\atree) = \asem{\prog}( \abs{\getinitst}(\prog, \atree) ) \\
+\]
+
+Conjecture 1:
+The only source of unsoundness (:= the abstract collecting semantics is not super set of
+the concrete collecting semantics) is when calling SDO (syntax directed operation) of the abstract node.
+
+Conjecture 2:
+Under \inred{certain condition},
+\[
+  \tree \in \gamma(\atree) \rightarrow \sem{\prog}(\tree) \subseteq \gamma \circ \asem{\prog}(\atree)
+\]
+
+\subsection{Sumamry}
+The abstract restricted semantics of $\prog$, $\rasem{\prog}$, collects every possible state
+that can happen at every label, when a $\atree$ is given as an input.
+However, this information is too large, and we want to
+filter it down and selectively choose only meaningful information, which we will call $\it{summary}$ of
+the $\atree$.
+
+Given an abstract state, the $\code{reduce}$ function
+collects only the label and the abstract environment at that label,
+where the label is mappd to a call instruction where at least one of the argument is $\sdotop$.
+
+$\code{reduce} : \astset \rightarrow \powerset{\labset \times \aenvset} $
+\[
+  \code{reduce}(\astate) = \left\{
+    % elem | f /\
+    \begin{array}{cclc}
+    &&\astate(\lab) = (\_, \aheap, \aenv) &\wedge\\
+    (\lab, \aenv) \in \labset \times \aenvset \ &\mid& \getinst{\prog}(\lab) = \varx \kweq \expr \kwrl \expr_1 \cdots \expr_n \kwrr &\wedge\\
+    && \exists i.\sem{\expr_i}(\aheap, \aenv) = \sdotop\\
+    \end{array}
+    \right\}
+\]
+
+The $\code{summary}_\prog$ function is simply a composition of $\rasem{\prog}$ and $\code{reduce}$.
+Given a syntactic view, it collects every call instruction that has at least
+one abstract node-originated argument.
+
+$\code{summary}_\prog : \atreeset \rightarrow \powerset{\labset \times \aenvset}$
+\[
+  \code{summary}_\prog(\atree) = \code{reduce} \circ \rasem{\prog} (\atree)
+\]
+
+Conjecture 3: If $\atree_1$ and $\atree_2$ have \inred{same} semantics,
+$\code{summary}_\prog(\atree_1)$ and $\code{summary}_\prog(\atree_2)$ will be \inred{similar}.

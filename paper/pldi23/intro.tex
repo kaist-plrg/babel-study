@@ -1,0 +1,90 @@
+\section{Introduction}
+%- Javascript is evolving. There was the big change of ES5 to ES6, and new features are coming every year.
+%
+%- Unfortunately, there are different browsers and environments for JS, and not all of them supoort the newest features.
+%
+%- Therefore, the code is desugared. The recent features of javascript is expressed in terms of older features.
+%  ex = babel
+%
+
+% 
+
+%- (Problem Statement)
+%  + It is important to understand HOW the input and the output of the desugarer are different.
+%    - make sure that the difference between the input code and the ouptut code of the desugarer is minimized, and there aren't any non-trivial semantic difference.
+%    - clarify the conditions that the semantics may vary, and use carefully.
+%- (Challanges: why is it hard?) 
+%  + (No definition of "differnce"?)
+%  + Complex semantics
+%  + Test can not cover every cases
+%
+%- (How did we solve it?)
+%  + In this paper, we suggest the method to automatically extract the semantic difference between input and output of desugarer.
+%  First, we express the desugarer in terms of finite pairs of "syntactic view (AAST?)".
+%  Second, each syntactic view is evaluated with ES-Meta, and the summary is generated
+%  Finally, the summaries are compared to see if there are any differneces, and if there is, the condition for realizing the difference is identified.
+%
+%- We tested wth babel. We introduce some known bugs of babel where the input and output show differecnt semantics, and showcase that our system can
+%  detect the bugs. (In addition, we newly figured out unidentified bugs from babel and reported them)
+%
+%- Contibution
+%  + Suggest method for quantifying the difference between a program and desugared program.
+%  + Implement the system that can automatically compare the trace in given
+%  + Find bug from babel by finding nontrivial difference
+
+
+
+Javascript is evolving, and new features are added to it every year.
+The official specification of javascript is defined by ECMA-262, the ECMAScript language speicification,
+and the new feaatures are added in the specification with each update.
+After the release of the 6th edition of ECMAScript specification (ES6) in 2015,
+the specification has been updated every year, introducing new featues with each update.
+
+Unfortunately, not every browsers and environments for Javascript supoort the newest features.
+(Insert some statistical data of feature support here)
+This is problematic for Javascript devleopers that want to use the newest features,
+and still want their code to run on every possible environment.
+
+Therefore, the Javascript developers desugar their Javascript code.
+Desugaring is the process of rewriting the recent features of javascript in terms of older features.
+The defacto standard for desugaring the code is using Babel.
+(Statistic about use of Babel in real world)
+
+In perspective of implementing the desugarer, it is important to understand how the input and the output of the desugarer behave differently.
+First, the primary goal of desugarer is to generate the ouptut code that behaves equivalently with the input code.
+Therefore, the developers would look at the difference between two codes, and try to minimize the difference.
+Second, there are some cases where the similar behavior is sacrificed as a trade-off between the performance or the size of the output code.
+In that case, the developer would want to clarify the conditions of the input program that will make the output program behaves differently
+and what are the specific behaviour difference that the output code has,
+so that the user of the desugar can be aware of it.
+
+However, figuring out the difference of two codes is not an easy task.
+One reason for the difficulty comes from the complex semantics of Javascript.
+One nortrious example of "wrong" desugar happens when the logical assignment operator, $\&\&=$ or $\vert\vert=$, is used.
+$x \&\&= y$ is an expression that assigns that value of y to x, only if x is truthy.
+One might be tempted to desugar the expression into $x = x \&\& y$, but it is wrong since the assigmnet always happen in this desugared code.
+The correct desugaring is to use $x \&\& x = y$. As illustrated, In order to detect such difference for desugarer of certain feature,
+the developer would have to fully understand the semantics of the target feature. Another challenge is that it is difficult to fully
+think of every possible inputs for desugarer, and it is easy to miss the edge cases.
+For example, there was an actual bug in babel for desugaring array destructuring. The bug happend when the input code was
+destructuring the empty string, like in $let [a] = ""$. In the desugared code, the value "" was assigned to an unintended
+variable due to the short-circuit behavior, which caused a runtime error. 
+
+In this paper, we suggest the method to automatically extract the semantic difference between input and output of desugarer.
+First, we express the desugarer in terms of finite pairs of \textit{syntactic view}. Syntactic view is an AST where some nodes are
+substituted with "abstract node".
+Second, each syntactic view, the \textit{summary} is generated. The summary is defined as the list of
+operations that are performed to the abstract node in the given syntactic view during evaluation of syntactic view.
+The evaluation of syntactic view is implemented with ESMeta[..], a tool for extracting mechanized specification from ECMAScript specification.
+Finally, we compare the two summaries to see if there are any differneces,
+and if there are, we identify the condition that input program should satisfy in order for the different behavior to occur.
+
+In order to test the practicallity of our approach, we performed a case study with Babel.
+We introduce some known bugs of babel where the input and output show differecnt semantics,
+and showcase that our system can detect these bugs by detecting the non-trivial difference between summaries of input and output.
+(In addition, we newly found new bugs from babel and reported them)
+
+The contibutions of the paper are as followed.
+  + We suggest method for formally expressing the semantic difference between a program and desugared program.
+  + We implement the system that can automatically extract the 
+  (+ We Find bug grom babel by finding nontrivial difference)
