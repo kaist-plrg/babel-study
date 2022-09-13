@@ -1,5 +1,5 @@
 0: def inlinedEvaluation(): Any {
-  10007: {
+  10006: {
     let expr0 = (parse |CoverCallExpressionAndAsyncArrowHead|[FF]<0>(...) (grammar |CallMemberExpression|[]))
     let memberExpr0 = expr0.MemberExpression
     let arguments0 = expr0.Arguments
@@ -28,6 +28,8 @@
   10030: result = [? %0] -> 10024
   10033: call %3 = clo<IsInTailPosition>(|CallExpression|[FF]<0>(...)) -> 10035
   10035: call %2 = clo<EvaluateCall>(func0, %9, expr0.Arguments, %3) -> 10036
-  10036: result = [? %2] -> 10037
-  10037: return result
+  10036: {
+    result = [? %2]
+    return result
+  }
 }

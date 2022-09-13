@@ -2,20 +2,22 @@
   10004: call %1 = clo<OrdinaryObjectCreate>(@EXECUTION_STACK[0].Realm.Intrinsics["%Object.prototype%"]) -> 10005
   10005: let obj0 = [! %1] -> 10009
   10009: this2 = |PropertyDefinition|[FF]<0>(...) -> 10010
-  10010: call %7 = this2[0].StringValue(|IdentifierReference|[FF]<0>(...)) -> 10013
-  10013: this3 = |IdentifierReference|[FF]<0>(...) -> 10014
+  10010: call %7 = this2[0].StringValue(|IdentifierReference|[FF]<0>(...)) -> 10011
+  10011: this3 = |IdentifierReference|[FF]<0>(...) -> 10014
   10014: call %9 = this3[0].StringValue(|Identifier|<0>(...)) -> 10015
   10015: call %8 = clo<ResolveBinding>(%9) -> 10018
   10018: call %5 = clo<GetValue>(%8) -> 10020
-  10020: call %4 = clo<CreateDataPropertyOrThrow>(obj0, %7, [? %5]) -> 10022
-  10022: %4 -> 10024
+  10020: call %4 = clo<CreateDataPropertyOrThrow>(obj0, %7, [? %5]) -> 10021
+  10021: %4 -> 10024
   10024: this4 = |PropertyDefinition|[FF]<0>(...) -> 10025
-  10025: call %13 = this4[0].StringValue(|IdentifierReference|[FF]<0>(...)) -> 10028
-  10028: this5 = |IdentifierReference|[FF]<0>(...) -> 10029
+  10025: call %13 = this4[0].StringValue(|IdentifierReference|[FF]<0>(...)) -> 10026
+  10026: this5 = |IdentifierReference|[FF]<0>(...) -> 10029
   10029: call %15 = this5[0].StringValue(|Identifier|<0>(...)) -> 10030
   10030: call %14 = clo<ResolveBinding>(%15) -> 10033
   10033: call %11 = clo<GetValue>(%14) -> 10035
   10035: call %10 = clo<CreateDataPropertyOrThrow>(obj0, %13, [? %11]) -> 10038
-  10038: %10 -> 10039
-  10039: return obj0
+  10038: {
+    %10
+    return obj0
+  }
 }

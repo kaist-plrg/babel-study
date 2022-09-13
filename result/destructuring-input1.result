@@ -1,11 +1,15 @@
 0: def inlinedEvaluation(): Any {
-  10074: let assignmentPattern0 = (parse |LeftHandSideExpression|[FF]<0>(...) (grammar |AssignmentPattern|[])) -> 10076
-  10076: this10 = |IdentifierReference|[FF]<0>(...) -> 10077
+  10074: {
+    let assignmentPattern0 = (parse |LeftHandSideExpression|[FF]<0>(...) (grammar |AssignmentPattern|[]))
+    this10 = |IdentifierReference|[FF]<0>(...)
+  } -> 10077
   10077: call %32 = this10[0].StringValue(|Identifier|<0>(...)) -> 10078
   10078: call %31 = clo<ResolveBinding>(%32) -> 10081
   10081: call %8 = clo<GetValue>(%31) -> 10082
   10082: let rval0 = [? %8] -> 10083
   10083: call %7 = assignmentPattern0.DestructuringAssignmentEvaluation(assignmentPattern0, rval0) -> 10084
-  10084: [? %7] -> 10085
-  10085: return rval0
+  10084: {
+    [? %7]
+    return rval0
+  }
 }

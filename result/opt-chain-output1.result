@@ -2,8 +2,10 @@
   10019: this6 = |IdentifierReference|[FF]<0>(...) -> 10020
   10020: call %27 = this6[0].StringValue(|Identifier|<0>(...)) -> 10021
   10021: call %26 = clo<ResolveBinding>(%27) -> 10022
-  10022: %21 = [? %26] -> 10023
-  10023: [? %21] -> 10088
+  10022: {
+    %21 = [? %26]
+    [? %21]
+  } -> 10088
   10088: this14 = |IdentifierReference|[FF]<0>(...) -> 10089
   10089: call %39 = this14[0].StringValue(|Identifier|<0>(...)) -> 10090
   10090: call %38 = clo<ResolveBinding>(%39) -> 10093
@@ -15,19 +17,23 @@
   10108: call %7 = clo<AbstractEqualityComparison>(null, [? %10]) -> 10111
   10111: call %5 = clo<GetValue>(%7) -> 10112
   10112: call %4 = clo<ToBoolean>([? %5]) -> 10114
-  10114: if (= [! %4] true) then 10118 else 10131
-  10118: this17 = |Literal|<2>(...) -> 10119
+  10114: if (= [! %4] true) then 10116 else 10129
+  10116: this17 = |Literal|<2>(...) -> 10119
   10119: call %42 = this17[0].NumericValue(|NumericLiteral|("0")) -> 10122
   10122: call %40 = clo<GetValue>(%42) -> 10123
   10123: [? %40] -> 10126
-  10126: result = undefined -> 10127
-  10127: return result
-  10131: this19 = |IdentifierReference|[FF]<0>(...) -> 10132
+  10126: {
+    result = undefined
+    return result
+  }
+  10129: this19 = |IdentifierReference|[FF]<0>(...) -> 10132
   10132: call %47 = this19[0].StringValue(|Identifier|<0>(...)) -> 10133
   10133: call %46 = clo<ResolveBinding>(%47) -> 10136
   10136: call %44 = clo<GetValue>(%46) -> 10140
   10140: call %43 = clo<EvaluatePropertyAccessWithIdentifierKey>([? %44], |IdentifierName|("p"), true) -> 10143
   10143: call %2 = clo<GetValue>(%43) -> 10144
-  10144: result = [? %2] -> 10145
-  10145: return result
+  10144: {
+    result = [? %2]
+    return result
+  }
 }

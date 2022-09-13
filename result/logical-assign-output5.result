@@ -2,8 +2,10 @@
   10019: this6 = |IdentifierReference|[FF]<0>(...) -> 10020
   10020: call %23 = this6[0].StringValue(|Identifier|<0>(...)) -> 10021
   10021: call %22 = clo<ResolveBinding>(%23) -> 10022
-  10022: %17 = [? %22] -> 10023
-  10023: [? %17] -> 10141
+  10022: {
+    %17 = [? %22]
+    [? %17]
+  } -> 10141
   10141: this19 = |IdentifierReference|[FF]<0>(...) -> 10142
   10142: call %52 = this19[0].StringValue(|Identifier|<0>(...)) -> 10143
   10143: call %51 = clo<ResolveBinding>(%52) -> 10146
@@ -16,16 +18,20 @@
   10160: call %3 = clo<GetValue>(%5) -> 10161
   10161: let lval0 = [? %3] -> 10162
   10162: call %2 = clo<ToBoolean>(lval0) -> 10164
-  10164: if (= [! %2] true) then 10165 else 10182
-  10165: result = lval0 -> 10166
-  10166: return result
-  10182: this25 = |IdentifierReference|[FF]<0>(...) -> 10183
+  10164: if (= [! %2] true) then 10165 else 10180
+  10165: {
+    result = lval0
+    return result
+  }
+  10180: this25 = |IdentifierReference|[FF]<0>(...) -> 10183
   10183: call %71 = this25[0].StringValue(|Identifier|<0>(...)) -> 10184
   10184: call %70 = clo<ResolveBinding>(%71) -> 10187
   10187: call %68 = clo<GetValue>(%70) -> 10191
   10191: call %67 = clo<EvaluatePropertyAccessWithExpressionKey>([? %68], |Expression|[TFF]<0>(...), true) -> 10192
-  10192: %62 = [? %67] -> 10193
-  10193: [? %62] -> 10214
+  10192: {
+    %62 = [? %67]
+    [? %62]
+  } -> 10214
   10214: this28 = |IdentifierReference|[FF]<0>(...) -> 10215
   10215: call %75 = this28[0].StringValue(|Identifier|<0>(...)) -> 10216
   10216: call %74 = clo<ResolveBinding>(%75) -> 10219
@@ -34,6 +40,8 @@
   10221: call %56 = clo<PutValue>(%62, rval23) -> 10222
   10222: [? %56] -> 10226
   10226: call %0 = clo<GetValue>(rval23) -> 10227
-  10227: result = [? %0] -> 10228
-  10228: return result
+  10227: {
+    result = [? %0]
+    return result
+  }
 }

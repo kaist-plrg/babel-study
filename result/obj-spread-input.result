@@ -1,27 +1,31 @@
 0: def inlinedEvaluation(): Any {
   10004: call %1 = clo<OrdinaryObjectCreate>(@EXECUTION_STACK[0].Realm.Intrinsics["%Object.prototype%"]) -> 10005
-  10005: let obj0 = [! %1] -> 10011
-  10011: this3 = |PropertyDefinition|[FF]<0>(...) -> 10012
-  10012: call %9 = this3[0].StringValue(|IdentifierReference|[FF]<0>(...)) -> 10015
-  10015: this4 = |IdentifierReference|[FF]<0>(...) -> 10016
+  10005: let obj0 = [! %1] -> 10009
+  10009: this3 = |PropertyDefinition|[FF]<0>(...) -> 10012
+  10012: call %9 = this3[0].StringValue(|IdentifierReference|[FF]<0>(...)) -> 10013
+  10013: this4 = |IdentifierReference|[FF]<0>(...) -> 10016
   10016: call %11 = this4[0].StringValue(|Identifier|<0>(...)) -> 10017
   10017: call %10 = clo<ResolveBinding>(%11) -> 10020
   10020: call %7 = clo<GetValue>(%10) -> 10022
-  10022: call %6 = clo<CreateDataPropertyOrThrow>(obj0, %9, [? %7]) -> 10024
-  10024: %6 -> 10028
-  10028: this6 = |IdentifierReference|[FF]<0>(...) -> 10029
+  10022: call %6 = clo<CreateDataPropertyOrThrow>(obj0, %9, [? %7]) -> 10023
+  10023: %6 -> 10026
+  10026: this6 = |IdentifierReference|[FF]<0>(...) -> 10029
   10029: call %16 = this6[0].StringValue(|Identifier|<0>(...)) -> 10030
   10030: call %15 = clo<ResolveBinding>(%16) -> 10033
   10033: call %13 = clo<GetValue>(%15) -> 10035
   10035: call %12 = clo<CopyDataProperties>(obj0, [? %13], (new [])) -> 10038
-  10038: %12 -> 10040
-  10040: this7 = |PropertyDefinition|[FF]<0>(...) -> 10041
-  10041: call %20 = this7[0].StringValue(|IdentifierReference|[FF]<0>(...)) -> 10044
-  10044: this8 = |IdentifierReference|[FF]<0>(...) -> 10045
+  10038: {
+    %12
+    this7 = |PropertyDefinition|[FF]<0>(...)
+  } -> 10041
+  10041: call %20 = this7[0].StringValue(|IdentifierReference|[FF]<0>(...)) -> 10042
+  10042: this8 = |IdentifierReference|[FF]<0>(...) -> 10045
   10045: call %22 = this8[0].StringValue(|Identifier|<0>(...)) -> 10046
   10046: call %21 = clo<ResolveBinding>(%22) -> 10049
   10049: call %18 = clo<GetValue>(%21) -> 10051
   10051: call %17 = clo<CreateDataPropertyOrThrow>(obj0, %20, [? %18]) -> 10054
-  10054: %17 -> 10055
-  10055: return obj0
+  10054: {
+    %17
+    return obj0
+  }
 }

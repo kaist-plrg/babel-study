@@ -1,5 +1,5 @@
 0: def inlinedEvaluation(): Any {
-  10005: this1 = |IdentifierReference|[FF]<0>(...) -> 10006
+  10003: this1 = |IdentifierReference|[FF]<0>(...) -> 10006
   10006: call %5 = this1[0].StringValue(|Identifier|<0>(...)) -> 10007
   10007: call %4 = clo<ResolveBinding>(%5) -> 10010
   10010: call %2 = clo<GetValue>(%4) -> 10011
@@ -9,8 +9,12 @@
   10015: call %7 = this2[0].StringValue(|Identifier|<0>(...)) -> 10016
   10016: call %6 = clo<ResolveBinding>(%7) -> 10019
   10019: call %0 = clo<GetValue>(%6) -> 10020
-  10020: result = [? %0] -> 10021
-  10021: return result
-  10022: result = lval0 -> 10023
-  10023: return result
+  10020: {
+    result = [? %0]
+    return result
+  }
+  10022: {
+    result = lval0
+    return result
+  }
 }

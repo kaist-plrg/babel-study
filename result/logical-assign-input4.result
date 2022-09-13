@@ -9,8 +9,10 @@
   10020: let lval0 = [? %8] -> 10021
   10021: call %7 = clo<ToBoolean>(lval0) -> 10023
   10023: if (= [! %7] false) then 10024 else 10061
-  10024: result = lval0 -> 10025
-  10025: return result
+  10024: {
+    result = lval0
+    return result
+  }
   10061: this6 = |IdentifierReference|[FF]<0>(...) -> 10062
   10062: call %20 = this6[0].StringValue(|Identifier|<0>(...)) -> 10063
   10063: call %19 = clo<ResolveBinding>(%20) -> 10066
@@ -20,6 +22,6 @@
   10069: {
     [? %0]
     result = rval0
-  } -> 10070
-  10070: return result
+    return result
+  }
 }

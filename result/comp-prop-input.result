@@ -1,18 +1,20 @@
 0: def inlinedEvaluation(): Any {
   10004: call %1 = clo<OrdinaryObjectCreate>(@EXECUTION_STACK[0].Realm.Intrinsics["%Object.prototype%"]) -> 10005
-  10005: let obj0 = [! %1] -> 10011
-  10011: this3 = |IdentifierReference|[FF]<0>(...) -> 10012
+  10005: let obj0 = [! %1] -> 10009
+  10009: this3 = |IdentifierReference|[FF]<0>(...) -> 10012
   10012: call %12 = this3[0].StringValue(|Identifier|<0>(...)) -> 10013
   10013: call %11 = clo<ResolveBinding>(%12) -> 10016
   10016: call %9 = clo<GetValue>(%11) -> 10018
   10018: call %8 = clo<ToPropertyKey>([? %9]) -> 10019
-  10019: %7 = [? %8] -> 10020
-  10020: [? %7] -> 10035
+  10019: {
+    %7 = [? %8]
+    [? %7]
+  } -> 10035
   10035: this5 = |IdentifierReference|[FF]<0>(...) -> 10036
   10036: call %16 = this5[0].StringValue(|Identifier|<0>(...)) -> 10037
   10037: call %15 = clo<ResolveBinding>(%16) -> 10040
   10040: call %4 = clo<GetValue>(%15) -> 10043
-  10043: call %2 = clo<CreateDataPropertyOrThrow>(obj0, %7, [? %4]) -> 10045
-  10045: %2 -> 10046
+  10043: call %2 = clo<CreateDataPropertyOrThrow>(obj0, %7, [? %4]) -> 10044
+  10044: %2 -> 10046
   10046: return obj0
 }

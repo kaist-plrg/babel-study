@@ -2,8 +2,8 @@
   10007: this2 = |IdentifierReference|[FF]<0>(...) -> 10008
   10008: call %7 = this2[0].StringValue(|Identifier|<0>(...)) -> 10009
   10009: call %6 = clo<ResolveBinding>(%7) -> 10012
-  10012: call %4 = clo<GetValue>(%6) -> 10015
-  10015: this3 = |IdentifierReference|[FF]<0>(...) -> 10016
+  10012: call %4 = clo<GetValue>(%6) -> 10013
+  10013: this3 = |IdentifierReference|[FF]<0>(...) -> 10016
   10016: call %9 = this3[0].StringValue(|Identifier|<0>(...)) -> 10017
   10017: call %8 = clo<ResolveBinding>(%9) -> 10020
   10020: call %2 = clo<GetValue>(%8) -> 10040

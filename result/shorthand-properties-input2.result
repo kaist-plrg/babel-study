@@ -2,14 +2,16 @@
   10004: call %1 = clo<OrdinaryObjectCreate>(@EXECUTION_STACK[0].Realm.Intrinsics["%Object.prototype%"]) -> 10005
   10005: let obj0 = [! %1] -> 10013
   10013: this4 = |LiteralPropertyName|<0>(...) -> 10014
-  10014: call %9 = this4[0].StringValue(|IdentifierName|("f")) -> 10016
-  10016: [? %9] -> 10017
+  10014: call %9 = this4[0].StringValue(|IdentifierName|("f")) -> 10015
+  10015: [? %9] -> 10017
   10017: if (! (= functionPrototype3 absent)) then 10018 else 10032
   10018: let prototype3 = functionPrototype3 -> 10020
-  10020: call %7 = clo<OrdinaryFunctionCreate>(prototype3, (source-text |MethodDefinition|[FF]<0>(...)), |UniqueFormalParameters|[FF]<0>(...), |FunctionBody|[FF]<0>(...), ~non-lexical-this~, @EXECUTION_STACK[0].LexicalEnvironment) -> 10024
-  10024: let methodDef2 = [? (new Record("Key" -> %9, "Closure" -> %7))] -> 10027
+  10020: call %7 = clo<OrdinaryFunctionCreate>(prototype3, (source-text |MethodDefinition|[FF]<0>(...)), |UniqueFormalParameters|[FF]<0>(...), |FunctionBody|[FF]<0>(...), ~non-lexical-this~, @EXECUTION_STACK[0].LexicalEnvironment) -> 10023
+  10023: let methodDef2 = [? (new Record("Key" -> %9, "Closure" -> %7))] -> 10027
   10027: call %3 = clo<DefinePropertyOrThrow>(obj0, methodDef2.Key, (new PropertyDescriptor("Value" -> methodDef2.Closure, "Writable" -> true, "Enumerable" -> true, "Configurable" -> true))) -> 10030
-  10030: [? %3] -> 10031
-  10031: return obj0
+  10030: {
+    [? %3]
+    return obj0
+  }
   10032: let prototype3 = @EXECUTION_STACK[0].Realm.Intrinsics["%Function.prototype%"] -> 10020
 }
