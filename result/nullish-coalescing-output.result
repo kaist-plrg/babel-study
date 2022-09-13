@@ -1,0 +1,35 @@
+0: def inlinedEvaluation(): Any {
+  10019: this6 = |IdentifierReference|[FF]<0>(...) -> 10020
+  10020: call %27 = this6[0].StringValue(|Identifier|<0>(...)) -> 10021
+  10021: call %26 = clo<ResolveBinding>(%27) -> 10022
+  10022: %21 = [? %26] -> 10023
+  10023: [? %21] -> 10077
+  10077: this12 = |IdentifierReference|[FF]<0>(...) -> 10078
+  10078: call %35 = this12[0].StringValue(|Identifier|<0>(...)) -> 10079
+  10079: call %34 = clo<ResolveBinding>(%35) -> 10082
+  10082: call %17 = clo<GetValue>(%34) -> 10083
+  10083: let rval5 = [? %17] -> 10084
+  10084: call %15 = clo<PutValue>(%21, rval5) -> 10085
+  10085: [? %15] -> 10089
+  10089: call %10 = clo<GetValue>(rval5) -> 10097
+  10097: call %7 = clo<AbstractEqualityComparison>(null, [? %10]) -> 10098
+  10098: [? %7] -> 10099
+  10099: if (= %7 true) then 10100 else 10124
+  10100: %6 = false -> 10102
+  10102: call %5 = clo<GetValue>(%6) -> 10103
+  10103: call %4 = clo<ToBoolean>([? %5]) -> 10105
+  10105: if (= [! %4] true) then 10107 else 10116
+  10107: this14 = |IdentifierReference|[FF]<0>(...) -> 10108
+  10108: call %37 = this14[0].StringValue(|Identifier|<0>(...)) -> 10109
+  10109: call %36 = clo<ResolveBinding>(%37) -> 10112
+  10112: call %0 = clo<GetValue>(%36) -> 10113
+  10113: result = [? %0] -> 10114
+  10114: return result
+  10116: this15 = |IdentifierReference|[FF]<0>(...) -> 10117
+  10117: call %39 = this15[0].StringValue(|Identifier|<0>(...)) -> 10118
+  10118: call %38 = clo<ResolveBinding>(%39) -> 10121
+  10121: call %2 = clo<GetValue>(%38) -> 10122
+  10122: result = [? %2] -> 10123
+  10123: return result
+  10124: %6 = true -> 10102
+}

@@ -1,0 +1,60 @@
+0: def inlinedEvaluation(): Any {
+  10019: this6 = |IdentifierReference|[FF]<0>(...) -> 10020
+  10020: call %27 = this6[0].StringValue(|Identifier|<0>(...)) -> 10021
+  10021: call %26 = clo<ResolveBinding>(%27) -> 10022
+  10022: %21 = [? %26] -> 10023
+  10023: [? %21] -> 10111
+  10111: this14 = |IdentifierReference|[FF]<0>(...) -> 10112
+  10112: call %45 = this14[0].StringValue(|Identifier|<0>(...)) -> 10113
+  10113: call %44 = clo<ResolveBinding>(%45) -> 10116
+  10116: call %17 = clo<GetValue>(%44) -> 10117
+  10117: let rval5 = [? %17] -> 10118
+  10118: call %15 = clo<PutValue>(%21, rval5) -> 10119
+  10119: [? %15] -> 10123
+  10123: call %10 = clo<GetValue>(rval5) -> 10131
+  10131: call %7 = clo<AbstractEqualityComparison>(null, [? %10]) -> 10134
+  10134: call %5 = clo<GetValue>(%7) -> 10135
+  10135: call %4 = clo<ToBoolean>([? %5]) -> 10137
+  10137: if (= [! %4] true) then 10141 else 10156
+  10141: this17 = |Literal|<2>(...) -> 10142
+  10142: call %48 = this17[0].NumericValue(|NumericLiteral|("0")) -> 10145
+  10145: call %46 = clo<GetValue>(%48) -> 10146
+  10146: [? %46] -> 10149
+  10149: result = undefined -> 10150
+  10150: return result
+  10156: {
+    let expr18 = (parse |CoverCallExpressionAndAsyncArrowHead|[FF]<0>(...) (grammar |CallMemberExpression|[]))
+    let memberExpr18 = expr18.MemberExpression
+    let arguments18 = expr18.Arguments
+  } -> 10157
+  10157: call %58 = memberExpr18.Evaluation(expr18.MemberExpression) -> 10158
+  10158: let ref18 = %58 -> 10159
+  10159: call %56 = clo<GetValue>(%58) -> 10160
+  10160: {
+    let func18 = [? %56]
+    %54 = (? %58: "ReferenceRecord")
+  } -> 10161
+  10161: if %54 then 10162 else 10166
+  10162: call %55 = clo<IsPropertyReference>(%58) -> 10163
+  10163: %54 = (= %55 false) -> 10164
+  10164: if %54 then 10165 else 10166
+  10165: %54 = (= ref18.ReferencedName "eval") -> 10166
+  10166: if %54 then 10167 else 10185
+  10167: call %53 = clo<SameValue>(func18, @EXECUTION_STACK[0].Realm.Intrinsics["%eval%"]) -> 10168
+  10168: if (= %53 true) then 10169 else 10185
+  10169: call %50 = arguments18.ArgumentListEvaluation(expr18.Arguments) -> 10170
+  10170: let argList18 = [? %50] -> 10171
+  10171: if (= argList18.length 0) then 10172 else 10181
+  10172: %3 = undefined -> 10174
+  10174: call %2 = clo<GetValue>(%3) -> 10175
+  10175: result = [? %2] -> 10176
+  10176: return result
+  10181: call %49 = clo<PerformEval>(argList18[0], @EXECUTION_STACK[0].Realm, true, true) -> 10182
+  10182: %3 = [? %49] -> 10174
+  10185: call %52 = clo<IsInTailPosition>(|CallExpression|[FF]<0>(...)) -> 10187
+  10187: call %51 = clo<EvaluateCall>(func18, %58, expr18.Arguments, %52) -> 10188
+  10188: %3 = [? %51] -> 10190
+  10190: call %2 = clo<GetValue>(%3) -> 10191
+  10191: result = [? %2] -> 10192
+  10192: return result
+}

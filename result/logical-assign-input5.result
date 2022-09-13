@@ -1,0 +1,25 @@
+0: def inlinedEvaluation(): Any {
+  10007: this2 = |IdentifierReference|[FF]<0>(...) -> 10008
+  10008: call %14 = this2[0].StringValue(|Identifier|<0>(...)) -> 10009
+  10009: call %13 = clo<ResolveBinding>(%14) -> 10012
+  10012: call %11 = clo<GetValue>(%13) -> 10016
+  10016: call %10 = clo<EvaluatePropertyAccessWithExpressionKey>([? %11], |Expression|[TFF]<0>(...), true) -> 10017
+  10017: %9 = [? %10] -> 10019
+  10019: call %8 = clo<GetValue>(%9) -> 10020
+  10020: let lval0 = [? %8] -> 10021
+  10021: call %7 = clo<ToBoolean>(lval0) -> 10023
+  10023: if (= [! %7] true) then 10024 else 10061
+  10024: result = lval0 -> 10025
+  10025: return result
+  10061: this6 = |IdentifierReference|[FF]<0>(...) -> 10062
+  10062: call %20 = this6[0].StringValue(|Identifier|<0>(...)) -> 10063
+  10063: call %19 = clo<ResolveBinding>(%20) -> 10066
+  10066: call %2 = clo<GetValue>(%19) -> 10067
+  10067: let rval0 = [? %2] -> 10068
+  10068: call %0 = clo<PutValue>(%9, rval0) -> 10069
+  10069: {
+    [? %0]
+    result = rval0
+  } -> 10070
+  10070: return result
+}

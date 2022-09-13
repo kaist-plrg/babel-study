@@ -1,0 +1,33 @@
+0: def inlinedEvaluation(): Any {
+  10007: {
+    let expr0 = (parse |CoverCallExpressionAndAsyncArrowHead|[FF]<0>(...) (grammar |CallMemberExpression|[]))
+    let memberExpr0 = expr0.MemberExpression
+    let arguments0 = expr0.Arguments
+  } -> 10008
+  10008: call %9 = memberExpr0.Evaluation(expr0.MemberExpression) -> 10009
+  10009: let ref0 = %9 -> 10010
+  10010: call %7 = clo<GetValue>(%9) -> 10011
+  10011: {
+    let func0 = [? %7]
+    %5 = (? %9: "ReferenceRecord")
+  } -> 10012
+  10012: if %5 then 10013 else 10017
+  10013: call %6 = clo<IsPropertyReference>(%9) -> 10014
+  10014: %5 = (= %6 false) -> 10015
+  10015: if %5 then 10016 else 10017
+  10016: %5 = (= ref0.ReferencedName "eval") -> 10017
+  10017: if %5 then 10018 else 10033
+  10018: call %4 = clo<SameValue>(func0, @EXECUTION_STACK[0].Realm.Intrinsics["%eval%"]) -> 10019
+  10019: if (= %4 true) then 10020 else 10033
+  10020: call %1 = arguments0.ArgumentListEvaluation(expr0.Arguments) -> 10021
+  10021: let argList0 = [? %1] -> 10022
+  10022: if (= argList0.length 0) then 10023 else 10029
+  10023: result = undefined -> 10024
+  10024: return result
+  10029: call %0 = clo<PerformEval>(argList0[0], @EXECUTION_STACK[0].Realm, true, true) -> 10030
+  10030: result = [? %0] -> 10024
+  10033: call %3 = clo<IsInTailPosition>(|CallExpression|[FF]<0>(...)) -> 10035
+  10035: call %2 = clo<EvaluateCall>(func0, %9, expr0.Arguments, %3) -> 10036
+  10036: result = [? %2] -> 10037
+  10037: return result
+}

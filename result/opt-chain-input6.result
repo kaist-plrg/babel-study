@@ -1,0 +1,31 @@
+0: def inlinedEvaluation(): Any {
+  10007: this2 = |IdentifierReference|[FF]<0>(...) -> 10008
+  10008: call %7 = this2[0].StringValue(|Identifier|<0>(...)) -> 10009
+  10009: call %6 = clo<ResolveBinding>(%7) -> 10012
+  10012: call %4 = clo<GetValue>(%6) -> 10013
+  10013: let baseValue1 = [? %4] -> 10014
+  10014: if (|| (= baseValue1 undefined) (= baseValue1 null)) then 10015 else 10035
+  10015: %2 = undefined -> 10017
+  10017: call %1 = clo<GetValue>(%2) -> 10018
+  10018: let baseValue0 = [? %1] -> 10019
+  10019: if (|| (= baseValue0 undefined) (= baseValue0 null)) then 10020 else 10025
+  10020: result = undefined -> 10021
+  10021: return result
+  10025: call %9 = clo<IsInTailPosition>(|OptionalChain|[FF]<0>(...)) -> 10027
+  10027: call %8 = clo<EvaluateCall>(baseValue0, %2, |Arguments|[FF]<0>, %9) -> 10028
+  10028: %0 = [? %8] -> 10029
+  10029: result = %0 -> 10030
+  10030: return result
+  10035: call %10 = clo<EvaluatePropertyAccessWithIdentifierKey>(baseValue1, |IdentifierName|("f"), true) -> 10037
+  10037: %2 = [? %10] -> 10039
+  10039: call %1 = clo<GetValue>(%2) -> 10040
+  10040: let baseValue0 = [? %1] -> 10041
+  10041: if (|| (= baseValue0 undefined) (= baseValue0 null)) then 10042 else 10047
+  10042: result = undefined -> 10043
+  10043: return result
+  10047: call %12 = clo<IsInTailPosition>(|OptionalChain|[FF]<0>(...)) -> 10049
+  10049: call %11 = clo<EvaluateCall>(baseValue0, %2, |Arguments|[FF]<0>, %12) -> 10050
+  10050: %0 = [? %11] -> 10051
+  10051: result = %0 -> 10052
+  10052: return result
+}

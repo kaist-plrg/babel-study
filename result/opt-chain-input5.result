@@ -1,0 +1,16 @@
+0: def inlinedEvaluation(): Any {
+  10005: this1 = |IdentifierReference|[FF]<0>(...) -> 10006
+  10006: call %4 = this1[0].StringValue(|Identifier|<0>(...)) -> 10007
+  10007: call %3 = clo<ResolveBinding>(%4) -> 10010
+  10010: call %1 = clo<GetValue>(%3) -> 10011
+  10011: let baseValue0 = [? %1] -> 10012
+  10012: if (|| (= baseValue0 undefined) (= baseValue0 null)) then 10013 else 10022
+  10013: result = undefined -> 10014
+  10014: return result
+  10022: call %9 = clo<EvaluatePropertyAccessWithIdentifierKey>(baseValue0, |IdentifierName|("f"), true) -> 10025
+  10025: call %7 = clo<GetValue>(%9) -> 10027
+  10027: call %6 = clo<IsInTailPosition>(|OptionalChain|[FF]<2>(...)) -> 10029
+  10029: call %5 = clo<EvaluateCall>([? %7], %9, |Arguments|[FF]<0>, %6) -> 10031
+  10031: result = [? %5] -> 10032
+  10032: return result
+}

@@ -1,0 +1,19 @@
+0: def inlinedEvaluation(): Any {
+  10007: this2 = |IdentifierReference|[FF]<0>(...) -> 10008
+  10008: call %7 = this2[0].StringValue(|Identifier|<0>(...)) -> 10009
+  10009: call %6 = clo<ResolveBinding>(%7) -> 10012
+  10012: call %4 = clo<GetValue>(%6) -> 10015
+  10015: this3 = |IdentifierReference|[FF]<0>(...) -> 10016
+  10016: call %9 = this3[0].StringValue(|Identifier|<0>(...)) -> 10017
+  10017: call %8 = clo<ResolveBinding>(%9) -> 10020
+  10020: call %2 = clo<GetValue>(%8) -> 10040
+  10037: return %1
+  10040: call %14 = clo<ToNumeric>([? %4]) -> 10041
+  10041: let lnum4 = [? %14] -> 10042
+  10042: call %13 = clo<ToNumeric>([? %2]) -> 10043
+  10043: let rnum4 = [? %13] -> 10044
+  10044: if (! (= (typeof lnum4) (typeof rnum4))) then 10045 else 10071
+  10045: %1 = comp[~throw~/~empty~]((new OrdinaryObject("Prototype" -> @EXECUTION_STACK[0].Realm.Intrinsics["%TypeError.prototype%"], "ErrorData" -> undefined))) -> 10037
+  10071: call %12 = @PRIMITIVE[(typeof lnum4)].exponentiate(lnum4, rnum4) -> 10072
+  10072: %1 = [? %12] -> 10037
+}

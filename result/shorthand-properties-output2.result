@@ -1,0 +1,16 @@
+0: def inlinedEvaluation(): Any {
+  10004: call %1 = clo<OrdinaryObjectCreate>(@EXECUTION_STACK[0].Realm.Intrinsics["%Object.prototype%"]) -> 10005
+  10005: let obj0 = [! %1] -> 10009
+  10009: this2 = |LiteralPropertyName|<0>(...) -> 10010
+  10010: call %8 = this2[0].StringValue(|IdentifierName|("f")) -> 10012
+  10012: [? %8] -> 10029
+  10029: this5 = |FunctionExpression|<0>(...) -> 10030
+  10030: assert (= %18 absent) -> 10031
+  10031: call %18 = this5[0].StringValue(|BindingIdentifier|[FF]<0>(...)) -> 10033
+  10033: call %17 = clo<NewDeclarativeEnvironment>(@EXECUTION_STACK[0].LexicalEnvironment) -> 10037
+  10037: call %15 = clo<OrdinaryFunctionCreate>(@EXECUTION_STACK[0].Realm.Intrinsics["%Function.prototype%"], (source-text |FunctionExpression|<0>(...)), |FormalParameters|[FF]<2>(...), |FunctionBody|[FF]<0>(...), ~non-lexical-this~, %17) -> 10045
+  10045: call %4 = clo<GetValue>(%15) -> 10048
+  10048: call %2 = clo<CreateDataPropertyOrThrow>(obj0, %8, [? %4]) -> 10050
+  10050: %2 -> 10051
+  10051: return obj0
+}

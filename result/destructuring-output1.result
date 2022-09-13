@@ -1,0 +1,51 @@
+0: def inlinedEvaluation(): Any {
+  10013: this4 = |IdentifierReference|[FF]<0>(...) -> 10014
+  10014: call %24 = this4[0].StringValue(|Identifier|<0>(...)) -> 10015
+  10015: call %23 = clo<ResolveBinding>(%24) -> 10016
+  10016: %18 = [? %23] -> 10017
+  10017: [? %18] -> 10464
+  10464: this48 = |IdentifierReference|[FF]<0>(...) -> 10465
+  10465: call %146 = this48[0].StringValue(|Identifier|<0>(...)) -> 10466
+  10466: call %145 = clo<ResolveBinding>(%146) -> 10469
+  10469: call %14 = clo<GetValue>(%145) -> 10470
+  10470: let rval3 = [? %14] -> 10471
+  10471: call %12 = clo<PutValue>(%18, rval3) -> 10472
+  10472: [? %12] -> 10474
+  10474: call %10 = clo<GetValue>(rval3) -> 10475
+  10475: [? %10] -> 10481
+  10481: this50 = |IdentifierReference|[FF]<0>(...) -> 10482
+  10482: call %159 = this50[0].StringValue(|Identifier|<0>(...)) -> 10483
+  10483: call %158 = clo<ResolveBinding>(%159) -> 10484
+  10484: %153 = [? %158] -> 10485
+  10485: [? %153] -> 10622
+  10622: this65 = |IdentifierReference|[FF]<0>(...) -> 10623
+  10623: call %197 = this65[0].StringValue(|Identifier|<0>(...)) -> 10624
+  10624: call %196 = clo<ResolveBinding>(%197) -> 10627
+  10627: call %194 = clo<GetValue>(%196) -> 10631
+  10631: call %193 = clo<EvaluatePropertyAccessWithIdentifierKey>([? %194], |IdentifierName|("a"), true) -> 10634
+  10634: call %149 = clo<GetValue>(%193) -> 10635
+  10635: let rval49 = [? %149] -> 10636
+  10636: call %147 = clo<PutValue>(%153, rval49) -> 10637
+  10637: [? %147] -> 10643
+  10643: [? rval49] -> 10649
+  10649: this67 = |IdentifierReference|[FF]<0>(...) -> 10650
+  10650: call %210 = this67[0].StringValue(|Identifier|<0>(...)) -> 10651
+  10651: call %209 = clo<ResolveBinding>(%210) -> 10652
+  10652: %204 = [? %209] -> 10653
+  10653: [? %204] -> 10685
+  10685: this72 = |IdentifierReference|[FF]<0>(...) -> 10686
+  10686: call %219 = this72[0].StringValue(|Identifier|<0>(...)) -> 10687
+  10687: call %218 = clo<ResolveBinding>(%219) -> 10690
+  10690: call %216 = clo<GetValue>(%218) -> 10694
+  10694: call %215 = clo<EvaluatePropertyAccessWithIdentifierKey>([? %216], |IdentifierName|("b"), true) -> 10697
+  10697: call %200 = clo<GetValue>(%215) -> 10698
+  10698: let rval66 = [? %200] -> 10699
+  10699: call %198 = clo<PutValue>(%204, rval66) -> 10700
+  10700: [? %198] -> 10706
+  10706: [? rval66] -> 10708
+  10708: this73 = |IdentifierReference|[FF]<0>(...) -> 10709
+  10709: call %221 = this73[0].StringValue(|Identifier|<0>(...)) -> 10710
+  10710: call %220 = clo<ResolveBinding>(%221) -> 10713
+  10713: call %0 = clo<GetValue>(%220) -> 10715
+  10715: return [? %0]
+}

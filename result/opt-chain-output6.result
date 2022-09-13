@@ -1,0 +1,91 @@
+0: def inlinedEvaluation(): Any {
+  10019: this6 = |IdentifierReference|[FF]<0>(...) -> 10020
+  10020: call %27 = this6[0].StringValue(|Identifier|<0>(...)) -> 10021
+  10021: call %26 = clo<ResolveBinding>(%27) -> 10022
+  10022: %21 = [? %26] -> 10023
+  10023: [? %21] -> 10396
+  10396: this40 = |IdentifierReference|[FF]<0>(...) -> 10397
+  10397: call %116 = this40[0].StringValue(|Identifier|<0>(...)) -> 10398
+  10398: call %115 = clo<ResolveBinding>(%116) -> 10401
+  10401: call %17 = clo<GetValue>(%115) -> 10402
+  10402: let rval5 = [? %17] -> 10403
+  10403: call %15 = clo<PutValue>(%21, rval5) -> 10404
+  10404: [? %15] -> 10408
+  10408: call %10 = clo<GetValue>(rval5) -> 10416
+  10416: call %7 = clo<AbstractEqualityComparison>(null, [? %10]) -> 10419
+  10419: call %5 = clo<GetValue>(%7) -> 10420
+  10420: call %4 = clo<ToBoolean>([? %5]) -> 10422
+  10422: if (= [! %4] true) then 10426 else 10453
+  10426: this43 = |Literal|<2>(...) -> 10427
+  10427: call %119 = this43[0].NumericValue(|NumericLiteral|("0")) -> 10430
+  10430: call %117 = clo<GetValue>(%119) -> 10431
+  10431: [? %117] -> 10434
+  10434: result = undefined -> 10435
+  10435: return result
+  10453: this50 = |IdentifierReference|[FF]<0>(...) -> 10454
+  10454: call %147 = this50[0].StringValue(|Identifier|<0>(...)) -> 10455
+  10455: call %146 = clo<ResolveBinding>(%147) -> 10456
+  10456: %141 = [? %146] -> 10457
+  10457: [? %141] -> 10556
+  10556: this59 = |IdentifierReference|[FF]<0>(...) -> 10557
+  10557: call %168 = this59[0].StringValue(|Identifier|<0>(...)) -> 10558
+  10558: call %167 = clo<ResolveBinding>(%168) -> 10561
+  10561: call %165 = clo<GetValue>(%167) -> 10565
+  10565: call %164 = clo<EvaluatePropertyAccessWithIdentifierKey>([? %165], |IdentifierName|("f"), true) -> 10568
+  10568: call %137 = clo<GetValue>(%164) -> 10569
+  10569: let rval49 = [? %137] -> 10570
+  10570: call %135 = clo<PutValue>(%141, rval49) -> 10571
+  10571: [? %135] -> 10575
+  10575: call %130 = clo<GetValue>(rval49) -> 10583
+  10583: call %127 = clo<AbstractEqualityComparison>(null, [? %130]) -> 10586
+  10586: call %125 = clo<GetValue>(%127) -> 10587
+  10587: call %124 = clo<ToBoolean>([? %125]) -> 10589
+  10589: if (= [! %124] true) then 10593 else 10611
+  10593: this62 = |Literal|<2>(...) -> 10594
+  10594: call %171 = this62[0].NumericValue(|NumericLiteral|("0")) -> 10597
+  10597: call %169 = clo<GetValue>(%171) -> 10598
+  10598: [? %169] -> 10601
+  10601: %3 = undefined -> 10603
+  10603: call %2 = clo<GetValue>(%3) -> 10604
+  10604: result = [? %2] -> 10605
+  10605: return result
+  10611: {
+    let expr63 = (parse |CoverCallExpressionAndAsyncArrowHead|[FF]<0>(...) (grammar |CallMemberExpression|[]))
+    let memberExpr63 = expr63.MemberExpression
+    let arguments63 = expr63.Arguments
+  } -> 10612
+  10612: call %181 = memberExpr63.Evaluation(expr63.MemberExpression) -> 10613
+  10613: let ref63 = %181 -> 10614
+  10614: call %179 = clo<GetValue>(%181) -> 10615
+  10615: {
+    let func63 = [? %179]
+    %177 = (? %181: "ReferenceRecord")
+  } -> 10616
+  10616: if %177 then 10617 else 10621
+  10617: call %178 = clo<IsPropertyReference>(%181) -> 10618
+  10618: %177 = (= %178 false) -> 10619
+  10619: if %177 then 10620 else 10621
+  10620: %177 = (= ref63.ReferencedName "eval") -> 10621
+  10621: if %177 then 10622 else 10643
+  10622: call %176 = clo<SameValue>(func63, @EXECUTION_STACK[0].Realm.Intrinsics["%eval%"]) -> 10623
+  10623: if (= %176 true) then 10624 else 10643
+  10624: call %173 = arguments63.ArgumentListEvaluation(expr63.Arguments) -> 10625
+  10625: let argList63 = [? %173] -> 10626
+  10626: if (= argList63.length 0) then 10627 else 10639
+  10627: %123 = undefined -> 10629
+  10629: call %122 = clo<GetValue>(%123) -> 10630
+  10630: %3 = [? %122] -> 10632
+  10632: call %2 = clo<GetValue>(%3) -> 10633
+  10633: result = [? %2] -> 10634
+  10634: return result
+  10639: call %172 = clo<PerformEval>(argList63[0], @EXECUTION_STACK[0].Realm, true, true) -> 10640
+  10640: %123 = [? %172] -> 10629
+  10643: call %175 = clo<IsInTailPosition>(|CallExpression|[FF]<0>(...)) -> 10645
+  10645: call %174 = clo<EvaluateCall>(func63, %181, expr63.Arguments, %175) -> 10646
+  10646: %123 = [? %174] -> 10648
+  10648: call %122 = clo<GetValue>(%123) -> 10649
+  10649: %3 = [? %122] -> 10651
+  10651: call %2 = clo<GetValue>(%3) -> 10652
+  10652: result = [? %2] -> 10653
+  10653: return result
+}

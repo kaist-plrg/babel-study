@@ -1,0 +1,26 @@
+0: def inlinedEvaluation(): Any {
+  10005: this1 = |IdentifierReference|[FF]<0>(...) -> 10006
+  10006: call %6 = this1[0].StringValue(|Identifier|<0>(...)) -> 10007
+  10007: call %5 = clo<ResolveBinding>(%6) -> 10010
+  10010: call %3 = clo<GetValue>(%5) -> 10011
+  10011: let lval0 = [? %3] -> 10012
+  10012: call %2 = clo<ToBoolean>(lval0) -> 10014
+  10014: if (= [! %2] false) then 10015 else 10030
+  10015: result = lval0 -> 10016
+  10016: return result
+  10030: this6 = |IdentifierReference|[FF]<0>(...) -> 10031
+  10031: call %22 = this6[0].StringValue(|Identifier|<0>(...)) -> 10032
+  10032: call %21 = clo<ResolveBinding>(%22) -> 10033
+  10033: %16 = [? %21] -> 10034
+  10034: [? %16] -> 10055
+  10055: this9 = |IdentifierReference|[FF]<0>(...) -> 10056
+  10056: call %26 = this9[0].StringValue(|Identifier|<0>(...)) -> 10057
+  10057: call %25 = clo<ResolveBinding>(%26) -> 10060
+  10060: call %12 = clo<GetValue>(%25) -> 10061
+  10061: let rval5 = [? %12] -> 10062
+  10062: call %10 = clo<PutValue>(%16, rval5) -> 10063
+  10063: [? %10] -> 10067
+  10067: call %0 = clo<GetValue>(rval5) -> 10068
+  10068: result = [? %0] -> 10069
+  10069: return result
+}

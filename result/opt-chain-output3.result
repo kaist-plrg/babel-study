@@ -1,0 +1,62 @@
+0: def inlinedEvaluation(): Any {
+  10019: this6 = |IdentifierReference|[FF]<0>(...) -> 10020
+  10020: call %27 = this6[0].StringValue(|Identifier|<0>(...)) -> 10021
+  10021: call %26 = clo<ResolveBinding>(%27) -> 10022
+  10022: %21 = [? %26] -> 10023
+  10023: [? %21] -> 10318
+  10318: this40 = |IdentifierReference|[FF]<0>(...) -> 10319
+  10319: call %98 = this40[0].StringValue(|Identifier|<0>(...)) -> 10320
+  10320: call %97 = clo<ResolveBinding>(%98) -> 10323
+  10323: call %17 = clo<GetValue>(%97) -> 10324
+  10324: let rval5 = [? %17] -> 10325
+  10325: call %15 = clo<PutValue>(%21, rval5) -> 10326
+  10326: [? %15] -> 10330
+  10330: call %10 = clo<GetValue>(rval5) -> 10338
+  10338: call %7 = clo<AbstractEqualityComparison>(null, [? %10]) -> 10341
+  10341: call %5 = clo<GetValue>(%7) -> 10342
+  10342: call %4 = clo<ToBoolean>([? %5]) -> 10344
+  10344: if (= [! %4] true) then 10348 else 10375
+  10348: this43 = |Literal|<2>(...) -> 10349
+  10349: call %101 = this43[0].NumericValue(|NumericLiteral|("0")) -> 10352
+  10352: call %99 = clo<GetValue>(%101) -> 10353
+  10353: [? %99] -> 10356
+  10356: result = undefined -> 10357
+  10357: return result
+  10375: this50 = |IdentifierReference|[FF]<0>(...) -> 10376
+  10376: call %129 = this50[0].StringValue(|Identifier|<0>(...)) -> 10377
+  10377: call %128 = clo<ResolveBinding>(%129) -> 10378
+  10378: %123 = [? %128] -> 10379
+  10379: [? %123] -> 10452
+  10452: this59 = |IdentifierReference|[FF]<0>(...) -> 10453
+  10453: call %144 = this59[0].StringValue(|Identifier|<0>(...)) -> 10454
+  10454: call %143 = clo<ResolveBinding>(%144) -> 10457
+  10457: call %141 = clo<GetValue>(%143) -> 10461
+  10461: call %140 = clo<EvaluatePropertyAccessWithIdentifierKey>([? %141], |IdentifierName|("p"), true) -> 10464
+  10464: call %119 = clo<GetValue>(%140) -> 10465
+  10465: let rval49 = [? %119] -> 10466
+  10466: call %117 = clo<PutValue>(%123, rval49) -> 10467
+  10467: [? %117] -> 10471
+  10471: call %112 = clo<GetValue>(rval49) -> 10479
+  10479: call %109 = clo<AbstractEqualityComparison>(null, [? %112]) -> 10482
+  10482: call %107 = clo<GetValue>(%109) -> 10483
+  10483: call %106 = clo<ToBoolean>([? %107]) -> 10485
+  10485: if (= [! %106] true) then 10489 else 10505
+  10489: this62 = |Literal|<2>(...) -> 10490
+  10490: call %147 = this62[0].NumericValue(|NumericLiteral|("0")) -> 10493
+  10493: call %145 = clo<GetValue>(%147) -> 10494
+  10494: [? %145] -> 10497
+  10497: %3 = undefined -> 10499
+  10499: call %2 = clo<GetValue>(%3) -> 10500
+  10500: result = [? %2] -> 10501
+  10501: return result
+  10505: this64 = |IdentifierReference|[FF]<0>(...) -> 10506
+  10506: call %152 = this64[0].StringValue(|Identifier|<0>(...)) -> 10507
+  10507: call %151 = clo<ResolveBinding>(%152) -> 10510
+  10510: call %149 = clo<GetValue>(%151) -> 10514
+  10514: call %148 = clo<EvaluatePropertyAccessWithIdentifierKey>([? %149], |IdentifierName|("q"), true) -> 10517
+  10517: call %104 = clo<GetValue>(%148) -> 10518
+  10518: %3 = [? %104] -> 10520
+  10520: call %2 = clo<GetValue>(%3) -> 10521
+  10521: result = [? %2] -> 10522
+  10522: return result
+}
