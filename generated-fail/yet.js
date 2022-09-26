@@ -8,7 +8,12 @@ let x , { } = x += x => { } ;
 class x extends class extends new new new new function ( ) { throw x ; } { ; } { }
 class x extends class extends new new new new function ( ) { x ; } { ; } { }
 
-// Should throw type error when
-// the second argument is 0.
+// Should throw TypeError
+// when the second argument is not given (undefined).
 // https://tc39.es/ecma262/#sec-object.setprototypeof
-Object.setPrototypeOf.call(0, 0)
+Object . setPrototypeOf . call ( 0 , 0 ) ;
+
+// Should throw RangeError,
+// when the argument is not one of "NFC", ...
+// https://tc39.es/ecma262/#sec-string.prototype.normalize
+String . prototype . normalize . call ( 0 , '' ) ;
