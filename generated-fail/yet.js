@@ -17,3 +17,8 @@ Object . setPrototypeOf . call ( 0 , 0 ) ;
 // when the argument is not one of "NFC", ...
 // https://tc39.es/ecma262/#sec-string.prototype.normalize
 String . prototype . normalize . call ( 0 , '' ) ;
+
+// delete should be evaluated later
+// minified: x + delete 0();
+0 | 0 & 0 & 0 >>> 0 >> 0 + 0 - 0 + x % function * ( ) { } % delete - class await extends 0 { } === 0 ?? async function ( ) { } ;
+0 | 0 & 0 & 0 >>> x >> 0 + 0 - 0 + 0 % async function ( ... x ) { } % delete - [ 0 , , , ... 0 ] === 0 ?? x ; 
