@@ -17,3 +17,9 @@ String . prototype . normalize . call ( 0 , '' ) ;
 // minified: x + delete 0();
 0 | 0 & 0 & 0 >>> 0 >> 0 + 0 - 0 + x % function * ( ) { } % delete - class await extends 0 { } === 0 ?? async function ( ) { } ;
 0 | 0 & 0 & 0 >>> x >> 0 + 0 - 0 + 0 % async function ( ... x ) { } % delete - [ 0 , , , ... 0 ] === 0 ?? x ; 
+
+// (Highly likely spec bug)
+// toString of class while initializing static field of itself
+// should be ... [native code] ..
+// minified: class C { static str = String(C) }
+class x { ; static 0 = super [ x ] ||= 0 ; } ;
