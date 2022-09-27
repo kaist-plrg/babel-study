@@ -23,3 +23,12 @@ String . prototype . normalize . call ( 0 , '' ) ;
 // should be ... [native code] ..
 // minified: class C { static str = String(C) }
 class x { ; static 0 = super [ x ] ||= 0 ; } ;
+
+// For statement's lexical declaration:
+// when object assignemnt pattern or
+// array assignment pattern is used,
+// ordering is wrong
+// minified: for ( let [a, b, c] = arr , arr = [1, 2, 3] ; ; ) break ;
+// minified: for ( let { p } = obj , obj = { p: 42 } ; ; ) break ;
+for ( const [ ] = x , x = 0 ; 0 ; ) x : ;
+for ( const [ ] = 0 , x = x ; 0 && async function * ( ) { } ; ) ;
