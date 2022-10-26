@@ -1,4 +1,32 @@
 \begin{abstract}
-Desugarers are hard to implement.
-In this paper, we propose our novel method to verify the desugarer using Syntactic View.
+  JavaScript is one of the most popular interpreted programming languages used
+  in diverse fields. To support consistent execution environments anywhere,
+  JavaScript engines and transpilers must conform to the ECMAScript language
+  specification called ECMA-262, maintained by a committee, TC39. Therefore,
+  creating and maintaining a \textit{conformance test} suite that strictly
+  conforms to the specification, covers diverse language semantics, and consists
+  of a small number of test programs are essential. However, it is challenging
+  to do it automatically because of the complex language semantics with a highly
+  dynamic nature and the fast-evolving language specification. Prior work
+  utilizes coverage-guided fuzzing with a traditional branch coverage in the
+  language specification to synthesize conformance tests. However, it cannot
+  discriminate test programs related to different language semantics whose
+  definitions share the same algorithms in the specification. As a result, it
+  lowers the quality of the fuzzing guidance and even removes meaningful test
+  programs in the final suite.
+
+  This paper presents a novel \textit{feature-sensitive coverage} as a general
+  extension of any coverage metrics. It alleviates the problem by discriminating
+  the covered elements with enclosing contexts that consist of 1)
+  \textit{language features} and 2) \textit{intra-feature call graphs}. We
+  applied feature-sensitive coverage to a state-of-the-art JavaScript
+  conformance test synthesizer, $\jest$, for evaluation. It automatically
+  synthesized \inred{5,000} conformance tests for the latest language
+  specification, ES2022 (ES13), in \inred{100} hours. We tested six mainstream
+  targets (four engines and four transpilers) with synthesized conformance tests
+  and discovered bugs in all of them. We had reported \inred{30} unique
+  conformance bugs (\inred{10} in engines and \inred{20} in transpilers),
+  developers confirmed all of them, and \inred{15} were undiscovered bugs.
+  \inred{In addition, the committee added 25 tests synthesized by our tool to
+  Test262, the official JavaScript conformance test suite.}
 \end{abstract}
