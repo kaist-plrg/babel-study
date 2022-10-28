@@ -1,93 +1,222 @@
 \section{Introduction}\label{sec:intro}
 
-\todo
+Developers utilize JavaScript engines in a wide range of fields.
+%
+While JavaScript was a simple scripting language for client-side programming in
+web browsers, it has now become one of the most popular programming languages.
+%
+It happens because diverse host environments support JavaScript engines for
+server-side programming, cross-platform desktop or mobile applications, PDF
+files, and even embedded systems.
+%
+For a consistent execution environment anywhere, JavaScript engines must conform
+to ECMA-262~\cite{es13}, the official ECMAScript language specification.
+%
+It defines JavaScript syntax in a variant of the extended Backus–Naur form
+(EBNF) and the language semantics using abstract algorithms consisting of
+well-organized English sentences as steps.
+%
+To check the conformance between the specification and JavaScript engines,
+developers usually utilized Test262~\cite{test262}, the official
+\textit{conformance test} suite.
+%
+It consists of JavaScript programs with assertions that check the expected
+behaviors according to the language semantics described in the specification.
+%
+Unfortunately, Test262 is manually maintained without any automated check for
+the correctness of the test programs.
+%
+Hence, it is labor-intensive to retain them as strictly conforming to the
+specification.
 
-%- Javascript is evolving. There was the big change of ES5 to ES6, and new features are coming every year.
-%
-%- Unfortunately, there are different browsers and environments for JS, and not all of them supoort the newest features.
-%
-%- Therefore, the code is desugared. The recent features of javascript is expressed in terms of older features.
-%  ex = babel
-%
+%----------------------------------------%
 
+It is challenging to automatically synthesize correct JavaScript conformance
+tests.
 %
+First, JavaScript has complex language semantics with a highly dynamic nature,
+such as first-class functions, first-class property names, implicit control
+flows (e.g., getters/setters), asynchronous function calls (\code{Promise}),
+mutable prototypes, and even dynamic code execution (\code{eval}).
+%
+Such complex semantics make it difficult to cover all possible edge cases in the
+semantics of various language features.
+%
+Second, JavaScript is fast-evolving with new language features, while the
+language specification is written in a natural language.
+%
+Since 2015, the language specification is annually released to quickly adapt
+users' demands to the language.
+%
+Hence, there have already been eight major updates of ECMA-262, and the latest
+version (ES13, 2022) is 846 pages.
 
-%- (Problem Statement)
-%  + It is important to understand HOW the input and the output of the desugarer are different.
-%    - make sure that the difference between the input code and the ouptut code of the desugarer is minimized, and there aren't any non-trivial semantic difference.
-%    - clarify the conditions that the semantics may vary, and use carefully.
-%- (Challanges: why is it hard?)
-%  + (No definition of "differnce"?)
-%  + Complex semantics
-%  + Test can not cover every cases
+%----------------------------------------%
+
+Therefore, most prior work~\cite{montage, langfuzz, die, favocado,
+codealchemist, sofi} only focuses on the detection of crashing bugs or
+vulnerabilities rather than conformance bugs in JavaScript engines.
 %
-%- (How did we solve it?)
-%  + In this paper, we suggest the method to automatically extract the semantic difference between input and output of desugarer.
-%  First, we express the desugarer in terms of finite pairs of "syntactic view (AAST?)".
-%  Second, each syntactic view is evaluated with ES-Meta, and the summary is generated
-%  Finally, the summaries are compared to see if there are any differneces, and if there is, the condition for realizing the difference is identified.
+Existing techniques utilize fuzz testing (or fuzzing), widely used in compiler
+bug detection by randomly generating or mutating test inputs.
 %
-%- We tested wth babel. We introduce some known bugs of babel where the input and output show differecnt semantics, and showcase that our system can
-%  detect the bugs. (In addition, we newly figured out unidentified bugs from babel and reported them)
+Even though they show outstanding results in detecting crash bugs or
+vulnerabilities in JavaScript engines, they almost neglect the detection of
+conformance bugs.
 %
-%- Contibution
-%  + Suggest method for quantifying the difference between a program and desugared program.
-%  + Implement the system that can automatically compare the trace in given
-%  + Find bug from babel by finding nontrivial difference
+On the other hand, $\comfort$~\cite{comfort} targets conformance bugs by
+leveraging a deep-learning-based program synthesis~\cite{deep-smith} with
+JavaScript values used as function arguments collected from the language
+specification.
+%
+However, it utilizes ECMA-262 only for program synthesis but not for conformance
+checks.
+%
+Thus, it heavily relies on the results of differential testing with multiple
+engines and cannot synthesize conformance tests strictly conforming to the
+specification.
+
+%----------------------------------------%
+
+\paragraph{\textbf{Challenges}}
+%
+Unlike existing fuzzers on JavaScript engines, $\jest$~\cite{jest} automatically
+synthesizes conformance tests directly from a given version of ECMA-262 without
+any engines.
+%
+It first synthesizes JavaScript programs using coverage-guided
+fuzzing~\cite{afl} with \textit{statement and branch coverages} in the language
+specification rather than engines.
+%
+Then, it automatically injects assertions into the synthesized programs based on
+their expected final states in the language specification.
+%
+While it has a remarkable result in detecting conformance bugs, it still has two
+limitations: 1) \textit{removal of meaningful test programs} and 2) \textit{no
+consideration of transpilers}.
+
+%----------------------------------------%
+
+First, statement and branch coverages might \textit{remove meaningful test
+programs} in the final test suite due to the lack of ability to discriminate
+similar edge cases in different language features.
+%
+JavaScript \textit{language features} are either 1) syntactic features or 2)
+built-in APIs.
+%
+In the language specification, the semantics of different language features
+might be defined using the same abstract algorithms.
+%
+Even different semantics parts of the same features might be defined using the
+same algorithms.
+%
+Unfortunately, the program synthesizer with statement and branch coverages
+cannot recognize whether different semantics parts are touched in above cases
+because such coverage metrics are context-insensitive.
+%
+As a result, it lowers the quality of the fuzzing guidance and might even remove
+meaningful test programs in the final test suite.
+%
+In addition, they do not have the ability to discriminate various combinations
+between features.
+%
+We describe more details of these problems with simple examples in
+Section~\ref{sec:motivation}.
+
+%----------------------------------------%
+
+Second, prior work focuses on conformance checks only for engines but does not
+consider \textit{transpilers}.
+%
+However, nowadays, JavaScript transpilers have become essential tools in the
+deployment process of JavaScript applications for various purposes.
+%
+For example, Babel and SWC desugar new language features into
+backward-compatible versions of the language.
+%
+The code minifiers, such as \code{terser}, compress code size to reduce the
+network communication cost, and JavaScript Obfuscator obfuscates code to make it
+hard to understand and reverse-engineering.
+%
+Therefore, ensuring the conformance of transpilers becomes crucial more and
+more.
 
 
+%----------------------------------------%
 
-% Javascript is evolving, and new features are added to it every year.
-% The official specification of javascript is defined by ECMA-262, the ECMAScript language speicification,
-% and the new feaatures are added in the specification with each update.
-% After the release of the 6th edition of ECMAScript specification (ES6) in 2015,
-% the specification has been updated every year, introducing new featues with each update.
+\paragraph{\textbf{This Work}}
+
+This paper introduces a novel \textit{feature-sensitive coverage} as a general
+extension of any coverage metrics.  
 %
-% Unfortunately, not every browsers and environments for Javascript supoort the newest features.
-% (Insert some statistical data of feature support here)
-% This is problematic for Javascript devleopers that want to use the newest features,
-% and still want their code to run on every possible environment.
+First, we formally define a \textit{sensitive coverage} parametric with a given
+set of \textit{views} $\viewset$ as an abstraction of enclosing calling contexts.
 %
-% Therefore, the Javascript developers desugar their Javascript code.
-% Desugaring is the process of rewriting the recent features of javascript in terms of older features.
-% The defacto standard for desugaring the code is using Babel.
-% (Statistic about use of Babel in real world)
+Then, we represent the feature-sensitive coverage as an instance of the sensitive
+coverage with \textit{feature-sensitive views}, which consists of two elements:
 %
-% In perspective of implementing the desugarer, it is important to understand how the input and the output of the desugarer behave differently.
-% First, the primary goal of desugarer is to generate the ouptut code that behaves equivalently with the input code.
-% Therefore, the developers would look at the difference between two codes, and try to minimize the difference.
-% Second, there are some cases where the similar behavior is sacrificed as a trade-off between the performance or the size of the output code.
-% In that case, the developer would want to clarify the conditions of the input program that will make the output program behaves differently
-% and what are the specific behaviour difference that the output code has,
-% so that the user of the desugar can be aware of it.
+1) \textit{language features} to discriminate semantics parts of different
+features and 2) \textit{intra-feature call graphs} for the different semantics
+parts of the same features.
 %
-% However, figuring out the difference of two codes is not an easy task.
-% One reason for the difficulty comes from the complex semantics of Javascript.
-% One nortrious example of "wrong" desugar happens when the logical assignment operator, $\&\&=$ or $\vert\vert=$, is used.
-% $x \&\&= y$ is an expression that assigns that value of y to x, only if x is truthy.
-% One might be tempted to desugar the expression into $x = x \&\& y$, but it is wrong since the assigmnet always happen in this desugared code.
-% The correct desugaring is to use $x \&\& x = y$. As illustrated, In order to detect such difference for desugarer of certain feature,
-% the developer would have to fully understand the semantics of the target feature. Another challenge is that it is difficult to fully
-% think of every possible inputs for desugarer, and it is easy to miss the edge cases.
-% For example, there was an actual bug in babel for desugaring array destructuring. The bug happend when the input code was
-% destructuring the empty string, like in $let [a] = ""$. In the desugared code, the value "" was assigned to an unintended
-% variable due to the short-circuit behavior, which caused a runtime error.
+Moreover, we extend it to cover pair-wise combinations between different
+language features.
 %
-% In this paper, we suggest the method to automatically extract the semantic difference between input and output of desugarer.
-% First, we express the desugarer in terms of finite pairs of \textit{syntactic view}. Syntactic view is an AST where some nodes are
-% substituted with "abstract node".
-% Second, each syntactic view, the \textit{summary} is generated. The summary is defined as the list of
-% operations that are performed to the abstract node in the given syntactic view during evaluation of syntactic view.
-% The evaluation of syntactic view is implemented with ESMeta[..], a tool for extracting mechanized specification from ECMAScript specification.
-% Finally, we compare the two summaries to see if there are any differneces,
-% and if there are, we identify the condition that input program should satisfy in order for the different behavior to occur.
+Then, we generalize prior work to synthesize conformance tests for both
+JavaScript engines and transpilers.
 %
-% In order to test the practicallity of our approach, we performed a case study with Babel.
-% We introduce some known bugs of babel where the input and output show differecnt semantics,
-% and showcase that our system can detect these bugs by detecting the non-trivial difference between summaries of input and output.
-% (In addition, we newly found new bugs from babel and reported them)
+To actualize our techniques, we implemented $\tool$ by extending a
+state-of-the-art JavaScript conformance test synthesizer, $\jest$.
 %
-% The contibutions of the paper are as followed.
-%   + We suggest method for formally expressing the semantic difference between a program and desugared program.
-%   + We implement the system that can automatically extract the
-%   (+ We Find bug grom babel by finding nontrivial difference)
+We applied our tool to the latest language specification (ES13, 2022) for
+evaluation, and it automatically synthesized \inred{5,000} conformance tests
+in \inred{100} hours.
+%
+We tested \inred{eight} mainstream targets (\inred{four} engines and
+\inred{four} transpilers) with synthesized conformance tests and discovered
+bugs in all of them.
+%
+Our tool detected \inred{50} unique conformance bugs (\inred{20} in engines
+and \inred{30} in transpilers), while the baseline tool detected only
+\inred{16} engine bugs.
+%
+We had reported all detected bugs, developers confirmed all of them, and
+\inred{40} were undiscovered bugs.
+%
+\inred{Furthermore, 25 test cases detected by our tool were added to Test262,
+the official JavaScript conformance test suite.}
+
+%----------------------------------------%
+
+\paragraph{\textbf{Contributions}}
+%
+We summarize our contributions as follows:
+%
+\begin{itemize}
+
+  \item
+    We introduce a novel \textit{feature-sensitive coverage} as a general
+    extension of any coverage metrics to discriminate covered elements based on
+    enclosing calling contexts that consist of \textit{language features} and
+    \textit{intra-feature call graphs}.
+    %
+    We also define its extension to cover pair-wise combinations between
+    different language features.
+
+  \item
+    We extended $\jest$ to $\tool$ with the feature-sensitive coverage and
+    the synthesis of conformance tests for transpilers.
+    %
+    Note that it is the first tool that automatically synthesizes conformance
+    tests for both JavaScript engines and transpilers.
+
+  \item
+    We experimentally show that our tool outperforms the baseline tool in the
+    context of conformance bug detection in \inred{eight} mainstream targets
+    (\inred{four} engines and \inred{four} transpilers) with the latest ECMA-262
+    (ES13, 2022).
+    %
+    As a result, $\tool$ detected \inred{50} unique conformance bugs (\inred{20}
+    in engines and \inred{30} in transpilers), while the baseline tool detected
+    only \inred{16} engine bugs.
+\end{itemize}
