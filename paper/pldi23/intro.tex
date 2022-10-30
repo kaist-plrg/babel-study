@@ -1,6 +1,7 @@
 \section{Introduction}\label{sec:intro}
 
-Developers utilize JavaScript engines in a wide range of fields.
+A \textit{conformance test} suite is essential to support consistent execution
+environments for JavaScript.
 %
 While JavaScript was a simple scripting language for client-side programming in
 web browsers, it has now become one of the most popular programming languages.
@@ -17,8 +18,8 @@ It defines JavaScript syntax in a variant of the extended Backus–Naur form
 well-organized English sentences as steps.
 %
 To check the conformance between the specification and JavaScript engines,
-developers usually utilized Test262~\cite{test262}, the official
-\textit{conformance test} suite.
+developers usually utilized Test262~\cite{test262}, the official conformance
+test suite.
 %
 It consists of JavaScript programs with assertions that check the expected
 behaviors according to the language semantics described in the specification.
@@ -26,30 +27,32 @@ behaviors according to the language semantics described in the specification.
 Unfortunately, Test262 is manually maintained without any automated check for
 the correctness of the test programs.
 %
-Hence, it is labor-intensive to retain them as strictly conforming to the
-specification.
+Therefore, it is labor-intensive to maintain them as strictly conforming to the
+specification by hand.
 
 %----------------------------------------%
 
-It is challenging to automatically synthesize correct JavaScript conformance
-tests.
+However, it is challenging to automatically synthesize correct JavaScript
+conformance tests.
 %
-First, JavaScript has complex language semantics with a highly dynamic nature,
-such as first-class functions, first-class property names, implicit control
-flows (e.g., getters/setters), asynchronous function calls (\code{Promise}),
-mutable prototypes, and even dynamic code execution (\code{eval}).
+First, JavaScript has complex language semantics with a highly dynamic nature.
+%
+For example, it supports first-class functions, first-class property names,
+implicit control flows (e.g., getters/setters), asynchronous function calls
+(\code{Promise}), mutable prototypes, and even dynamic code execution
+(\code{eval}).
 %
 Such complex semantics make it difficult to cover all possible edge cases in the
 semantics of various language features.
 %
-Second, JavaScript is fast-evolving with new language features, while the
+Second, JavaScript is fast-evolving with new language features, while its
 language specification is written in a natural language.
 %
-Since 2015, the language specification is annually released to quickly adapt
-users' demands to the language.
+Since 2015, ECMA-262 is annually released to quickly adapt users' demands to the
+language.
 %
-Hence, there have already been eight major updates of ECMA-262, and the latest
-version (ES13, 2022) is 846 pages.
+Already eight major versions of ECMA-262 have been released, and the
+latest version (ES13, 2022) is 846 pages.
 
 %----------------------------------------%
 
@@ -65,60 +68,51 @@ vulnerabilities in JavaScript engines, they almost neglect the detection of
 conformance bugs.
 %
 On the other hand, $\comfort$~\cite{comfort} targets conformance bugs by
-leveraging a deep-learning-based program synthesis~\cite{deep-smith} with
-JavaScript values used as function arguments collected from the language
-specification.
+leveraging a deep-learning-based program synthesis~\cite{deep-smith} and
+differential testing with multiple JavaScript engines.
 %
-However, it utilizes ECMA-262 only for program synthesis but not for conformance
-checks.
-%
-Thus, it heavily relies on the results of differential testing with multiple
-engines and cannot synthesize conformance tests strictly conforming to the
-specification.
+However, it heavily relies on the results of differential testing instead of the
+language semantics described in ECMA-262.
 
 %----------------------------------------%
 
 \paragraph{\textbf{Challenges}}
 %
-Unlike existing fuzzers on JavaScript engines, $\jest$~\cite{jest} automatically
+Unlike other fuzzers on JavaScript engines, $\jest$~\cite{jest} automatically
 synthesizes conformance tests directly from a given version of ECMA-262 without
 any engines.
 %
 It first synthesizes JavaScript programs using coverage-guided
-fuzzing~\cite{afl} with \textit{statement and branch coverages} in the language
-specification rather than engines.
+fuzzing~\cite{afl} with the control-flow graph (CFG) in the language
+specification. 
 %
 Then, it automatically injects assertions into the synthesized programs based on
 their expected final states in the language specification.
 %
 While it has a remarkable result in detecting conformance bugs, it still has two
-limitations: 1) \textit{removal of meaningful test programs} and 2) \textit{no
-consideration of transpilers}.
+limitations: 1) \textit{removal of meaningful conformance tests} and 2)
+\textit{no consideration of transpilers}.
 
 %----------------------------------------%
 
-First, statement and branch coverages might \textit{remove meaningful test
-programs} in the final test suite due to the lack of ability to discriminate
-similar edge cases in different language features.
+First, the prior work utilizes simple \textit{node/branch coverages}, and we
+found that they remove meaningful conformance tests in the final test suite.
 %
-JavaScript \textit{language features} are either 1) syntactic features or 2)
-built-in APIs.
+In the JavaScript language specification, the semantics of different language
+features often share the same abstract algorithms.
 %
-In the language specification, the semantics of different language features
-might be defined using the same abstract algorithms.
+However, node/branch coverages are context-insensitive, and their test
+requirements are just nodes or branches in the CFG in the language
+specification.
 %
-Even different semantics parts of the same features might be defined using the
-same algorithms.
+It means that they are not enough to distinguish the semantics of different
+language features defined with shared abstract algorithms in the specification.
 %
-Unfortunately, the program synthesizer with statement and branch coverages
-cannot recognize whether different semantics parts are touched in above cases
-because such coverage metrics are context-insensitive.
+As a result, it lweakens the fuzzing guidance and even remove meaningful test
+programs in the final test suite.
 %
-As a result, it lowers the quality of the fuzzing guidance and might even remove
-meaningful test programs in the final test suite.
-%
-In addition, they do not have the ability to discriminate various combinations
-between features.
+In addition, even different parts in the semantics of the same language features
+often share the same abstract algorithms, which deepens the problem.
 %
 We describe more details of these problems with simple examples in
 Section~\ref{sec:motivation}.
@@ -128,15 +122,16 @@ Section~\ref{sec:motivation}.
 Second, prior work focuses on conformance checks only for engines but does not
 consider \textit{transpilers}.
 %
-However, nowadays, JavaScript transpilers have become essential tools in the
-deployment process of JavaScript applications for various purposes.
+Recently, developers heavily utilize JavaScript transpilers as well as engines,
+and they have become essential tools in the deployment process of JavaScript
+applications for various purposes.
 %
 For example, Babel and SWC desugar new language features into
-backward-compatible versions of the language.
+backward-compatible versions of the language mainly for legacy web browsers.
 %
-The code minifiers, such as \code{terser}, compress code size to reduce the
-network communication cost, and JavaScript Obfuscator obfuscates code to make it
-hard to understand and reverse-engineering.
+The code compressors compress code size to reduce the network communication
+cost, and JavaScript Obfuscator obfuscates code to make it hard to understand
+and reverse-engineering.
 %
 Therefore, ensuring the conformance of transpilers becomes crucial more and
 more.
@@ -146,45 +141,46 @@ more.
 
 \paragraph{\textbf{This Work}}
 
-This paper introduces a novel \textit{feature-sensitive coverage} as a general
-extension of any coverage metrics.  
+This paper introduces a novel \textit{feature-sensitive coverage}, which
+discriminates the test requirements with their enclosing language features.
 %
-First, we formally define a \textit{sensitive coverage} parametric with a given
-set of \textit{views} $\viewset$ as an abstraction of enclosing calling contexts.
+We observe that specific abstract algorithms in the JavaScript language
+specification are coupled with language features.
 %
-Then, we represent the feature-sensitive coverage as an instance of the sensitive
-coverage with \textit{feature-sensitive views}, which consists of two elements:
+We utilize this information to enhance the quality of the coverage-guided
+fuzzing for conformance test synthesis.
 %
-1) \textit{language features} to discriminate semantics parts of different
-features and 2) \textit{intra-feature call graphs} for the different semantics
-parts of the same features.
+First, we formally define a basic feature-sensitive coverage as a general
+extension of any coverage metrics.
 %
-Moreover, we extend it to cover pair-wise combinations between different
-language features.
+It could discriminate the semantics of different language features defined with
+shared abstract algorithms in the specification.
 %
-Then, we generalize prior work to synthesize conformance tests for both
-JavaScript engines and transpilers.
+In addition, we define its variants with simple call paths from language
+features to distinguish different parts in the semantics of the same language
+features.
 %
-To actualize our techniques, we implemented $\tool$ by extending a
-state-of-the-art JavaScript conformance test synthesizer, $\jest$.
+We implemented $\tool$ by extending a state-of-the-art JavaScript conformance
+test synthesizer, $\jest$, with our feature-sensitive coverage.
 %
-We applied our tool to the latest language specification (ES13, 2022) for
-evaluation, and it automatically synthesized \inred{5,000} conformance tests
-in \inred{100} hours.
+For the latest language specification (ES13, 2022), our tool automatically
+synthesized \inred{5,000} conformance tests in \inred{100} hours.
 %
-We tested \inred{eight} mainstream targets (\inred{four} engines and
-\inred{four} transpilers) with synthesized conformance tests and discovered
-bugs in all of them.
+We checked conformance of not only engines but also transpilers with the
+synthesized conformance tests for evaluation.
 %
-Our tool detected \inred{50} unique conformance bugs (\inred{20} in engines
-and \inred{30} in transpilers), while the baseline tool detected only
-\inred{16} engine bugs.
+The evaluation targets were \inred{eight} mainstream tools (\inred{four} engines
+and \inred{four} transpilers), and we discovered bugs in all of them.
+%
+Our tool detected \inred{50} unique conformance bugs (\inred{20} in engines and
+\inred{30} in transpilers), while the baseline tool detected only \inred{16}
+engine bugs.
 %
 We had reported all detected bugs, developers confirmed all of them, and
-\inred{40} were undiscovered bugs.
+\inred{40} were newly discovered bugs.
 %
-\inred{Furthermore, 25 test cases detected by our tool were added to Test262,
-the official JavaScript conformance test suite.}
+\inred{Furthermore, 25 test cases were added to Test262, the official JavaScript
+conformance test suite.}
 
 %----------------------------------------%
 
@@ -195,20 +191,16 @@ We summarize our contributions as follows:
 \begin{itemize}
 
   \item
-    We introduce a novel \textit{feature-sensitive coverage} as a general
-    extension of any coverage metrics to discriminate covered elements based on
-    enclosing calling contexts that consist of \textit{language features} and
-    \textit{intra-feature call graphs}.
+    We introduce a novel \textit{feature-sensitive coverage} to discriminate
+    test requirements with their enclosing language features.
     %
-    We also define its extension to cover pair-wise combinations between
-    different language features.
+    We also define its variants with simple call paths from language features to
+    distinguish different parts in the semantics of the same language features.
 
   \item
-    We extended $\jest$ to $\tool$ with the feature-sensitive coverage and
-    the synthesis of conformance tests for transpilers.
-    %
-    Note that it is the first tool that automatically synthesizes conformance
-    tests for both JavaScript engines and transpilers.
+    We extended $\jest$ to $\tool$ with the feature-sensitive coverage, and it
+    is the first work to check conformance not only for engines but also for
+    transpilers.
 
   \item
     We experimentally show that our tool outperforms the baseline tool in the
