@@ -27,6 +27,11 @@
 % basic
 \newcommand{\inred}[1]{{\color{red}{#1}}}
 \newcommand{\todo}{\inred{TODO}}
+\newcommand{\cfbox}[2]{%
+  \colorlet{currentcolor}{.}%
+  {\color{#1}%
+  \fbox{\color{currentcolor}#2}}%
+}
 
 % tool name
 \newcommand{\name}[1]{\textsf{#1}}
