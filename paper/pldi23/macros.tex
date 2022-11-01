@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{ulem}
 \usepackage{listings}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -80,8 +81,19 @@
 }
 
 % codes
-\newcommand{\code}[1]{\text{\lstinline[style=JS]!#1!}} 
+\newcommand{\jscode}[1]{\text{\lstinline[style=JS]!#1!}} 
+\newcommand{\scode}[1]{\texttt{\small{#1}}}
 
-% views
-\newcommand{\view}{\pi}
-\newcommand{\viewset}{\Pi}
+% ECMA-262
+\definecolor{esnt}{rgb}{0.20, 0.20, 0.20}
+\definecolor{esparam}{rgb}{0.16, 0.63, 0.59}
+\newcommand{\esnt}[1]{\textit{\color{esnt}#1}}
+\newcommand{\esntp}[2]{\esnt{#1}_\text{ \color{esparam}[#2]}}
+\newcommand{\est}[1]{\textbf{\texttt{#1}}}
+\definecolor{esalg}{rgb}{0.12, 0.42, 0.65}
+\newcommand{\esalg}[1]{{\color{esalg}#1}}
+\definecolor{esvar}{rgb}{0.16, 0.63, 0.59}
+\newcommand{\esvar}[1]{\textit{\color{esvar}#1}}
+\newcommand{\esval}[1]{\textbf{#1}}
+\newcommand{\escode}[1]{\textbf{\texttt{#1}}}
+\newcommand{\esconst}[1]{\textsf{#1}}
