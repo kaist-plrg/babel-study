@@ -1,21 +1,36 @@
 \section{Background and Motivation}\label{sec:motivation}
 
-In this section, we first introduce how ECMA-262~\cite{es13} describes
-JavaScript syntax and semantics with simple examples.
+In this section, we first introduce how the language specification describes
+JavaScript syntax and semantics of language features with simple examples.
 %
-Then, we explain how prior work synthesizes JavaScript conformance tests using
-coverage-guided fuzzing~\cite{afl} with the control-flow graph (CFG) in the
-language specification.
+Then, we explain how prior work~\cite{jest} synthesizes JavaScript conformance
+tests using coverage-guided fuzzing~\cite{afl} with the control-flow graph (CFG)
+in the language specification.
 %
 Finally, we explain why node/branch coverages cannot fully discriminate
-different semnatics in different language features or even in the same features.
+different semantics in different language features or even in the same features.
+
+
+
 
 \subsection{JavaScript Language Specification (ECMA-262)}
+
+ECMA-262 is the official JavaScript language specification written in English
+and maintained by the Ecma Technical Committee 39 (TC39).
+%
+Now, we explain how it describes JavaScript syntax and semantics of language
+features with simple examples.
+
+
+
+
+\subsubsection{Syntax}
 
 \begin{figure}
   \centering
   \begin{subfigure}{\textwidth}
     \[
+      \small
       \begin{array}{l}
         \esntp{AdditiveExpression}{Yield, Await} \est{:}\\
 
@@ -28,146 +43,391 @@ different semnatics in different language features or even in the same features.
         \esntp{MultiplicativeExpression}{?Yield, ?Await}\\
       \end{array}
     \]
-    \subcaption{The syntax defined with a variant of EBNF.}
   \end{subfigure}
-  \par\bigskip
+  \caption{
+    The syntax of \esnt{AdditiveExpression} in ES13.
+  }
+  \label{fig:add-syntax}
+\end{figure}
+
+JavaScript syntax is defined with a variant of the extended Backus–Naur form
+(EBNF).
+%
+It consists of syntactic productions defined with multiple alternatives, and
+each alternative is a sequence of symbols.
+%
+Unlike the original EBNF, its nonterminals are parametric with boolean
+arguments; $\esparam{?}$ denotes passing the argument as is, and $\esparam{+}$
+and $\esparam{\(\sim\)}$ denote passing the \scode{true} and \scode{false},
+respectively.
+%
+Beyond parametric nonterminals, it even provides context-sensitive symbols,
+conditional alternatives, etc.
+%
+For example, consider the following simple additive expression:
+%
+\begin{equation}\label{equ:add}
+  \jscode{1 + 2;}
+\end{equation}
+%
+It tries to compute the addition of two Number values \jscode{1} and \jscode{2}.
+%
+Figure~\ref{fig:add-syntax} describes its syntax with the production of
+\esnt{AdditiveExpression}.
+%
+It requires two boolean parameters, \esparam{Yield} and \esparam{Await}, and
+consists of three alternatives.
+%
+The second (or third) one consists of three symbols, a nonterminal
+\esnt{AdditiveExpression}, a terminal \est{+} (or \est{-}), and a nonterminal
+\esnt{MultiplicativeExpression}.
+
+
+
+
+\subsubsection{Semantics}
+
+\begin{figure}
+  \centering
   \begin{subfigure}{\textwidth}
-    \textbf{13.8.1.1 Runtime Semantics: Evaluation}
-    \\%
+    \small
+    %----------------------------------------%
+    $\fbox{\textsf{Syntax-directed operations (SDOs)}}$
+    \vspace*{0.5em}\\
+    %----------------------------------------%
+    \textbf{Evaluation} of
     \esnt{AdditiveExpression} \est{:} \esnt{AdditiveExpression} \est{+}
     \esnt{MultiplicativeExpression}
-    \vspace*{.5em}\\%
-    1. Return ?${}^{2}$
-    \esalg{EvaluateStringOrNumericBinaryExpression}${}^{1}$(\esnt{AdditiveExpression},
-    \escode{+}, \esnt{MultiplicativeExpression}).${}^{3}$
-    \\%
-
-    \textbf{13.8.2.1 Runtime Semantics: Evaluation}
-    \vspace*{.5em}\\%
+    \\
+    \null\quad 1. Return ?$\lab{2}$
+    \esalg{EvaluateStringOrNumericBinaryExpression}$\lab{1}$(\esnt{AdditiveExpression},
+    \escode{+}, \esnt{MultiplicativeExpression}).$\lab{3}$
+    \vspace*{0.5em}\\
+    %----------------------------------------%
+    \textbf{Evaluation} of
     \esnt{AdditiveExpression} \est{:} \esnt{AdditiveExpression} \est{-}
     \esnt{MultiplicativeExpression}
-    \vspace*{.5em}\\%
-    1. Return ?${}^{5}$
-    \esalg{EvaluateStringOrNumericBinaryExpression}${}^{4}$(\esnt{AdditiveExpression},
-    \escode{-}, \esnt{MultiplicativeExpression})${}^{6}$.
-    \\%
+    \\
+    \null\quad 1. Return ?$\lab{5}$
+    \esalg{EvaluateStringOrNumericBinaryExpression}$\lab{4}$(\esnt{AdditiveExpression},
+    \escode{-}, \esnt{MultiplicativeExpression}).$\lab{6}$
 
-    \textbf{13.15.4 EvaluateStringOrNumericBinaryExpression (
+  \end{subfigure}
+  \caption{
+    The semantics of \esnt{AdditiveExpression} defined with two syntax-directed
+    operations (SDOs) in ES13.
+  }
+  \label{fig:add-sdo}
+\end{figure}
+
+The language specification describes semantics using abstract algorithms, and
+there are three different kinds of abstract algorithms:
+%
+\begin{itemize}
+  \item Syntax-directed operations (SDOs) (e.g., \textbf{Evaluation} of
+    \esnt{AdditiveExpression} \est{:} $\cdots$ in Figure~\ref{fig:add-sdo})
+
+  \item Normal algorithms (e.g., \textbf{ToNumeric} in
+    Figure~\ref{fig:normal-algos})
+
+  \item Built-in methods (e.g., \textbf{Number} in
+    Figure~\ref{fig:builtin-number})
+\end{itemize}
+
+%----------------------------------------%
+
+A \textit{syntax-directed operation (SDO)} defines the semantics of each
+alternative in syntactic productions.
+%
+It consists of 1) target alternative, 2) name, 3) optional parameters, and 4)
+body.
+%
+Each algorithm body is pseudo-code consisting of well-organized steps written in
+a natural language, English.
+%
+For example, two abstract algorithms in Figure~\ref{fig:add-sdo} are SDOs whose
+target alternatives are the second and third ones of the
+\esnt{AdditiveExpression} production for addition (\scode{+}) and subtraction
+(\scode{-}) operators.
+%
+Their names are \textbf{Evaluation} with no optional parameters, and
+bodies consist of a single step that invokes another normal algorithm
+\textbf{EvaluateStringOrNumericBinaryExpression}.
+%
+Note that the variables \esnt{AdditiveExpression} and
+\esnt{MultiplicativeExpression} in these SDOs store \textit{abstract syntax
+trees (ASTs)} of left- and right-hand side of given additive expressions.
+%
+For instance, if the first SDO in Figure~\ref{fig:add-sdo} takes the additive
+expressions in~(\ref{equ:add}), two metavariables store ASTs of two Number
+literal \jscode{1} and \jscode{2}, respectively.
+%
+It means that abstract algorithms in ECMA-262 treat ASTs as values as well, and
+could store them in variables or pass them as arguments of other algorithms.
+%
+The ``?'' operator is a shortcut of the following steps to handle control-flows:
+\vspace*{.5em}\\
+{
+  \noindent
+  \null\qquad 1. If \esvar{argument} is an abrupt completion, return
+  \esalg{Completion}(\esvar{argument}).
+  \\
+  \null\qquad 2. Else if \esvar{argument} is a Completion Record, set
+  \esvar{argument} to \esvar{argument}.[[Value]].
+}
+\vspace*{.5em}\\
+where a completion value is an \textit{abrupt} when it represnets exceptional
+control-flows, such as \jscode{throw}, \jscode{return}, \jscode{break}, and
+\jscode{continue}.
+%
+In other words, the ``?'' operator is a branch that checks whether given
+values are abrupt completions and directly return them if so.
+
+%----------------------------------------%
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{\textwidth}
+    \small
+    %----------------------------------------%
+    $\fbox{\textsf{Normal algorithms}}$
+    \vspace*{0.5em}\\
+    %----------------------------------------%
+    \textbf{EvaluateStringOrNumericBinaryExpression} (
       \esvar{leftOperand},
       \esvar{opText},
       \esvar{rightOperand}
-    )}
-    \vspace*{.5em}\\%
-    % 1. Let \esvar{lref} be the result of evaluating \esvar{leftOperand}.
-    % \\%
-    % 2. Let \esvar{lval} be ? \esalg{GetValue}(\esvar{lref}).
-    % \\%
-    % 3. Let \esvar{rref} be the result of evaluating \esvar{rightOperand}.
-    % \\%
-    % 4. Let \esvar{rval} be ? \esalg{GetValue}(\esvar{rref}).
-    ...${}^{7}$
-    \\%
-    5. Return ?${}^{9}$ \esalg{ApplyStringOrNumericBinaryOperator}${}^{8}$(\esvar{lval},
-    \esvar{opText}, \esvar{rval}).${}^{10}$
-    \\%
-
-    \textbf{13.15.3 ApplyStringOrNumericBinaryOperator (
+    )
+    \\
+    \null\quad $\lab{7}$...
+    \\
+    \null\quad 5. Return ?$\lab{9}$
+    \esalg{ApplyStringOrNumericBinaryOperator}$\lab{8}$(\esvar{lval},
+    \esvar{opText}, \esvar{rval}).$\lab{10}$
+    \vspace*{0.5em}\\
+    %----------------------------------------%
+    \textbf{ApplyStringOrNumericBinaryOperator} (
       \esvar{lval},
       \esvar{opText},
       \esvar{rval}
-    )}
-    \vspace*{.5em}\\%
-    % 1. If \esvar{opText} is \escode{+}, then ...
-    % \\%
-    % 2. NOTE: At this point, it must be a numeric operation.
-    ...${}^{11}$
-    \\%
-    3. Let \esvar{lnum} be ?${}^{13}$ \esalg{ToNumeric}${}^{12}$(\esvar{lval}).
-    \\%
-    4. Let \esvar{rnum} be ?${}^{15}$ \esalg{ToNumeric}${}^{14}$(\esvar{rval}).
-    \\%
-    5. If \esalg{Type}(\esvar{lnum}) is different from \esalg{Type}(\esvar{rnum})${}^{16}$,
-    \cfbox{red}{throw a \esval{TypeError} exception.}${}^{\inred{17}}$
-    \\%
-    ...${}^{18}$
-    \\%
+    )
+    \\
+    \null\quad $\lab{11}$...
+    \\
+    \null\quad 3. Let \esvar{lnum} be ?$\lab{13}$
+    \esalg{ToNumeric}$\lab{12}$(\esvar{lval}).
+    \\
+    \null\quad 4. Let \esvar{rnum} be ?$\lab{15}$
+    \esalg{ToNumeric}$\lab{14}$(\esvar{rval}).
+    \\
+    \null\quad 5. If \esalg{Type}(\esvar{lnum}) is different from
+    \esalg{Type}(\esvar{rnum})$\lab{16}$, \cfbox{red}{throw a \esval{TypeError}
+    exception.}$\lab{\inred{17}}$
+    \\
+    \null\quad ...$\lab{18}$
+    \vspace*{0.5em}\\
+    %----------------------------------------%
+    \textbf{ToNumeric} ( \esvar{value} )
+    \\
+    \null\quad $\lab{19}$...
+    \\
+    \null\quad 2. If \esalg{Type}(\esvar{primValue}) is BigInt$\lab{20}$,
+    \cfbox{red}{return
+    \esvar{primValue}.}$\lab{\inred{21}}$
+    \\
+    \null\quad ...$\lab{22}$
+  \end{subfigure}
+  \caption{Three normal algorithms used as helpers for the semantics of
+  \esnt{AdditiveExpression} in ES13.}
+  \label{fig:normal-algos}
+  \vspace*{-1em}
+\end{figure}
 
-    \textbf{7.1.3 ToNumeric ( \esvar{value} )}
-    \vspace*{.5em}\\%
-    % 1. ${}^{19}$Let \esvar{primValue} be ? \esalg{ToPrimitive}(\esvar{value},
-    % \esconst{number}).
-    ...${}^{19}$
-    \\%
-    2. If \esalg{Type}(\esvar{primValue}) is BigInt${}^{20}$, \cfbox{red}{return
-    \esvar{primValue}.}${}^\inred{21}$
-    \\%
-    ...${}^{20}$
-    \\%
+A \textit{normal algorithm} is the basic form of abstract algorithms defined
+with its 1) name, 2) parameters, and 3) body.
+%
+It is commonly used as helpers, and multiple normal algorithms are used when
+defining semantics of language features.
+%
+Hence, the semantics of different language features often share the same normal
+algorithms.
+%
+For example, both SDOs in Figure~\ref{fig:add-sdo} invoke the same normal
+algorithm \textbf{EvaluateStringOrNumericBinaryExpression} with different second
+arguments \escode{+} and \escode{-}, respectively.
+%
+Then, it transitively invokes other normal algorithms
+\textbf{ApplyStringOrNumericBinaryOperator} and \textbf{ToNumeric}.
+%
+Thus, at least three normal algorithms are shared in the semantics of the
+addition and subtraction expressions.
 
-    % \textbf{22.1.3.14 String.prototype.normalize ( [ \esvar{form} ] )}
-    % \vspace*{.5em}\\%
-    % 1. Let \esvar{O} be ? \esalg{RequireObjectCoercible}(\esval{this} value).
-    % \\%
-    % 2. Let \esvar{S} be ? \esalg{ToString}(\esvar{O}).
-    % \\%
-    % 3. If \esvar{form} is \esval{undefined}, let \esvar{f}\;  be \esval{"NFC"}.
-    % \\%
-    % 4. Else, let \esvar{f}\; be ? \esalg{ToString}(\esvar{form}).
-    % \\%
-    % ...
-    % \\%
-    % 
-    % \textbf{ToString ( \esvar{argument} )}
-    % \vspace*{.5em}\\%
-    % % 1. If \esalg{Type}(\esvar{argument}) is Undefined, return \esval{"undefined"}.
-    % % \\%
-    % % 2. Else if \esalg{Type}(\esvar{argument}) is Null, return \esval{"undefined"}.
-    % % \\%
-    % % 3. Else if \esalg{Type}(\esvar{argument}) is Boolean,
-    % % \\%
-    % % \indent a. If \esvar{argument} is \esval{true}, return \esval{"true"}.
-    % % \\%
-    % % \indent b. If \esvar{argument} is \esval{false}, return \esval{"false"}.
-    % % \\%
-    % % 4. Else if \esalg{Type}(\esvar{argument}) is Number, return
-    % % \esalg{Number::toString}(\esvar{argument}).
-    % ...
-    % \\%
-    % 5. Else if \esalg{Type}(\esvar{argument}) is String, return \esvar{argument}.
-    % \\%
-    % ...
-    % % 6. Else if \esalg{Type}(\esvar{argument}) is Symbol, throw a \esval{TypeError}
-    % % exception.
-    % % \\%
-    % % 7. Else if \esalg{Type}(\esvar{argument}) is BigInt, return !
-    % % \esalg{BigInt::toString}(\esvar{argument}).
-    % % \\%
-    % % 8. Else if \esalg{Type}(\esvar{argument}) is Object,
-    % % \\%
-    % % \indent a. Let \esvar{primValue} be ? \esalg{ToPrimitive}(\esvar{argument},
-    % % \esval{string}).
-    % % \\%
-    % % \indent b. Return ? \esalg{ToString}(\esvar{primValue}).
-    % \\%
-    \subcaption{The semantics defined with abstract algorithms.}
+%----------------------------------------%
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{\textwidth}
+    \small
+    %----------------------------------------%
+    $\fbox{\textsf{Built-in methods}}$
+    \vspace*{0.5em}\\
+    %----------------------------------------%
+    \textbf{Number} ( \esvar{value} )
+    \\
+    \null\quad 1. If \esvar{value} is present$\lab{23}$, then
+    \\
+    \null\quad\quad a. Let \esvar{prim} be ?$\lab{25}$
+    \esalg{ToNumeric}$\lab{24}$(\esvar{value}).
+    \\
+    \null\quad ...$\lab{26}$
   \end{subfigure}
   \caption{
-    The (a) syntax and (b) semantics of \esnt{AdditiveExpression} for addition
-    (\scode{+}) and subtraction (\scode{-}) operators described in the latest
-    JavaScript language specification (ES13, 2022).
+    The built-in method \textbf{Number} in ES13.
   }
-  \label{fig:spec-additive}
+  \label{fig:builtin-number}
 \end{figure}
+
+JavaScript provides diverse built-in APIs as opaque functions, such as
+\jscode{Object.getPrototypeOf} and \jscode{Number.prototype.toString}.
+%
+A \textit{built-in method} defines the semantics of a built-in API.
+%
+For example, Figure~\ref{fig:builtin-number} defines the semantics of the
+\jscode{Number} built-in API.
+%
+Since its basic functionality is to convert a given JavaScript value to the
+corresponding Number value, it utilizes the normal algorithm \textbf{ToNumeric}
+as a helper as well.
+
+
+
+
+\subsubsection{Language Features}
+
+In JavaScript, a language feature is 1) a \textit{syntactic feature} or 2) a
+\textit{built-in API feature}.
+%
+A syntactic feature is related to specific JavaScript syntax consisting of an
+alternative in a syntactic production and corresponding SDO.
+%
+On the other hand, a built-in API feature is related to a built-in API instead
+of specific syntax.
+
+
+
+
+\subsection{Conformance Test Synthesis with Coverage-guided Fuzzing}
 
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{img/spec-cfg}
   \caption{
-    The control-flow graph (CFG) for two different \textbf{Evaluation}
-    algorithms of \esnt{AdditiveExpression} for addition (\scode{+}) and
-    subtraction (\scode{-}) operators in ES13.
+    The control-flow graph (CFG) of abstract algorithms in
+    Figure~\ref{fig:add-sdo}, \ref{fig:normal-algos}, and
+    \ref{fig:builtin-number}.
   }
   \label{fig:spec-cfg}
 \end{figure}
 
-\todo
+Prior work~\cite{jest} presents a way to automatically synthesize JavaScript
+conformance tests using coverage-guided fuzzing with the control-flow graph
+(CFG) in the language specification.
+%
+It first utilizes another tool $\jiset$~\cite{jiset} to extract a mechanized
+specification from a given version of ECMA-262.
+%
+A specification is mechanized when it is formally defined and executable.
+%
+Then, it extracts a CFG from the mechanized specification and performs
+a coverage-guided fuzzing~\cite{afl} to synthesize diverse JavaScript programs.
+%
+It maintains a \textit{program pool} based on coverage information of JavaScript
+programs in the extracted CFG.
+%
+It repeatedly tries to construct a new program by mutating programs in the pool
+and adds the new mutated program to the pool when it covers more nodes or
+branches.
+%
+Finally, it automatically injects assertions to the synthesized programs in the
+pool to convert them to the conformance tests for JavaScript.
+%
+The assertions injected to each program represnets the final state of its
+execution on the mechanized specification.
+
+%----------------------------------------%
+
+For example, we could extract a CFG depeicted in Figure~\ref{fig:spec-cfg} from
+the abstract algorithms in Figure~\ref{fig:add-sdo}, \ref{fig:normal-algos}, and
+\ref{fig:builtin-number} via $\jiset$.
+%
+In this graph, circles denote nodes, diamonds denote branches, and boxes denote
+algorithms.
+%
+Arrows denote control-flows, thick solid arrows denote algorithm calls, and
+thick dotted arrows denote algorithm returns.
+%
+The labels in nodes are matched with the labels annotated in the algorithms.
+%
+Now, consider a simple JavaScript program: \jscode{let x = 1 + 2;}.
+%
+Then, it covers only false branch of $20$ because the left- and right-hand sides
+of \jscode{1 + 2} are both Number values rather than BitInt values.
+%
+In this case, the coverage-guided fuzzer repeatedly mutates it to cover the true
+branch of $20$ and might get another program: \jscode{let x = 3n + 4n;}.
+%
+The new mutated program now covers the true branch of $20$ and the node of $21$.
+%
+Finally, the assertion \jscode{assert(x === 7n);} is automatically injected to
+the mutated program based on the final state of its execution on the mechanized
+specification.
+
+
+
+
+\subsection{Motivation}
+
+Prior work utilizes simple \textit{node/branch coverages} in the coverage-guided
+fuzzer to synthesize JavaScript conformance tests.
+%
+However, such simple coverage metrics cannot fully discriminate different
+semantics in different language features or even in the same features.
+
+
+
+
+\subsubsection{Different Semantics in Different Language Features}
+
+Assume that the current program pool is as follows:
+\[
+  \cdots \qquad \jscode{1 + 3n;} \qquad \cdots
+\]
+%
+Then, the node of $17$ in the CFG depicted in Figure~\ref{fig:spec-cfg} is
+already covered by the program: \jscode{1 + 3n;}.
+%
+It means that another similar program \jscode{1 - 3n;} might be not added to the
+program pool because the test requirement for the node of $17$ is already
+satisfied by \jscode{1 + 3n;}.
+%
+However, the conformance test inferred from \jscode{1 - 3n;} is also a
+meaningful test to check the edge case for the semantics of subtraction operator
+(\scode{-}).
+%
+Furthermore, it even lowers the chance to get more complex programs using the
+subtraction operator (\scode{-}), such as \jscode{[] - ""}.
+%
+Therefore, we need a more fine-grained definition of test requirements that
+discriminates \jscode{1 + 3n;} and \jscode{1 - 3n;} for a more advanced quality
+of JavaScript conformance test suite.
+
+
+
+
+\subsubsection{Different Semantics in Same Language Features}
+
+Now, assume that 
+
+
+
+todo

@@ -6,7 +6,6 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
-\usepackage{ulem}
 \usepackage{listings}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -23,6 +22,9 @@
 \usepackage{microtype}
 \usepackage{hyperref}
 \usepackage{balance}
+
+% colors
+\definecolor{dkgreen}{rgb}{0,0.5,0}
 
 % basic
 \newcommand{\inred}[1]{{\color{red}{#1}}}
@@ -56,8 +58,8 @@
 \lstdefinelanguage{JavaScript}{
   keywords={async, await, break, case, catch, class, const, continue, debugger,
     default, delete, do, else, enum, export, extends, false, finally, for,
-    function, if, import, in, of, instanceof, new, null, return, super, switch, this,
-    throw, true, try, typeof, let, var, void, while, with, yield},
+    function, if, import, in, of, instanceof, new, null, return, super, switch,
+    this, throw, true, try, typeof, let, var, void, while, with, yield},
   keywordstyle=\color{blue}\bfseries,
   ndkeywordstyle=\color{darkgray}\bfseries,
   identifierstyle=\color{black},
@@ -93,7 +95,8 @@
 \definecolor{esnt}{rgb}{0.20, 0.20, 0.20}
 \definecolor{esparam}{rgb}{0.16, 0.63, 0.59}
 \newcommand{\esnt}[1]{\textit{\color{esnt}#1}}
-\newcommand{\esntp}[2]{\esnt{#1}_\text{ \color{esparam}[#2]}}
+\newcommand{\esparam}[1]{\text{\color{esparam}#1}}
+\newcommand{\esntp}[2]{\esnt{#1}_\esparam{[#2]}}
 \newcommand{\est}[1]{\textbf{\texttt{#1}}}
 \definecolor{esalg}{rgb}{0.12, 0.42, 0.65}
 \newcommand{\esalg}[1]{{\color{esalg}#1}}
@@ -102,3 +105,4 @@
 \newcommand{\esval}[1]{\textbf{#1}}
 \newcommand{\escode}[1]{\textbf{\texttt{#1}}}
 \newcommand{\esconst}[1]{\textsf{#1}}
+\newcommand{\lab}[1]{{}^{\textbf{#1}}}
