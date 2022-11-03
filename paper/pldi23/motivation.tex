@@ -70,7 +70,8 @@ For example, consider the following simple additive expression:
   \jscode{1 + 2;}
 \end{equation}
 %
-It tries to compute the addition of two Number values \jscode{1} and \jscode{2}.
+It tries to compute the addition of two Number values, \jscode{1} and
+\jscode{2}.
 %
 Figure~\ref{fig:add-syntax} describes its syntax with the production of
 \esnt{AdditiveExpression}.
@@ -142,8 +143,8 @@ alternative in syntactic productions.
 It consists of 1) target alternative, 2) name, 3) optional parameters, and 4)
 body.
 %
-Each algorithm body is pseudo-code consisting of well-organized steps written in
-a natural language, English.
+Each algorithm body is a pseudo-code consisting of well-organized steps written
+in a natural language, English.
 %
 For example, two abstract algorithms in Figure~\ref{fig:add-sdo} are SDOs whose
 target alternatives are the second and third ones of the
@@ -156,16 +157,17 @@ bodies consist of a single step that invokes another normal algorithm
 %
 Note that the variables \esnt{AdditiveExpression} and
 \esnt{MultiplicativeExpression} in these SDOs store \textit{abstract syntax
-trees (ASTs)} of left- and right-hand side of given additive expressions.
+trees (ASTs)} of the left- and right-hand side of given additive expressions.
 %
 For instance, if the first SDO in Figure~\ref{fig:add-sdo} takes the additive
 expressions in~(\ref{equ:add}), two metavariables store ASTs of two Number
-literal \jscode{1} and \jscode{2}, respectively.
+literals, \jscode{1} and \jscode{2}, respectively.
 %
-It means that abstract algorithms in ECMA-262 treat ASTs as values as well, and
-could store them in variables or pass them as arguments of other algorithms.
+It means that abstract algorithms in ECMA-262 treat ASTs as values, and could
+store them in variables or pass them as arguments of other algorithms.
 %
-The ``?'' operator is a shortcut of the following steps to handle control-flows:
+The ``?'' operator is a shorthand for the following sequence of steps to handle
+control flows:
 \vspace*{.5em}\\
 {
   \noindent
@@ -176,12 +178,12 @@ The ``?'' operator is a shortcut of the following steps to handle control-flows:
   \esvar{argument} to \esvar{argument}.[[Value]].
 }
 \vspace*{.5em}\\
-where a completion value is an \textit{abrupt} when it represnets exceptional
-control-flows, such as \jscode{throw}, \jscode{return}, \jscode{break}, and
+where a completion record is \textit{abrupt} when it represents exceptional
+control flows, such as \jscode{throw}, \jscode{return}, \jscode{break}, and
 \jscode{continue}.
 %
 In other words, the ``?'' operator is a branch that checks whether given
-values are abrupt completions and directly return them if so.
+values are abrupt completions and directly returns them if so.
 
 %----------------------------------------%
 
@@ -243,11 +245,11 @@ values are abrupt completions and directly return them if so.
   \vspace*{-1em}
 \end{figure}
 
-A \textit{normal algorithm} is the basic form of abstract algorithms defined
-with its 1) name, 2) parameters, and 3) body.
+A \textit{normal algorithm} is the primary form of an abstract algorithm defined
+by its 1) name, 2) parameters, and 3) body.
 %
-It is commonly used as helpers, and multiple normal algorithms are used when
-defining semantics of language features.
+It is commonly used as a helper, and multiple normal algorithms are used when
+defining the semantics of language features.
 %
 Hence, the semantics of different language features often share the same normal
 algorithms.
@@ -256,7 +258,7 @@ For example, both SDOs in Figure~\ref{fig:add-sdo} invoke the same normal
 algorithm \textbf{EvaluateStringOrNumericBinaryExpression} with different second
 arguments \escode{+} and \escode{-}, respectively.
 %
-Then, it transitively invokes other normal algorithms
+Then, it transitively invokes other normal algorithms,
 \textbf{ApplyStringOrNumericBinaryOperator} and \textbf{ToNumeric}.
 %
 Thus, at least three normal algorithms are shared in the semantics of the
@@ -311,7 +313,14 @@ A syntactic feature is related to specific JavaScript syntax consisting of an
 alternative in a syntactic production and corresponding SDO.
 %
 On the other hand, a built-in API feature is related to a built-in API instead
-of specific syntax.
+of a specific syntax.
+%
+For example, the addition and subtraction operators (\scode{+}) are syntactic
+features defined by the second and third alternatives of
+\esnt{AdditiveExpression} and corresponding \textbf{Evaluation} SDOs.
+%
+The \textbf{Number} built-method describes the semantics of a built-in API
+feature \jscode{Number}.
 
 
 
@@ -338,11 +347,11 @@ specification from a given version of ECMA-262.
 %
 A specification is mechanized when it is formally defined and executable.
 %
-Then, it extracts a CFG from the mechanized specification and performs
+Then, it constructs a CFG from the mechanized specification and performs
 a coverage-guided fuzzing~\cite{afl} to synthesize diverse JavaScript programs.
 %
-It maintains a \textit{program pool} based on coverage information of JavaScript
-programs in the extracted CFG.
+To keep meaningful synthesized programs, it maintains a \textit{program pool}
+based on coverage information of the programs in the extracted CFG.
 %
 It repeatedly tries to construct a new program by mutating programs in the pool
 and adds the new mutated program to the pool when it covers more nodes or
@@ -351,34 +360,35 @@ branches.
 Finally, it automatically injects assertions to the synthesized programs in the
 pool to convert them to the conformance tests for JavaScript.
 %
-The assertions injected to each program represnets the final state of its
+The assertions injected into each program represents the final state of its
 execution on the mechanized specification.
 
 %----------------------------------------%
 
-For example, we could extract a CFG depeicted in Figure~\ref{fig:spec-cfg} from
-the abstract algorithms in Figure~\ref{fig:add-sdo}, \ref{fig:normal-algos}, and
-\ref{fig:builtin-number} via $\jiset$.
+For example, we could extract a CFG depicted in Figure~\ref{fig:spec-cfg} from
+the abstract algorithms in Figures~\ref{fig:add-sdo}, \ref{fig:normal-algos},
+and \ref{fig:builtin-number} via $\jiset$.
 %
 In this graph, circles denote nodes, diamonds denote branches, and boxes denote
 algorithms.
 %
-Arrows denote control-flows, thick solid arrows denote algorithm calls, and
-thick dotted arrows denote algorithm returns.
+Thin arrows indicate intra-algorithm control flows, but thick arrows indicate
+inter-algorithm control flows: calls for solid arrows and returns for dotted
+arrows.
 %
-The labels in nodes are matched with the labels annotated in the algorithms.
+The labels in nodes match the labels annotated in the algorithms.
 %
 Now, consider a simple JavaScript program: \jscode{let x = 1 + 2;}.
 %
-Then, it covers only false branch of $20$ because the left- and right-hand sides
-of \jscode{1 + 2} are both Number values rather than BitInt values.
+Then, it covers only the false branch of $20$ because the left- and right-hand
+sides of \jscode{1 + 2} are both Number values rather than BitInt values.
 %
 In this case, the coverage-guided fuzzer repeatedly mutates it to cover the true
 branch of $20$ and might get another program: \jscode{let x = 3n + 4n;}.
 %
 The new mutated program now covers the true branch of $20$ and the node of $21$.
 %
-Finally, the assertion \jscode{assert(x === 7n);} is automatically injected to
+Finally, the assertion \jscode{assert(x === 7n);} is automatically injected into
 the mutated program based on the final state of its execution on the mechanized
 specification.
 
@@ -392,42 +402,75 @@ fuzzer to synthesize JavaScript conformance tests.
 %
 However, such simple coverage metrics cannot fully discriminate different
 semantics in different language features or even in the same features.
+%
+I explain such cases with simple examples in the CFG depicted in
+Figure~\ref{fig:spec-cfg}.
 
 
 
 
 \subsubsection{Different Semantics in Different Language Features}
 
-Assume that the current program pool is as follows:
+Different language features might share the same abstract algorithms to define
+their semantics.
+%
+For example, the semantics of addition (\scode{+}) and subtraction (\scode{-})
+operators are defined with \textbf{EvaluateStringOrNumericBinaryExpression} and
+other transitively related normal algorithms as helpers.
+%
+Now, assume that the current program pool is as follows:
 \[
-  \cdots \qquad \jscode{1 + 3n;} \qquad \cdots
+  \cdots \qquad \jscode{2n + 1;} \qquad \cdots
 \]
 %
-Then, the node of $17$ in the CFG depicted in Figure~\ref{fig:spec-cfg} is
-already covered by the program: \jscode{1 + 3n;}.
+Then, the node $17$ is covered by the program \jscode{2n + 1;} because it has
+different types of numeric values, a BigInt \jscode{2n} and a Number {1}, as the
+left- and right-hand sides of the addition operator (\scode{+}).
 %
-It means that another similar program \jscode{1 - 3n;} might be not added to the
-program pool because the test requirement for the node of $17$ is already
-satisfied by \jscode{1 + 3n;}.
+It means that another similar program \jscode{2n - 1;} might not be added to the
+program pool because the test requirement for the node $17$ is already satisfied
+by \jscode{2n + 1;}.
 %
-However, the conformance test inferred from \jscode{1 - 3n;} is also a
-meaningful test to check the edge case for the semantics of subtraction operator
-(\scode{-}).
+However, the conformance test inferred from \jscode{2n - 1;} is also a
+meaningful test case that checks the edge case throwing a \textbf{TypeError}
+exception in the semantics of the subtraction operator (\scode{-}).
 %
-Furthermore, it even lowers the chance to get more complex programs using the
+It even lowers the chance of synthesizing more complex programs using the
 subtraction operator (\scode{-}), such as \jscode{[] - ""}.
 %
 Therefore, we need a more fine-grained definition of test requirements that
-discriminates \jscode{1 + 3n;} and \jscode{1 - 3n;} for a more advanced quality
-of JavaScript conformance test suite.
-
+discriminates \jscode{2n + 1;} and \jscode{2n - 1;} for a more advanced
+JavaScript conformance test suite.
 
 
 
 \subsubsection{Different Semantics in Same Language Features}
 
-Now, assume that 
+Moreover, different parts in the semantics of even the same language features
+might be defined using the same algorithms.
+%
+For example, the semantics of the addition operator (\scode{+}) is defined with
+\textbf{ApplyStringOrNumericBinaryOperator}, and it invokes \textbf{ToNumeric}
+twice in the nodes 12 and 14.
+%
+Now, assume that the current program pool is as follows:
+\[
+  \cdots \qquad \jscode{2n + 1;} \qquad \cdots
+\]
+%
+Then, the node $21$ is covered by the program: \jscode{2n + 1;} because the
+left-hand side is a BigInt \jscode{2n}.
+%
+It means that another similar program \jscode{1 + 2n;} might not be added to the
+program pool because the test requirement for the node $21$ is already satisfied
+by \jscode{2n + 1;}.
+%
+However, the conformance test inferred from \jscode{1 + 2n;} is also a
+meaningful test case to check the edge case when the right-hand side of the
+addition operator (\scode{+}) is a BigInt value.
 
+%----------------------------------------%
 
-
-todo
+To resolve this problem, we propose a feature-sensitive coverage and its
+variants to discriminate test requirements based on enclosing language features
+in Section~\ref{sec:fscov}.
