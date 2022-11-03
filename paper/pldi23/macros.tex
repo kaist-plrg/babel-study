@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{soul}
 \usepackage{listings}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -22,18 +23,31 @@
 \usepackage{microtype}
 \usepackage{hyperref}
 \usepackage{balance}
+\usepackage{adjustbox}
 
-% colors
-\definecolor{dkgreen}{rgb}{0,0.5,0}
-
-% basic
-\newcommand{\inred}[1]{{\color{red}{#1}}}
-\newcommand{\todo}{\inred{TODO}}
+% box
 \newcommand{\cfbox}[2]{%
   \colorlet{currentcolor}{.}%
   {\color{#1}%
   \fbox{\color{currentcolor}#2}}%
 }
+\newcommand{\lcolorbox}[2]{\adjustbox{padding=0ex 1ex 1ex 1ex, bgcolor=#1}{#2}}
+\newcommand{\rcolorbox}[2]{\adjustbox{padding=1ex 1ex 0ex 1ex, bgcolor=#1}{#2}}
+
+% colors
+\definecolor{dkgreen}{rgb}{0, 0.5, 0}
+\definecolor{lightred}{rgb}{0.93, 0.57 0.52}
+\definecolor{esnt}{rgb}{0.20, 0.20, 0.20}
+\definecolor{esparam}{rgb}{0.16, 0.63, 0.59}
+\definecolor{esalg}{rgb}{0.12, 0.42, 0.65}
+\definecolor{esvar}{rgb}{0.16, 0.63, 0.59}
+\definecolor{gray1}{rgb}{0.95, 0.95, 0.95}
+\definecolor{gray2}{rgb}{0.85, 0.85, 0.85}
+\definecolor{gray3}{rgb}{0.75, 0.75, 0.75}
+
+% basic
+\newcommand{\inred}[1]{{\color{red}{#1}}}
+\newcommand{\todo}{\inred{TODO}}
 
 % tool name
 \newcommand{\name}[1]{\textsf{#1}}
@@ -92,17 +106,32 @@
 \newcommand{\scode}[1]{\texttt{\small{#1}}}
 
 % ECMA-262
-\definecolor{esnt}{rgb}{0.20, 0.20, 0.20}
-\definecolor{esparam}{rgb}{0.16, 0.63, 0.59}
 \newcommand{\esnt}[1]{\textit{\color{esnt}#1}}
 \newcommand{\esparam}[1]{\text{\color{esparam}#1}}
 \newcommand{\esntp}[2]{\esnt{#1}_\esparam{[#2]}}
 \newcommand{\est}[1]{\textbf{\texttt{#1}}}
-\definecolor{esalg}{rgb}{0.12, 0.42, 0.65}
 \newcommand{\esalg}[1]{{\color{esalg}#1}}
-\definecolor{esvar}{rgb}{0.16, 0.63, 0.59}
 \newcommand{\esvar}[1]{\textit{\color{esvar}#1}}
 \newcommand{\esval}[1]{\textbf{#1}}
 \newcommand{\escode}[1]{\textbf{\texttt{#1}}}
 \newcommand{\esconst}[1]{\textsf{#1}}
 \newcommand{\lab}[1]{{}^{\textbf{#1}}}
+
+% control-flow graphs
+\newcommand{\graph}{G}
+\newcommand{\nodeset}{N}
+\newcommand{\node}{n}
+\newcommand{\inodeset}{N_\iota}
+\newcommand{\fnodeset}{N_f}
+\newcommand{\edgeset}{E}
+\newcommand{\edge}{e}
+\newcommand{\patset}{P}
+\newcommand{\pat}{p}
+\newcommand{\patmap}[1]{\textsf{path}_{#1}}
+\newcommand{\testset}{T}
+\newcommand{\test}{t}
+\newcommand{\flowsto}{\rightarrow}
+\newcommand{\call}{\xrightarrow{\name{call}}}
+\newcommand{\ret}{\xrightarrow{\name{ret}}}
+\newcommand{\tedge}{\xrightarrow{\name{\#t}}}
+\newcommand{\fedge}{\xrightarrow{\name{\#f}}}
