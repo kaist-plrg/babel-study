@@ -381,7 +381,7 @@ The labels in nodes match the labels annotated in the algorithms.
 Now, consider a simple JavaScript program: \jscode{let x = 1 + 2;}.
 %
 Then, it covers only the false branch of $20$ because the left- and right-hand
-sides of \jscode{1 + 2} are both Number values rather than BitInt values.
+sides of \jscode{1 + 2} are both Number values rather than BigInt values.
 %
 In this case, the coverage-guided fuzzer repeatedly mutates it to cover the true
 branch of $20$ and might get another program: \jscode{let x = 3n + 4n;}.
