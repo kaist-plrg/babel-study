@@ -386,7 +386,7 @@ sides of \jscode{1 + 2} are both Number values rather than BitInt values.
 In this case, the coverage-guided fuzzer repeatedly mutates it to cover the true
 branch of $20$ and might get another program: \jscode{let x = 3n + 4n;}.
 %
-The new mutated program now covers the true branch of $20$ and the node of $21$.
+The new mutated program now covers the true branch of $20$ and the node $21$.
 %
 Finally, the assertion \jscode{assert(x === 7n);} is automatically injected into
 the mutated program based on the final state of its execution on the mechanized
@@ -419,16 +419,16 @@ operators are defined with \textbf{EvaluateStringOrNumericBinaryExpression} and
 other transitively related normal algorithms as helpers.
 %
 Now, assume that the current program pool is as follows:
-\[
+\begin{equation}\label{equ:pool}
   \cdots \qquad \jscode{2n + 1;} \qquad \cdots
-\]
+\end{equation}
 %
 Then, the node $17$ is covered by the program \jscode{2n + 1;} because it has
-different types of numeric values, a BigInt \jscode{2n} and a Number {1}, as the
-left- and right-hand sides of the addition operator (\scode{+}).
+different types of numeric values, a BigInt \jscode{2n} and a Number \jscode{1},
+as the left- and right-hand sides of the addition operator (\scode{+}).
 %
 It means that another similar program \jscode{2n - 1;} might not be added to the
-program pool because the test requirement for the node $17$ is already satisfied
+program pool because the test requirement for the node $17$ is already covered
 by \jscode{2n + 1;}.
 %
 However, the conformance test inferred from \jscode{2n - 1;} is also a
@@ -453,21 +453,19 @@ For example, the semantics of the addition operator (\scode{+}) is defined with
 \textbf{ApplyStringOrNumericBinaryOperator}, and it invokes \textbf{ToNumeric}
 twice in the nodes 12 and 14.
 %
-Now, assume that the current program pool is as follows:
-\[
-  \cdots \qquad \jscode{2n + 1;} \qquad \cdots
-\]
+Now, assume that the current program pool is same with the pool in
+(\ref{equ:pool}).
 %
 Then, the node $21$ is covered by the program: \jscode{2n + 1;} because the
 left-hand side is a BigInt \jscode{2n}.
 %
 It means that another similar program \jscode{1 + 2n;} might not be added to the
-program pool because the test requirement for the node $21$ is already satisfied
+program pool because the test requirement for the node $21$ is already covered
 by \jscode{2n + 1;}.
 %
 However, the conformance test inferred from \jscode{1 + 2n;} is also a
-meaningful test case to check the edge case when the right-hand side of the
-addition operator (\scode{+}) is a BigInt value.
+meaningful test case because it checks the edge case when the right-hand side of
+the addition operator (\scode{+}) is a BigInt value.
 
 %----------------------------------------%
 

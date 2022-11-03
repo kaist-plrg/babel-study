@@ -1,70 +1,66 @@
 \section{Feature-Sensitive Coverages}\label{sec:fscov}
 
 This section first formulates the general definition of graph coverages for a
-given control-flow graph (CFG) and explains representative coverage metrics as
-examples.
+given directed graph and explains representative coverage metrics as examples.
 %
-Then, we introduce a \textit{feature-sensitive (FS) coverages} as their
+Then, we introduce \textit{feature-sensitive (FS) coverages} as their
 extensions to fully discriminate semantics between different language features.
 %
-Finally, we define \textit{feature-call-path-sensitive (FCPS) coverages} as its
-variants to discriminate different parts in the semantics of the same language
-features.
+Finally, we define \textit{feature-call-path-sensitive (FCPS) coverages} as
+their variants to distinguish different parts in the semantics of the same
+language features.
 
 
 
 
-\subsection{Graph Coverages}
-
-We formulate graph coverages by referring to its well-known
-definition~\cite{testing}.
-
-
-
-
-\subsubsection{Notations}
+\subsection{Notations}
 %
 First, we define notations used in the definition of graph coverages.
 %
-A \textit{control-flow graph} (CFG) $\graph = (\nodeset, \inodeset,
+A \textit{directed graph} $\graph = (\nodeset, \inodeset,
 \fnodeset, \edgeset)$ consists of:
-\begin{enumerate}
+\begin{itemize}
   \item a set of \textit{nodes} $\nodeset$
   \item a set of \textit{initial nodes} $\inodeset \subseteq \nodeset$
   \item a set of \textit{final nodes} $\fnodeset \subseteq \nodeset$
-  \item a set of \textit{edges} $\edgeset \subseteq \nodeset \times \nodeset$
-\end{enumerate}
+  \item a set of \textit{edges} $\edgeset \subseteq \nodeset \times \nodeset
+    \times \annotset$ with a set of \textit{annotations} $\annotset$
+\end{itemize}
 %
-The notation $\node \rightarrow \node'$ denotes an edge from $\node$ to
-$\node'$.
+The notation $\node \edge{\annot} \node'$ denotes an edge from a node $\node$ to
+a node $\node'$ with an annotation $\annot \in \annotset$.
 %
-If an edge has a specific annotation, such as \name{\#t}, we use the notation
-$\node \tedge \node'$.
+If an edge has an empty annotation $\epsilon$, we omit the annotation: $\node
+\edge{} \node'$.
 %
-In a given CFG, a \textit{path} $\pat \in \patset$ is a sequence of nodes, where
-each pair of adjacent nodes is an edge as follows:
+In a given directed graph $\graph$, a \textit{path} $\pat \in \patset{\graph}$
+is a sequence of nodes, where each pair of adjacent nodes is an edge as follows:
 \[
-  \patset = \{
-    [\node_0, \cdots, \node_k] \mid
-    \forall i < k, (\node_i, \node_{i+1}) \in \edgeset \wedge
-    \node_k \in \fnodeset
+  \patset{\graph} = \{
+    \node_0 \edge{\annot_0} \cdots \edge{\annot_{k-1}} \node_k \mid
+    \forall i < k. \; \node_i \edge{\annot_i} \node_{i+1} \in \edgeset \wedge
+    \node_k \in \nodeset
   \}
 \]
 %
-The notation $\node_0 \rightarrow \cdots \rightarrow \node_k$ denotes a path.
+The length of a path is defined as $\norm{\node_0 \edge{\annot_0} \cdots
+\edge{\annot_{k-1}} \node_k} = k$.
 %
-A path $\pat$ is a \textit{subpath} of another path $\pat'$ when 
+A path $\pat$ is a \textit{subpath} ($\subpath$) of another path $\pat'$ when
+$\pat$ is a subsequence of $\pat'$.
 %
 A \textit{test path} is a path that starts at an initial node and ends at a
 final node (i.e., $\node_0 \in \inodeset \wedge \node_k \in \fnodeset$).
 %
-Then, $\patmap{\graph} : \testset \rightarrow \patset$ is a mapping from a test
-case $\test \in \testset$ to the corresponding test path in the graph $\graph$.
+Then, $\patmap{\graph} : \testset \rightarrow \patset{\graph}$ is a mapping from
+a \textit{test} $\test \in \testset$ to the corresponding test path in the graph
+$\graph$.
 
 %----------------------------------------%
 
-For example, consider the CFG $\graph$ depicted in Figure~\ref{fig:spec-cfg} and
-a JavaScript program $\jscode{1 + 2n;}$ as a test case $\test$.
+For example, consider a control-flow graph $\graph$ depicted in
+Figure~\ref{fig:spec-cfg} and a JavaScript program $\jscode{2n + 1;}$ as a test
+$\test \in \testset$.
 %
 Then, the $\patmap{\graph}(\test)$ is the following test path:
 \[
@@ -76,11 +72,11 @@ Then, the $\patmap{\graph}(\test)$ is the following test path:
     1
     \call
     \overset{\textbf{EvaluateStringOrNumericBinaryExpression}}{\rcolorbox{gray2}{\(
-    7 \flowsto \cdots \flowsto 8
+    7 \edge{} \cdots \edge{} 8
     \call \overset{\textbf{ApplyStringOrNumericBinaryOperator}}{\colorbox{gray1}{\(
-    11 \flowsto \cdots \flowsto 12
+    11 \edge{} \cdots \edge{} 12
     \call \overset{\textbf{ToNumeric}}{\colorbox{white}{\(
-    19 \flowsto \cdots \flowsto 20 \fedge \cdots \flowsto 22
+    19 \edge{} \cdots \edge{} 20 \fedge \colorbox{lightred}{21} \edge{} 22
     \)}}
     \ret 13 \fedge 14
     \)}}
@@ -93,9 +89,9 @@ Then, the $\patmap{\graph}(\test)$ is the following test path:
     \lcolorbox{gray2}{\(
     \colorbox{gray1}{\(
     \call \overset{\textbf{ToNumeric}}{\colorbox{white}{\(
-    19 \flowsto \cdots \flowsto 20 \tedge \colorbox{lightred}{21} \flowsto 22
+    19 \edge{} \cdots \edge{} 20 \tedge \cdots \edge{} 22
     \)}}
-    \ret 15 \fedge 16 \tedge \colorbox{lightred}{17} \flowsto 18
+    \ret 15 \fedge 16 \tedge \colorbox{lightred}{17} \edge{} 18
     \)}
     \ret 9 \tedge 10
     \)}
@@ -104,17 +100,161 @@ Then, the $\patmap{\graph}(\test)$ is the following test path:
     \ret \cdots\\
   \end{array}
 \]
+The following path $\pat$ is one of its subpaths ($\pat \subpath
+\patmap{\graph}(\test)$):
+\begin{equation}\label{equ:subpath}
+  \pat = 22 \ret 15 \fedge 16 \tedge
+  \colorbox{lightred}{17}
+\end{equation}
+whose length is $\norm{\pat} = 3$.
 
 
 
 
+\subsection{Graph Coverages}
 
-% \subsubsection{Graph Coverage}
-% 
-% \todo
-% 
-% % Now, we could define a \textit{graph coverage} with the corresponding
-% % 1) \textit{test requirements} and 2) \textit{}:
-% % \begin{definition}
-% % For example, a JavaScript program \jscode{1 + 2;} is given 
-% % When a testcase is given
+We formulate graph coverages by referring to their well-known
+definitions~\cite{testing}.
+%
+We specify \textit{graph coverage} criteria by 1) a set of \textit{test
+requirements} for a given directed graph and 2) a \textit{cover relation}
+between paths and test requirements:
+\begin{definition}[Graph Coverage]\label{def:graph-cov}
+  A \textit{graph coverage} criterion $\cov{\graph} = (\trset{\graph}, \cover)$
+  for a given directed graph $\graph$ is defined with:
+  \begin{itemize}
+    \item a set of \textit{test requirements} $\trset{\graph}$ for a given
+      directed graph $\graph$
+    \item a \textit{cover relation} $\cover \subseteq \patset{\graph} \times
+      \trset{\graph}$ between paths and test requirements
+  \end{itemize}
+  A test set $T \subseteq \testset$ \textit{satisfies} the criterion
+  $\cov{\graph}$ if and only if
+  \[
+    \forall \tr \in \trset{\graph}. \; \exists \test \in T. \;
+    \text{s.t.} \; \patmap{\graph}(t) \cover \tr
+  \]
+\end{definition}
+
+%----------------------------------------%
+
+In a specific graph coverage criterion $\cov{\graph}$, we say that a path $\pat$
+\textit{covers} a test requirement $\tr \in \trset{\graph}$ when $\pat \cover
+\tr$ satisfies.
+%
+If a test path, $\patmap{\graph}(\test)$ of a test $\test \in \testset$ covers
+$\tr$, we also say that the test $\test$ covers the test requirement $\tr$.
+%
+We use the notation $T \sat \cov{\graph}$ when a test set $T$ satisfies a graph
+coverage criterion $\cov{\graph}$.
+%
+If $T \sat \cov{\graph} \Rightarrow T \sat \cov{\graph}'$ for any test set $T$
+and direct graph $\graph$, we say that $\cov{}'$ is \textit{weaker} than
+$\cov{}$ and use the notation $\cov{}' \weak \cov{}$.
+%
+
+A \textit{node coverage} is the most common graph coverage defined with nodes as
+test requirements:
+\begin{definition}[Node Coverage]\label{def:node-cov}
+  A \textit{node coverage} criterion $\nodecov{\graph}$ is defined as follows:
+  \begin{itemize}
+    \item $\trset{\graph} = \nodeset$ where $\graph = (\nodeset, \inodeset,
+      \fnodeset, \edgeset)$
+   \item $(\node_0 \edge{\annot_0} \cdots \edge{\annot_{k-1}} \node_k) \cover
+     \node \iff \exists i. \; \node_i = \node$
+  \end{itemize}
+\end{definition}
+
+%----------------------------------------%
+
+We could generalize it into \textit{$k$-limiting path coverage} criteria with
+paths whose lengths are bounded by $k$ as test requirements:
+\begin{definition}[$k$-Limiting Path Coverage]\label{def:k-path-cov}
+  A \textit{$k$-limiting path coverage} criterion $\kpathcov{k}{\graph}$ is
+  defined as follows:
+  \begin{itemize}
+    \item $\trset{\graph} =
+      \{ \pat \in \patset{\graph} \mid \norm{\pat} \leq k \}$
+    \item $\pat \cover \pat' \iff \pat' \subpath \pat$
+  \end{itemize}
+\end{definition}
+%
+Now, a node coverage could be redefined as $0$-limiting path coverage
+$\kpathcov{0}{\graph} = \nodecov{\graph}$, and other graph coverages are defined
+as follows:
+\begin{itemize}
+  \item An \textit{edge coverage} criterion is
+    $\kpathcov{1}{\graph}$ 
+  \item An \textit{edge-pair coverage} criterion is
+    $\kpathcov{2}{\graph}$ 
+  \item A \textit{complete path coverage} criterion is
+    $\kpathcov{\infty}{\graph}$
+\end{itemize}
+%
+Note that $k$-limiting path coverage criteria utilize the inequality for path
+lengths $\norm{\pat} \leq k$ rather than equality $\norm{\pat} = k$.
+%
+Thus, the set of test requirements of $\kpathcov{i}{\graph}$ is always a subset
+of that of $\kpathcov{j}{\graph}$ when $i \leq j$.
+%
+As a result, $\kpathcov{i}{}$ is weaker than $\kpathcov{j}{\graph}$ (i.e.,
+$\kpathcov{i}{} \weak \kpathcov{j}{}$ if $i \leq j$).
+
+%----------------------------------------%
+
+A complete path coverage might have infinite test requirements because of
+recursions and loop structures.
+%
+To resolve this problem, \citet{testing} have presented a \textit{simple path
+coverage} that deals with only simple paths as test requirements.
+%
+A path $\node_0 \edge{\annot_0} \cdots \edge{\annot_{k-1}} \node_k$ is
+\textit{simple} if no duplicated nodes in the path, with the exception that the
+first and last nodes may be identical: $\forall i, j. \; \node_i = \node_j
+\Rightarrow (i = j \vee \{ i, j \} = \{ 0, k \})$.
+%
+In addition, they extend it to a \textit{prime path coverage} to reduce the
+number of test requirements by filtering out meaningless simple paths.
+%
+It deals with only prime paths as test requirements, where a \textit{prime path}
+is a maximal length simple path in the graph.
+%
+However, such advanced structural coverage criteria still need a tremendous
+number of test requirements for the entire control-flow graphs.
+%
+Hence, they are used only for unit testing in practice with intra-procedural
+control-flow graphs~\cite{unit-test}.
+
+%----------------------------------------%
+
+For example, consider again a control-flow graph $\graph$ depicted in
+Figure~\ref{fig:spec-cfg} and the following test:
+\[
+  \test = \text{(a JavaScript program \jscode{2n + 1;})}
+\]
+%
+Then, its test path, $\patmap{\graph}(\test)$, covers node 17, one of the test
+requirements in the node coverage: $\patmap{\graph}(\test) \cover 17$.
+%
+If we use $3$-limiting path coverage, the path $\pat$ in (\ref{equ:subpath}) is
+a test requirement, and the test path covers it as well: $\patmap{\graph}(\test)
+\cover \pat$.
+%
+Now, consider another test program using the subtraction (\scode{-}) operator
+instead of the addition operator (\scode{+}):
+\[
+  \test' = \text{(a JavaScript program \jscode{2n - 1;})}
+\]
+%
+Unfortunately, since the test requirement $\pat$ is already covered by $\test$,
+the new test $\test'$ might not be added to the program pool.
+%
+To discriminate them with $k$-limiting path coverages, we need a large $k \geq
+50$ because the first edges differ in two test paths $\patmap{\graph}(\test)$
+and $\patmap{\graph}(\test')$ are $1 \call 7$ and $4 \call 7$ from two different
+SDOs for addition and subtraction operators to
+\textbf{EvaluateStringOrNumericBinaryExpression}.
+%
+However, it is not practical because of excessive test requirements, and even
+advanced structural coverages, such as simple or prime path coverages, would
+suffer from the same reason.
