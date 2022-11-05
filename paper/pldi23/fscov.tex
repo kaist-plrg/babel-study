@@ -241,9 +241,9 @@ $\kpathcov{0}{\graph} = \nodecov{\graph}$, and other graph coverages are defined
 with $k$-limiting path coverages as well:
 \begin{itemize}
   \item An \textit{edge coverage} criterion is
-    $\kpathcov{1}{\graph}$ 
+    $\kpathcov{1}{\graph}$
   \item An \textit{edge-pair coverage} criterion is
-    $\kpathcov{2}{\graph}$ 
+    $\kpathcov{2}{\graph}$
   \item A \textit{complete path coverage} criterion is
     $\kpathcov{\infty}{\graph}$
 \end{itemize}
@@ -456,7 +456,7 @@ most $k$-most enclosing language features:
 
       \extfeats{k-1}([\node_0, \cdots, \node_{m-1}]) + \feat & \tif
       \featmap(\node_m) = \feat\\
-      
+
       \extfeats{k}([\node_0, \cdots, \node_{m-1}]) & \telse\\
     \end{array}
   \right.
@@ -525,9 +525,9 @@ If we use $2$-FC node coverage, the set of $2$-FS-TRs is $\kftrset{2} =
     \node (1-fs)   at (3,0) {$\fcov{}=\kfcov{1}{}$};
     \node (2-fs)   at (6,0) {$\kfcov{2}{}$};
     \node (k-fs)   at (8,0) {$\cdots$};
-    \node (1-fcps) at (3,2) {$\fcpcov{}=\kfcpcov{1}{}$}; 
-    \node (2-fcps) at (6,2) {$\kfcpcov{2}{}$};           
-    \node (k-fcps) at (8,2) {$\cdots$};                  
+    \node (1-fcps) at (3,2) {$\fcpcov{}=\kfcpcov{1}{}$};
+    \node (2-fcps) at (6,2) {$\kfcpcov{2}{}$};
+    \node (k-fcps) at (8,2) {$\cdots$};
     \path[->]
     (1-fs) edge node[auto] {(1)} (base)
     (2-fs) edge node[auto] {(1)} (1-fs)
