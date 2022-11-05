@@ -10,8 +10,8 @@ in the language specification.
 Finally, we explain why node/branch coverages cannot fully discriminate
 different semantics in different language features or even in the same features.
 
-
-
+%----------------------------------------%
+%----------------------------------------%
 
 \subsection{JavaScript Language Specification (ECMA-262)}
 
@@ -21,8 +21,8 @@ and maintained by the Ecma Technical Committee 39 (TC39).
 Now, we explain how it describes JavaScript syntax and semantics of language
 features with simple examples.
 
-
-
+%----------------------------------------%
+%----------------------------------------%
 
 \subsubsection{Syntax}
 
@@ -83,8 +83,8 @@ The second (or third) one consists of three symbols, a nonterminal
 \esnt{AdditiveExpression}, a terminal \est{+} (or \est{-}), and a nonterminal
 \esnt{MultiplicativeExpression}.
 
-
-
+%----------------------------------------%
+%----------------------------------------%
 
 \subsubsection{Semantics}
 
@@ -301,8 +301,8 @@ Since its basic functionality is to convert a given JavaScript value to the
 corresponding Number value, it utilizes the normal algorithm \textbf{ToNumeric}
 as a helper as well.
 
-
-
+%----------------------------------------%
+%----------------------------------------%
 
 \subsubsection{Language Features}
 
@@ -315,15 +315,16 @@ alternative in a syntactic production and corresponding SDO.
 On the other hand, a built-in API feature is related to a built-in API instead
 of a specific syntax.
 %
-For example, the addition and subtraction operators (\scode{+}) are syntactic
-features defined by the second and third alternatives of
-\esnt{AdditiveExpression} and corresponding \textbf{Evaluation} SDOs.
+For example, the addition (\scode{+}) and subtraction (\scode{-}) operators are
+syntactic features ($\addfeat$ and $\subfeat$) defined by the second and third
+alternatives of \esnt{AdditiveExpression} and corresponding \textbf{Evaluation}
+SDOs.
 %
-The \textbf{Number} built-method describes the semantics of a built-in API
-feature \jscode{Number}.
+The \textbf{Number} built-method describes the semantics of a built-in
+\jscode{Number} API feature \jscode{Number} ($\numfeat$).
 
-
-
+%----------------------------------------%
+%----------------------------------------%
 
 \subsection{Conformance Test Synthesis with Coverage-guided Fuzzing}
 
@@ -392,8 +393,8 @@ Finally, the assertion \jscode{assert(x === 7n);} is automatically injected into
 the mutated program based on the final state of its execution on the mechanized
 specification.
 
-
-
+%----------------------------------------%
+%----------------------------------------%
 
 \subsection{Motivation}
 
@@ -406,8 +407,8 @@ semantics in different language features or even in the same features.
 I explain such cases with simple examples in the CFG depicted in
 Figure~\ref{fig:spec-cfg}.
 
-
-
+%----------------------------------------%
+%----------------------------------------%
 
 \subsubsection{Different Semantics in Different Language Features}
 
@@ -442,7 +443,8 @@ Therefore, we need a more fine-grained definition of test requirements that
 discriminates \jscode{2n + 1;} and \jscode{2n - 1;} for a more advanced
 JavaScript conformance test suite.
 
-
+%----------------------------------------%
+%----------------------------------------%
 
 \subsubsection{Different Semantics in Same Language Features}
 

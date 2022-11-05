@@ -24,6 +24,7 @@
 \usepackage{hyperref}
 \usepackage{balance}
 \usepackage{adjustbox}
+\usepackage{tikz}
 
 % box
 \newcommand{\cfbox}[2]{%
@@ -49,6 +50,9 @@
 \newcommand{\inred}[1]{{\color{red}{#1}}}
 \newcommand{\todo}{\inred{TODO}}
 \newcommand{\powerset}{\mathcal{P}}
+\newcommand{\tif}{\text{if} \; }
+\newcommand{\telse}{\text{otherwise}}
+\newcommand{\tst}{{\; \text{s.t.} \; }}
 
 % tool name
 \newcommand{\name}[1]{\textsf{#1}}
@@ -118,7 +122,7 @@
 \newcommand{\esconst}[1]{\name{#1}}
 \newcommand{\lab}[1]{{}^{\textbf{#1}}}
 
-% control-flow graphs
+% graph coverages
 \newcommand{\graph}{\mathbb{G}}
 \newcommand{\nodeset}{\mathbb{N}}
 \newcommand{\node}{n}
@@ -126,24 +130,57 @@
 \newcommand{\fnodeset}{\nodeset_f}
 \newcommand{\edgeset}{\mathbb{E}}
 \newcommand{\edge}[1]{\xrightarrow{#1}}
-\newcommand{\annotset}{\mathbb{A}}
-\newcommand{\annot}{a}
-\newcommand{\patset}[1]{\mathbb{P}_{#1}}
-\newcommand{\pat}{p}
-\newcommand{\patmap}[1]{\name{path}_{#1}}
-\newcommand{\testset}{\mathbb{T}}
-\newcommand{\test}{t}
 \newcommand{\call}{\edge{\name{call}}}
 \newcommand{\ret}{\edge{\name{ret}}}
 \newcommand{\tedge}{\edge{\name{\#t}}}
 \newcommand{\fedge}{\edge{\name{\#f}}}
-\newcommand{\subpath}{\preceq}
+\newcommand{\annotset}{\mathbb{A}}
+\newcommand{\annot}{a}
+\newcommand{\patset}[1]{\mathbb{P}_{#1}}
+\newcommand{\pat}{p}
+\newcommand{\addpat}{\pat_\name{add}}
+\newcommand{\subpat}{\pat_\name{sub}}
+\newcommand{\patmap}[1]{\name{path}_{#1}}
+\newcommand{\getfirst}{\name{first}}
+\newcommand{\getlast}{\name{last}}
+\newcommand{\testset}{\mathbb{T}}
+\newcommand{\test}{t}
+\newcommand{\addtest}{\test_\name{add}}
+\newcommand{\subtest}{\test_\name{sub}}
+\newcommand{\prefix}{\preceq}
+\newcommand{\subpath}{\sqsubseteq}
+
+% graph coverage
 \newcommand{\cover}{\overset{\name{cover}}{\sim}}
 \newcommand{\trset}[1]{\mathbb{R}}
 \newcommand{\tr}{r}
 \newcommand{\cov}[1]{C_{#1}}
 \newcommand{\nodecov}[1]{\cov{#1}^{\name{node}}}
-\newcommand{\kpathcov}[2]{\cov{#2}^{\name{path}[#1]}}
+\newcommand{\kpathcov}[2]{\cov{#2}^{{#1}\name{-path}}}
 \newcommand{\norm}[1]{\lVert{#1}\rVert}
 \newcommand{\sat}{\vdash}
-\newcommand{\weak}{<:}
+
+% feature-sensitive coverage
+\newcommand{\featset}{\mathbb{F}}
+\newcommand{\feat}{f}
+\newcommand{\addfeat}{\feat_{\name{add}}}
+\newcommand{\subfeat}{\feat_{\name{sub}}}
+\newcommand{\numfeat}{\feat_{\name{B:Number}}}
+\newcommand{\feats}{\bar{\feat}}
+\newcommand{\featmap}{\name{feat}}
+\newcommand{\extfeat}{\name{ext}_\featset}
+\newcommand{\extfeats}[1]{\extfeat^{#1}}
+\newcommand{\css}[1]{{#1}\!\mid_{\name{call}}}
+\newcommand{\fcov}[1]{\cov{#1}^{\name{FS}}}
+\newcommand{\fnodecov}[1]{\cov{#1}^{\name{FS}[\name{node}]}}
+\newcommand{\ftrset}[1]{\trset{#1}^{\name{FS}}}
+\newcommand{\kfcov}[2]{\cov{#2}^{{#1}\name{-FS}}}
+\newcommand{\kfnodecov}[2]{\cov{#2}^{{#1}\name{-FS}[\name{node}]}}
+\newcommand{\kftrset}[2]{\trset{#2}^{{#1}\name{-FS}}}
+\newcommand{\fcpcov}[1]{\cov{#1}^{\name{FCPS}}}
+\newcommand{\fcpnodecov}[1]{\cov{#1}^{\name{FCPS}[\name{node}]}}
+\newcommand{\fcptrset}[1]{\trset{#1}^{\name{FCPS}}}
+\newcommand{\kfcpcov}[2]{\cov{#2}^{{#1}\name{-FCPS}}}
+\newcommand{\kfcpnodecov}[2]{\cov{#2}^{{#1}\name{-FCPS}[\name{node}]}}
+\newcommand{\kfcptrset}[2]{\trset{#2}^{{#1}\name{-FCPS}}}
+\newcommand{\subs}{\rhd}
