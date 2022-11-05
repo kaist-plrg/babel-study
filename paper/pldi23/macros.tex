@@ -126,6 +126,7 @@
 \newcommand{\graph}{\mathbb{G}}
 \newcommand{\nodeset}{\mathbb{N}}
 \newcommand{\node}{n}
+\newcommand{\nodes}{\bar{\node}}
 \newcommand{\inodeset}{\nodeset_\iota}
 \newcommand{\fnodeset}{\nodeset_f}
 \newcommand{\edgeset}{\mathbb{E}}
@@ -152,7 +153,7 @@
 
 % graph coverage
 \newcommand{\cover}{\overset{\name{cover}}{\sim}}
-\newcommand{\trset}[1]{\mathbb{R}}
+\newcommand{\trset}[1]{\mathbb{R}_{#1}}
 \newcommand{\tr}{r}
 \newcommand{\cov}[1]{C_{#1}}
 \newcommand{\nodecov}[1]{\cov{#1}^{\name{node}}}
@@ -160,11 +161,12 @@
 \newcommand{\norm}[1]{\lVert{#1}\rVert}
 \newcommand{\sat}{\vdash}
 
-% feature-sensitive coverage
+% feature-sensitive (FS) coverage
 \newcommand{\featset}{\mathbb{F}}
 \newcommand{\feat}{f}
 \newcommand{\addfeat}{\feat_{\name{add}}}
 \newcommand{\subfeat}{\feat_{\name{sub}}}
+\newcommand{\idfeat}{\feat_{\name{id}}}
 \newcommand{\numfeat}{\feat_{\name{B:Number}}}
 \newcommand{\feats}{\bar{\feat}}
 \newcommand{\featmap}{\name{feat}}
@@ -177,10 +179,17 @@
 \newcommand{\kfcov}[2]{\cov{#2}^{{#1}\name{-FS}}}
 \newcommand{\kfnodecov}[2]{\cov{#2}^{{#1}\name{-FS}[\name{node}]}}
 \newcommand{\kftrset}[2]{\trset{#2}^{{#1}\name{-FS}}}
+\newcommand{\subs}{\rhd}
+
+% feature call path-sensitive (FCPS) coverage
+\newcommand{\fcpset}{\featset_\name{cp}}
+\newcommand{\fcp}{\feat_\name{cp}}
+\newcommand{\fcps}{\bar\fcp}
+\newcommand{\extfcp}{\name{ext}_{\fcpset}}
+\newcommand{\extfcps}[1]{\extfcp^{#1}}
 \newcommand{\fcpcov}[1]{\cov{#1}^{\name{FCPS}}}
 \newcommand{\fcpnodecov}[1]{\cov{#1}^{\name{FCPS}[\name{node}]}}
 \newcommand{\fcptrset}[1]{\trset{#1}^{\name{FCPS}}}
 \newcommand{\kfcpcov}[2]{\cov{#2}^{{#1}\name{-FCPS}}}
 \newcommand{\kfcpnodecov}[2]{\cov{#2}^{{#1}\name{-FCPS}[\name{node}]}}
 \newcommand{\kfcptrset}[2]{\trset{#2}^{{#1}\name{-FCPS}}}
-\newcommand{\subs}{\rhd}

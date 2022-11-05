@@ -13,7 +13,7 @@ different semantics in different language features or even in the same features.
 %----------------------------------------%
 %----------------------------------------%
 
-\subsection{JavaScript Language Specification (ECMA-262)}
+\subsection{JavaScript Language Specification (ECMA-262)}\label{sec:ecma-262}
 
 ECMA-262 is the official JavaScript language specification written in English
 and maintained by the Ecma Technical Committee 39 (TC39).
@@ -24,7 +24,7 @@ features with simple examples.
 %----------------------------------------%
 %----------------------------------------%
 
-\subsubsection{Syntax}
+\subsubsection{Syntax}\label{sec:syntax}
 
 \begin{figure}
   \centering
@@ -86,7 +86,7 @@ The second (or third) one consists of three symbols, a nonterminal
 %----------------------------------------%
 %----------------------------------------%
 
-\subsubsection{Semantics}
+\subsubsection{Semantics}\label{sec:sem}
 
 \begin{figure}
   \centering
@@ -304,7 +304,7 @@ as a helper as well.
 %----------------------------------------%
 %----------------------------------------%
 
-\subsubsection{Language Features}
+\subsubsection{Language Features}\label{sec:feat}
 
 In JavaScript, a language feature is 1) a \textit{syntactic feature} or 2) a
 \textit{built-in API feature}.
@@ -326,7 +326,8 @@ The \textbf{Number} built-method describes the semantics of a built-in
 %----------------------------------------%
 %----------------------------------------%
 
-\subsection{Conformance Test Synthesis with Coverage-guided Fuzzing}
+\subsection{Conformance Test Synthesis with Coverage-guided
+Fuzzing}\label{sec:jest}
 
 \begin{figure}
   \centering
@@ -396,7 +397,7 @@ specification.
 %----------------------------------------%
 %----------------------------------------%
 
-\subsection{Motivation}
+\subsection{Motivation}\label{sec:motiv}
 
 Prior work utilizes simple \textit{node/branch coverages} in the coverage-guided
 fuzzer to synthesize JavaScript conformance tests.
@@ -410,7 +411,8 @@ Figure~\ref{fig:spec-cfg}.
 %----------------------------------------%
 %----------------------------------------%
 
-\subsubsection{Different Semantics in Different Language Features}
+\subsubsection{Different Semantics in Different Language
+Features}\label{sec:diff-feat}
 
 Different language features might share the same abstract algorithms to define
 their semantics.
@@ -446,7 +448,8 @@ JavaScript conformance test suite.
 %----------------------------------------%
 %----------------------------------------%
 
-\subsubsection{Different Semantics in Same Language Features}
+\subsubsection{Different Semantics in Same Language
+Features}\label{sec:same-feat}
 
 Moreover, different parts in the semantics of even the same language features
 might be defined using the same algorithms.

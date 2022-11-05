@@ -3,19 +3,20 @@
 This section first formulates the general definition of graph coverages for a
 given directed graph and explains representative coverage metrics as examples.
 %
-Then, we introduce \textit{feature-sensitive (FS) coverages} as their
-extensions to fully discriminate semantics between different language features.
-%
-Finally, we define \textit{feature call path-sensitive (FCPS) coverages} as
-their variants to distinguish different parts in the semantics of the same
+Then, we introduce a \textit{feature-sensitive (FS) coverage} as a general
+extension of graph coverages to fully discriminate semantics between different
 language features.
+%
+Finally, we define a \textit{feature call path-sensitive (FCPS) coverage} as a
+variant of FS coverage to distinguish different parts in the semantics of the
+same language features.
 
 
 %----------------------------------------%
 %----------------------------------------%
 
 
-\subsection{Notations}
+\subsection{Notations}\label{sec:notation}
 %
 First, we define notations used in the definition of graph coverages.
 %
@@ -41,14 +42,14 @@ is a sequence of one or more nodes, where each pair of adjacent nodes is an
 edge:
 \begin{equation}\label{euq:path-def}
   \patset{\graph} = \{
-    \node_0 \edge{\annot_0} \cdots \edge{\annot_{k-1}} \node_k \mid
-    \forall i < k. \; \node_i \edge{\annot_i} \node_{i+1} \in \edgeset \wedge
-    \node_k \in \nodeset
+    \node_0 \edge{\annot_0} \cdots \edge{\annot_{m-1}} \node_m \mid
+    \forall i < m. \; \node_i \edge{\annot_i} \node_{i+1} \in \edgeset \wedge
+    \node_m \in \nodeset
   \}
 \end{equation}
 %
 The length of a path is defined as $\norm{\node_0 \edge{\annot_0} \cdots
-\edge{\annot_{k-1}} \node_k} = k$.
+\edge{\annot_{m-1}} \node_m} = m$.
 %
 A path $\pat$ is a \textit{subpath} ($\subpath$) of a path $\pat'$ when $\pat$
 is a subsequence of $\pat'$.
@@ -72,12 +73,14 @@ Consider a control-flow graph (CFG) $\graph$ depicted in
 Figure~\ref{fig:spec-cfg} and the following JavaScript programs as a test set $T
 \subseteq \testset$:
 \begin{equation}\label{equ:testset}
-  \begin{array}{rcl}
-    \cdots\\
-    \addtest \in \testset &=& \text{(a JavaScript program \jscode{2n + 1;})}\\
-    \subtest \in \testset &=& \text{(a JavaScript program \jscode{2n - 1;})}\\
-    \cdots\\
-  \end{array}
+  T = \left\{
+    \begin{array}{rcl}
+      \cdots\\
+      \addtest &=& \text{(a JavaScript program \jscode{2n + 1;})}\\
+      \subtest &=& \text{(a JavaScript program \jscode{2n - 1;})}\\
+      \cdots\\
+    \end{array}
+  \right.
 \end{equation}
 %
 Then, $\patmap{\graph}(\addtest)$ is the execution path of $\addtest$:
@@ -119,8 +122,8 @@ Then, $\patmap{\graph}(\addtest)$ is the execution path of $\addtest$:
   \end{array}
 \]
 And, $\patmap{\graph}(\subtest)$ is equal to $\patmap{\graph}(\addtest)$ except
-for nodes 4, 5, and 6 in the SDO for subtraction rather than 1, 2 and 3 in the
-SDO for addition.
+for nodes 4, 5, and 6 in the $\textbf{Evaluation}$ SDO for subtraction rather
+than 1, 2 and 3 in the $\textbf{Evaluation}$ SDO for addition.
 %
 The following path $\pat$ is a subpath of both $\patmap{\graph}(\addtest)$ and
 $\patmap{\graph}(\subtest)$:
@@ -134,14 +137,14 @@ whose length is $\norm{\pat} = 3$.
 %----------------------------------------%
 
 
-\subsection{Graph Coverages}
+\subsection{Graph Coverages}\label{sec:cov}
 
 We formulate graph coverages by referring to their well-known
 definitions~\cite{testing}.
 %
-We specify \textit{graph coverage} criteria by 1) a set of \textit{test
-requirements} for a given directed graph and 2) a \textit{cover relation}
-between paths and test requirements:
+For a given directed graph, we specify \textit{graph coverage} criteria by 1) a
+set of \textit{test requirements} and 2) a \textit{cover relation} between paths
+and test requirements:
 
 %----------------------------------------%
 
@@ -149,8 +152,7 @@ between paths and test requirements:
   A \textit{graph coverage} criterion $\cov{\graph} = (\trset{\graph}, \cover)$
   for a given directed graph $\graph$ is defined with:
   \begin{itemize}
-    \item a set of \textit{test requirements (TRs)} $\trset{\graph}$ for a given
-      directed graph $\graph$
+    \item a set of \textit{test requirements (TRs)} $\trset{\graph}$
     \item a \textit{cover relation} $\cover \subseteq \patset{\graph} \times
       \trset{\graph}$ between paths and TRs
   \end{itemize}
@@ -185,9 +187,9 @@ $\cov{\graph}$ when it covers all valid TRs:
 where a TR $\tr$ is \textit{valid} if there exists a possible test $\test \in
 \testset$ that covers $\tr$.
 %
-If $T \sat \cov{\graph} \Rightarrow T \sat \cov{\graph}'$ for any test set $T$
-and direct graph $\graph$, we say that $\cov{}$ \textit{subsumes} $\cov{}'$ and
-use the notation: $\cov{} \subs \cov{}'$.
+If $T \sat \cov{\graph} \Rightarrow T \sat \cov{\graph}'$ for any test set $T$,
+we say that $\cov{\graph}$ \textit{subsumes} $\cov{\graph}'$ and use the
+notation: $\cov{\graph} \subs \cov{\graph}'$.
 %
 The subsumption relation between graph coverage criteria is a partial order.
 
@@ -212,7 +214,7 @@ The subsumption relation between graph coverage criteria is a partial order.
 
 The node coverage is the most common graph coverage defined with nodes as test
 requirements, and we could generalize it into \textit{$k$-limiting path
-coverage} criteria using paths:
+coverage} criteria using paths instead of nodes:
 
 %----------------------------------------%
 
@@ -237,13 +239,11 @@ coverage} criteria using paths:
 %----------------------------------------%
 
 Now, a node coverage could be redefined as $0$-limiting path coverage
-$\kpathcov{0}{\graph} = \nodecov{\graph}$, and other graph coverages are defined
-with $k$-limiting path coverages as well:
+($\kpathcov{0}{\graph} = \nodecov{\graph}$), and other graph coverages are
+defined with $k$-limiting path coverages as well:
 \begin{itemize}
-  \item An \textit{edge coverage} criterion is
-    $\kpathcov{1}{\graph}$
-  \item An \textit{edge-pair coverage} criterion is
-    $\kpathcov{2}{\graph}$
+  \item An \textit{edge coverage} criterion is $\kpathcov{1}{\graph}$
+  \item An \textit{edge-pair coverage} criterion is $\kpathcov{2}{\graph}$
   \item A \textit{complete path coverage} criterion is
     $\kpathcov{\infty}{\graph}$
 \end{itemize}
@@ -252,8 +252,8 @@ Note that $k$-limiting path coverage criteria utilize the inequality for path
 lengths $\norm{\pat} \leq k$ rather than equality $\norm{\pat} = k$.
 %
 Thus, if $i \leq j$, the set of TRs in $\kpathcov{i}{\graph}$ is always a subset
-of that in $\kpathcov{j}{\graph}$, and $\kpathcov{j}{}$ subsumes
-$\kpathcov{i}{}$.
+of that in $\kpathcov{j}{\graph}$, and $\kpathcov{j}{\graph}$ subsumes
+$\kpathcov{i}{\graph}$.
 
 %----------------------------------------%
 
@@ -263,10 +263,10 @@ structures.
 To resolve this problem, \citet{testing} have presented a \textit{simple path
 coverage} that deals with only simple paths as TRs.
 %
-A path $\node_0 \edge{\annot_0} \cdots \edge{\annot_{k-1}} \node_k$ is
+A path $\node_0 \edge{\annot_0} \cdots \edge{\annot_{m-1}} \node_m$ is
 \textit{simple} if no duplicated nodes in the path, with the exception that the
 first and last nodes may be identical: $\forall i, j. \; \node_i = \node_j
-\Rightarrow (i = j \vee \{ i, j \} = \{ 0, k \})$.
+\Rightarrow (i = j \vee \{ i, j \} = \{ 0, m \})$.
 %
 In addition, they extend it to a \textit{prime path coverage} to reduce the
 number of TRs by filtering out meaningless simple paths.
@@ -292,25 +292,27 @@ set $T$, both a node 17 and the path $\pat$ in (\ref{equ:subpath}) are test
 requirements $\trset{\graph}$.
 %
 First, the prefix path, whose last node is 17, of $\patmap{\graph}(\addtest)$
-covers both TRs: the node 17 and the path $\pat$.
+covers both TRs: node 17 and $\pat$.
 %
 Thus, the test $\addtest$ for addition covers both of them.
 %
 Similarly, the test $\subtest$ for subtraction covers both of them for the same
 reason.
 %
-Unfortunately, it causes that $\subtest$ for subtraction would not be added to
-the program pool because $\subtest$ does not cover new TRs.
+Unfortunately, it causes that either $\addtest$ or $\subtest$ might be removed
+in the minimal test set because they cover the same TRs, node 17 and the path
+$\pat$.
 
 
 %----------------------------------------%
 %----------------------------------------%
 
 
-\subsection{Feature-Sensitive (FS) Coverages}
+\subsection{Feature-Sensitive (FS) Coverages}\label{sec:fs-cov}
 
-To alleviate the problem, we introduce a novel \textit{feature-sensitive (FS)
-coverage} as a general extension of any graph coverages.
+To alleviate the problem explained in Section~\ref{sec:diff-feat}, we introduce
+a novel \textit{feature-sensitive (FS) coverage} as a general extension of any
+graph coverages.
 %
 It depends on the following two components:
 %
@@ -333,13 +335,13 @@ path $\pat$ as a sequence of nodes constructed by:
       \epsilon &
       \tif \pat = \node\\
 
-      {[\node_0, \cdots, \node_k, \getlast(\pat')]} &
+      {[\node_1, \cdots, \node_m, \getlast(\pat')]} &
       \tif \pat = \pat' \call \node \wedge
-      \css{\pat'} = [\node_0, \cdots, \node_k]\\
+      \css{\pat'} = [\node_1, \cdots, \node_m]\\
 
-      {[\node_0, \cdots, \node_{k-1}]} &
+      {[\node_1, \cdots, \node_{m-1}]} &
       \tif \pat = \pat' \ret \node \wedge
-      \css{\pat'} = [\node_0, \cdots, \node_k]\\
+      \css{\pat'} = [\node_1, \cdots, \node_m]\\
 
       \css{\pat'} &
       \tif \pat = \pat' \edge{\annot} \node
@@ -356,7 +358,7 @@ Then, we define the \textit{feature extractor} $\extfeat: \css{\patset{\graph}}
 \rightarrow \featset \uplus \{ \bot \}$ as a partial mapping from call-site
 stacks to enclosing language features $\featset$:
 \begin{equation}\label{equ:extfeat}
-  \extfeat([\node_0, \cdots, \node_k]) = \left\{
+  \extfeat([\node_1, \cdots, \node_m]) = \left\{
     \begin{array}{ll}
       \feat & \tif
       \exists i. \tst \featmap(\node_i) = \feat \wedge
@@ -440,27 +442,29 @@ In a similar way, we know that the enclosing language feature of $\subpat$
 is $\extfeat(\css{\subpat}) = \featmap(4) = \subfeat$.
 %
 It means that $\subtest$ covers a new FS-TS $(17, \subfeat)$ instead of $(17,
-\addfeat)$ and would be added to the program pool.
+\addfeat)$ and remains in the minimal test set.
 
 %----------------------------------------%
 
-It addition, we extend the feature extractor $\extfeat$ to apply apply
-$k$-limiting approach to FS coverages. The extended feature extractor
-$\extfeats{k}: \css{\patset{\graph}} \rightarrow \featset^{\leq k}$ collects at
-most $k$-most enclosing language features:
+In addition, we extend the feature extractor $\extfeat$ to apply $k$-limiting
+approach to FS coverages. The extended feature extractor $\extfeats{k}:
+\css{\patset{\graph}} \rightarrow \featset^{\leq k}$ collects at most $k$
+enclosing language features:
 %
 \begin{equation}\label{equ:extfeats}
-  \extfeats{k}([\node_0, \cdots, \node_m]) = \left\{
+  \extfeats{k}([\node_1, \cdots, \node_m]) = \left\{
     \begin{array}{ll}
       \epsilon & \tif k = 0 \vee m = 0\\
 
-      \extfeats{k-1}([\node_0, \cdots, \node_{m-1}]) + \feat & \tif
+      \extfeats{k-1}([\node_1, \cdots, \node_{m-1}]) + \feat & \tif
       \featmap(\node_m) = \feat\\
 
-      \extfeats{k}([\node_0, \cdots, \node_{m-1}]) & \telse\\
+      \extfeats{k}([\node_1, \cdots, \node_{m-1}]) & \telse\\
     \end{array}
   \right.
 \end{equation}
+
+%----------------------------------------%
 
 \begin{definition}[$k$-Limiting Feature-Sensitive ($k$-FS)
   Coverage]\label{def:k-fs-cov}
@@ -478,7 +482,7 @@ most $k$-most enclosing language features:
       covers the original TR $\tr$ and $\feats$ is the $k$-most enclosing
       language features of $\pat$:
       \[
-        \pat \cover (\tr, \feats) \iff pat \cover \tr \wedge
+        \pat \cover (\tr, \feats) \iff \pat \cover \tr \wedge
         \extfeats{k}(\css{\pat}) = \feats
       \]
   \end{itemize}
@@ -506,27 +510,241 @@ Then, $\extfeats{2}(\pat) = [\subfeat, \addfeat]$ because the most enclosing
 language feature is $\addfeat$, and the next enclosing one is $\subfeat$ for the
 path $\pat$.
 %
-If we use $2$-FC node coverage, the set of $2$-FS-TRs is $\kftrset{2} =
-(\nodeset, \featset^{\leq 2})$, and the test $\test$ covers a $2$-FS-TR $(17,
-[\subfeat, \addfeat])$.
+If we use $2$-FC node coverage $\kfnodecov{2}{\graph}$, the set of $2$-FS-TRs is
+$\kftrset{2}{\graph} = (\nodeset, \featset^{\leq 2})$, and the test $\test$
+covers a $2$-FS-TR $(17, [\subfeat, \addfeat])$.
+
+%----------------------------------------%
+
+The $k$-FS coverage divides TRs using each combination of different language
+features.
+%
+Especially, the $k$-FS coverage with $k > 2$ is helpful to cover edge cases in
+JavaScript engines and transpilers because they are heavily optimized and handle
+even same language features differently depending on which language features are
+used together.
+%
+For example, a \jscode{let} declaration just declares a block-scoped local
+variable.
+%
+However, JavaScript engines and transpilers often have a different execution path
+to handle it when it is declared in a \jscode{for-in/of} statement rather than a
+simple block.
+%
+Indeed, the GraalJS~\cite{graaljs} engine and the Babel~\cite{babel} transpiler
+contain conformance and crashing bugs only reproducible with a combination of
+\jscode{let} declaration and \jscode{for-in/of} statement.\footnote{
+  See \url{https://github.com/oracle/graaljs/issues/656} and
+  \url{https://github.com/babel/babel/issues/15100}
+}
 
 %----------------------------------------%
 %----------------------------------------%
 
-\subsection{Feature Call Path-Sensitive (FCPS) Coverages}
+\subsection{Feature Call Path-Sensitive (FCPS) Coverages}\label{sec:fcps-cov}
 
-\todo
+As explained in Section~\ref{sec:same-feat}, a more fine-grained set of test
+requirements is necessary to distinguish different parts of the semantics even
+in the same language features.
+%
+To resolve this problem, we define a \textit{feature call path-sensitive (FCPS)
+coverage} as a variant of FS coverage.
+%
+The main idea of FCPS coverage is to distinguish TRs using paths from the most
+enclosing language features.
+%
+However, if we keep paths as it is, the number of TRs exponentially increases
+because of the path explosion caused by sequential branches.
+%
+Hence, we simplify a path $\pat$ to a corresponding \textit{feature call path}
+$\fcp \in \fcpset = \featset \times \css{\patset{\graph}}$, which consists of
+the most enclosing feature and a subsequence of the call-site stack
+$\css{\pat}$ from the feature.
+%
+We define the \textit{feature call path extractor} $\extfcp:
+\css{\patset{\graph}} \rightarrow (\fcpset \uplus \{ \bot \})$ as follows:
+%
+\begin{equation}\label{equ:extfcp}
+  \extfcp([\node_1, \cdots, \node_m]) = \left\{
+    \begin{array}{ll}
+      \bot & \tif m = 0\\
+
+      (\feat, [\node_m]) & \tif \featmap(\node_m) = \feat\\
+
+      \fcp & \tif \fcp = \bot\\
+
+      (\feat, [\node'_0, \cdots, \node'_i]) &
+      \tif \fcp = (\feat, [\node'_0, \cdots, \node'_{m'}]) \wedge
+      \exists i. \tst \node'_i = \node_m\\
+
+      (\feat, \nodes + \node_m) & \tif \fcp = (\feat, \nodes)\\
+    \end{array}
+  \right.
+\end{equation}
+%
+where $\fcp = \extfcp([\node_1, \cdots, \node_{m-1}])$.
+%
+Initially, this algorithm starts with $\bot$, which denotes no feature call path
+for $\pat$, because there is no enclosing feature in the beginning ($m = 0$).
+%
+Then, it recursively keeps the call-sites in a given call-site
+stack $\css{\pat}$.
+%
+However, it refreshes the result when there exists a mapping from the current
+call-site to a language feature ($\featmap(\node_m) = \feat$).
+%
+In addition, it removes cycles in the result to prevent a possibly infinite
+length of feature call path and remove the meaningless cases ($\exists i. \tst
+\node'_i = \node_m$).
+
+%----------------------------------------%
+
+\begin{definition}[Feature Call Path-Sensitive (FCPS)
+  Coverage]\label{def:fcps-cov}
+  For a given graph coverage $\cov{\graph} = (\trset{\graph}, \cover)$, the
+  \textit{feature call path-sensitive (FCPS) coverage} $\fcov{\graph} =
+  (\fcptrset{\graph}, \cover)$ is defined as follows:
+  \begin{itemize}
+    \item the set of \textbf{feature call path-sensitive test requirements
+      (FCPS-TRs)} $\fcptrset{\graph}$ is a set of original TRs optionally tagged
+      with feature call paths.
+      \[
+        \fcptrset{\graph} = \trset{\graph} \times (\fcpset \uplus \{ \bot \})
+      \]
+    \item a path $\pat$ \textbf{covers} a FCPS-TR $(\tr, \fcp)$ when $\pat$
+      covers the original TR $\tr$ and $\fcp$ is the feature call path extracted
+      from $\pat$:
+      \[
+        \pat \cover (\tr, \fcp) \iff \pat \cover \tr \wedge
+        \extfcp(\css{\pat}) = \fcp
+      \]
+  \end{itemize}
+\end{definition}
+
+%----------------------------------------%
+
+\paragraph{\textbf{Example}}
+
+\begin{figure}
+  \includegraphics[width=0.85\textwidth]{img/spec-cfg-id}
+  \caption{
+    An excerpt from the CFG of abstract algorithms in ES13 related to $\idfeat$,
+    a syntactic feature defined by the first alternative of
+    \esnt{IdentifierReference} and its \textbf{Evaluation} SDO.
+  }
+  \label{fig:spec-cfg-id}
+\end{figure}
+
+We show two examples for FCPS node coverages in graph with graphs in
+Figure~\ref{fig:spec-cfg} and Figure~\ref{fig:spec-cfg-id}.
+%
+First, consider the following two JavaScript programs as tests with the CFG in
+Figure~\ref{fig:spec-cfg}:
+%
+\begin{equation}\label{equ:fcps-example1}
+  \begin{array}{rcl}
+    \test_0 \in \testset &=& \text{(a JavaScript program \jscode{2n + 1;})}\\
+    \test_1 \in \testset &=& \text{(a JavaScript program \jscode{1 + 2n;})}\\
+  \end{array}
+\end{equation}
+%
+If we use FS node coverage, both tests $\test_0$ and $\test_1$ cover the same
+FS-TR $(21, \addfeat)$, and one of them might be removed in the minimal test
+set.
+%
+However, if we use FCPS node coverage, $\test_0$ and $\test_1$ cover different
+FCPS-TRs $(21, (\addfeat, [1, 8, 12]))$ and $(21, (\addfeat, [1, 8, 14]))$,
+respectively.
+%
+The other example is about the cycles in the call-site stacks with the graph in
+Figure~\ref{fig:spec-cfg-id}.
+%
+It depicts an excerpt from the CFG of abstract algorithms in ES13 related to
+$\idfeat$, a syntactic feature defined by the first alternative of
+\esnt{IdentifierReference} and its \textbf{Evaluation} SDO. 
+%
+Assume that we do not remove cycles in the feature call paths $\fcpset$ during
+the extraction algorithm $\extfcp$.
+%
+Then, since the algorithm \textbf{GetIdentifierReference} contains a
+self-recursion, there exists an infinite number of possible feature call paths
+from $\idfeat$ to node 29:
+%
+\begin{equation}\label{fcp-inf-example}
+  (\idfeat, [27, 28]) \qquad
+  (\idfeat, [27, 28, 30]) \qquad
+  (\idfeat, [27, 28, 30, 30]) \qquad
+  \cdots
+\end{equation}
+%
+However, we remove cycles in feature call paths to resolve this issue, and there
+exists only two possible feature call paths: $(\idfeat, [27, 28])$ and
+$(\idfeat, [27, 28, 30])$.
+
+%----------------------------------------%
+
+Similar to the extension of FS coverages to $k$-FS coverages, we define a
+$k$-FCPS coverage by extending the $\extfcp$ into $\extfcps{k}:
+\css{\patset{\graph}} \rightarrow \fcpset^{\leq k}$ where $\fcpset^{\leq k} =
+\featset^{\leq k} \times \css{\patset{\graph}}$:
+%
+\begin{equation}\label{equ:extfcps}
+  \extfcps{k}([\node_1, \cdots, \node_m]) = \left\{
+    \begin{array}{ll}
+      (\epsilon, \epsilon) & \tif k = 0 \vee m = 0\\
+
+      (\feats + \feat, [\node_m]) & \tif \featmap(\node_m) = \feat \wedge
+      \extfcps{k-1}([\node_1, \cdots, \node_{m-1}]) = (\feats, \_)\\
+
+      \fcps & \tif \fcps = (\epsilon, \epsilon)\\
+
+      (\feats, [\node'_0, \cdots, \node'_i]) &
+      \tif \fcp = (\feats, [\node'_0, \cdots, \node'_{m'}]) \wedge
+      \exists i. \tst \node'_i = \node_m\\
+
+      (\feats, \nodes + \node_m) & \tif \fcp = (\feats, \nodes)\\
+    \end{array}
+  \right.
+\end{equation}
+%
+where $\fcps = \extfcps{k}([\node_1, \cdots, \node_{m-1}])$.
+
+%----------------------------------------%
+
+\begin{definition}[$k$-Limiting Feature Call Path-Sensitive ($k$-FCPS)
+  Coverage]\label{def:k-fcps-cov}
+  For a given graph coverage $\cov{\graph} = (\trset{\graph}, \cover)$, the
+  \textit{$k$-limiting feature call path-sensitive ($k$-FCPS) coverage}
+  $\kfcpcov{k}{\graph} = (\kfcptrset{k}{\graph}, \cover)$ is defined as follows:
+  \begin{itemize}
+    \item the set of \textbf{$k$-feature call path-sensitive test requirements
+      ($k$-FCPS-TRs)} $\kfcptrset{k}{\graph}$ is a set of original TRs tagged
+      with extends feature call paths bounded by $k$:
+      \[
+        \kfcptrset{k}{\graph} = \trset{\graph} \times \fcpset^{\leq k}
+      \]
+    \item a path $\pat$ \textbf{covers} a $k$-FCPS-TR $(\tr, \fcps)$ when $\pat$
+      covers the original TR $\tr$ and $\fcps$ is the extended feature call path
+      extracted from $\pat$:
+      \[
+        \pat \cover (\tr, \fcps) \iff \pat \cover \tr \wedge
+        \extfcps{k}(\css{\pat}) = \fcps
+      \]
+  \end{itemize}
+\end{definition}
+
+%----------------------------------------%
 
 \begin{figure}
   \centering
   \small
   \begin{tikzpicture}[every node/.style={draw=none}]
-    \node (base)   at (0,1) {$\cov{}=\kfcov{0}{}=\kfcpcov{0}{}$};
-    \node (1-fs)   at (3,0) {$\fcov{}=\kfcov{1}{}$};
-    \node (2-fs)   at (6,0) {$\kfcov{2}{}$};
+    \node (base)   at (0,1) {$\cov{\graph}=\kfcov{0}{\graph}=\kfcpcov{0}{\graph}$};
+    \node (1-fs)   at (3,0) {$\fcov{\graph}=\kfcov{1}{\graph}$};
+    \node (2-fs)   at (6,0) {$\kfcov{2}{\graph}$};
     \node (k-fs)   at (8,0) {$\cdots$};
-    \node (1-fcps) at (3,2) {$\fcpcov{}=\kfcpcov{1}{}$};
-    \node (2-fcps) at (6,2) {$\kfcpcov{2}{}$};
+    \node (1-fcps) at (3,2) {$\fcpcov{\graph}=\kfcpcov{1}{\graph}$};
+    \node (2-fcps) at (6,2) {$\kfcpcov{2}{\graph}$};
     \node (k-fcps) at (8,2) {$\cdots$};
     \path[->]
     (1-fs) edge node[auto] {(1)} (base)
@@ -544,16 +762,69 @@ If we use $2$-FC node coverage, the set of $2$-FS-TRs is $\kftrset{2} =
   \label{fig:subs}
 \end{figure}
 
+In addition, we prove Theorem~\ref{thm:subs} for the subsumption relations
+between $k$-FS and $k$-FCPS coverages.
+%
+We first prove the Lemma~\ref{lem:subs} and prove the theorem using it.
+%
+Figure~\ref{fig:subs} depicts the subsumption relations between them using edges
+annotated with the corresponding equation in Theorem~\ref{thm:subs}.
+
+%----------------------------------------%
+
+\begin{lemma}\label{lem:subs}
+  Consider two graph coverages $\cov{\graph} = (\trset{\graph}, \cover)$ and
+  $\cov{\graph}' = (\trset{\graph}', \cover')$.
+  %
+  If there exists a valid TR $\tr \in \trset{\graph}$ that satisfies the following
+  condition for each valid TR $\tr' \in \trset{\graph}'$:
+  %
+  \begin{equation}\label{equ:subs-lemma}
+    \forall \test \in \testset. \; \test \cover \tr \Rightarrow \test \cover' \tr'
+  \end{equation}
+  %
+  Then, $\cov{\graph}$ subsumes $\cov{\graph}'$ ($\cov{\graph}
+  \subs\cov{\graph}'$).
+\end{lemma}
+\begin{proof}
+  Assume $T \sat \cov{\graph}$.
+  %
+  For a given valid TR $\tr' \in \trset{\graph}'$, let $\tr \in \trset{\graph}$
+  be the valid TR satisfies (\ref{equ:subs-lemma}).
+  %
+  Then, there exists a test $\test \in T$ such that $\test \cover \tr$ because
+  $\tr$ is valid and $T \sat \cov{\graph}$.
+  %
+  Finally, $\test \cover \tr'$ because of (\ref{equ:subs-lemma}).
+\end{proof}
+
 \begin{theorem}[Subsumption Relation]\label{thm:subs}
-  For a given integer $k > 0$, the following three subsumption relation
-  ($\subs$) between $k$-FS and $k$-FCPS Coverages satisfies:
+  For a given integer $k > 0$, the following three subsumption relations
+  ($\subs$) between $k$-FS and $k$-FCPS coverages satisfy:
   \begin{enumerate}
-    \item $\kfcov{k}{} \subs \kfcov{(k-1)}{}$
-    \item $\kfcpcov{k}{} \subs \kfcpcov{(k-1)}{}$
-    \item $\kfcpcov{k}{} \subs \kfcov{k}{}$
+    \item $\kfcov{k}{\graph} \subs \kfcov{(k-1)}{\graph}$
+    \item $\kfcpcov{k}{\graph} \subs \kfcpcov{(k-1)}{\graph}$
+    \item $\kfcpcov{k}{\graph} \subs \kfcov{k}{\graph}$
   \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-  \todo
+  We prove the first subsumption relation using Lemma~\ref{lem:subs}, but omit
+  the other second and third ones because it is possible to prove them in a
+  similar way.
+  %
+  Let $k > 0$.
+  %
+  For a given valid $(k-1)$-FS-TR $(\tr, \feats)$, there exists a test $\test
+  \in \testset$ such that $\test \cover (\tr, \feats)$ because $(\tr, \feats)$
+  is valid.
+  %
+  There exists a prefix path $\pat$ of $\patmap{\graph}(\test)$ such that $\pat
+  \cover (\tr, \feats)$ ($\because$ (\ref{equ:test-cover}))
+  %
+  Then, a $k$-FS-TR $(\tr, \extfeats{k}(\css{\pat}))$ satisfies the condition
+  (\ref{equ:subs-lemma}) because of the inductive definition of $\extfeats{k}$
+  in (\ref{equ:extfeats}).
+  %
+  Hence, $k$-FS coverages subsumes $(k-1)$-FS coverages.
 \end{proof}
