@@ -4,12 +4,13 @@ To evalute feature-sensitive coverages, we apply $\tool$ to the latest language
 specification (ES13, 2022)~\cite{es13} with different $k$-FS and $k$-FCPS
 node/branch coverages to synthesize JavaScript conformance tests.
 %
-As a result, we synthesize \inred{97,234} conformance tests using $\tool$ with
-five different graph coverage criteria: 1) a node/branch coverage and 2)
-$1$-FS, 3) $2$-FS, 4) $1$-FCPS, and 5) $2$-FCPS node/branch coverages.
+As a result, we synthesize \inred{185,246} conformance tests using $\tool$ with
+five different graph coverage criteria: 1) a node/branch coverage and 2) $1$-FS,
+3) $2$-FS, 4) $1$-FCPS, and 5) $2$-FCPS node/branch coverages.
 %
 Our evaluation platform is a 4.0GHz Intel(R) Core(TM) i7-6700k and 32GB of RAM
-(Samsung DDR4 2133MHz 8GB*4).
+(Samsung DDR4 2133MHz 8GB*4), and it takes \inred{72} hours to synthesize
+conformance tests.
 %
 We evaluated the synthesized conformance test suite with the following four
 research questions:
@@ -34,14 +35,14 @@ research questions:
 \subsection{Conformance Bug Detection}\label{sec:conform-bug}
 
 \begin{table}
-  \caption{
-    Detected conformance bugs in JavaScript engines and transpilers.
-  }
-  \vspace*{-.5em}
-  {
-    \small
-    \label{tab:conform-bugs}
-    \begin{tabular}{?c?l|l|l?r|r|r?}
+\caption{
+  Detected conformance bugs in JavaScript engines and transpilers.
+}
+\vspace*{-.5em}
+{
+\small
+\label{tab:conform-bugs}
+\begin{tabular}{?c?l|l|l?r|r|r?}
 \toprule\\[-1.6em]
 
 \multicolumn{1}{?c?}{\multirow{2}{*}{\textbf{Kind}}}
@@ -80,8 +81,8 @@ research questions:
 & \y{76}& \y{78}& \y{118}\\
 
 \toprule\multicolumn{1}{c}{}\\[-1.6em]
-    \end{tabular}
-  }
+\end{tabular}
+}
 \end{table}
 
 %----------------------------------------%
@@ -112,7 +113,7 @@ reverse-engineering.
 %----------------------------------------%
 
 Table~\ref{tab:conform-bugs} gives the distribution of the detected conformance
-bugs by \inred{97,234} synthesized conformance tests.
+bugs by \inred{185,246} synthesized conformance tests.
 %
 We found conformance bugs in all the evaluation targets using the synthesized
 conformance tests.
@@ -130,16 +131,20 @@ not yet responded.
 Among \inred{118} detected bugs, \inred{29} are engine bugs, and \inred{118} are
 transpiler bugs.
 %
-The most two trusted engines are V8 and SpiderMonkey containing only three
-conformance bugs, and GraalJS has the most with \inred{7} engine conformance
-bugs.
+The two most trusted engines are V8 and SpiderMonkey because they have only three
+conformance bugs.
 %
-For transpilers, JavaScript Obfuscator contains only three bugs, but Babel has
-the most with \inred{39} transpiler conformance bugs.
+Hence, we use V8 as the default engine during the transpiler conformance check.
 %
-However, it is unfair to directly compare transpilers because they have
-different purposes, and desugaring new language features to ES5.1 is a
-more challenging work than compressing or obfuscating the code.
+If V8 fails a conformance test, we use another JavaScript engine that passes the
+test for the conformance check of a transpiler.
+%
+Among transpilers, Terser and JavaScript Obfuscator contain only \inred{15} and
+\inred{3} bugs, respectively, but Babel and SWC have \inred{39} and
+\inred{32} transpiler conformance bugs, respectively.
+%
+In happens because transpilers desugaring new language features to ES5.1 is a
+more challenging than compressing or obfuscating the code.
 
 %----------------------------------------%
 %----------------------------------------%
@@ -147,40 +152,45 @@ more challenging work than compressing or obfuscating the code.
 \subsection{Impact of $k$-FS Coverages}\label{sec:impact-k-fs}
 
 \begin{table}
-  \label{tab:compare}
-  \caption{
-    Comparison of synthesized conformance test suite guided-by five different
-    graph coverage criteria: 1) a node/branch coverage, and 2) $1$-FS, 3)
-    $2$-FS, 4) $1$-FCPS, and 5) $2$-FCPS node/branch coverages.
-  }
-  \vspace*{-.5em}
-  {
-    \small
-    \begin{tabular}{?c?r|r|r?r|r?}
-      \toprule\\[-1.6em]
+\label{tab:compare}
+\caption{
+  Comparison of synthesized conformance test suite guided-by five different
+  graph coverage criteria: 1) a node/branch coverage, and 2) $1$-FS, 3)
+  $2$-FS, 4) $1$-FCPS, and 5) $2$-FCPS node/branch coverages.
+}
+\vspace*{-.5em}
+{
+\small
+\begin{tabular}{?c?r|r|r?r|r?}
+\toprule\\[-1.6em]
 
-      \multicolumn{1}{?c?}{\multirow{2}{*}{\textbf{Coverage Criterion}}}
-      & \multicolumn{3}{c?}{\textbf{\# Covered TRs}}
-      & \multicolumn{1}{c|}{\multirow{2}{*}{\textbf{\# Synthesized Tests}}}
-      & \multicolumn{1}{c?}{\multirow{2}{*}{\textbf{\# Unique Bugs}}}\\\cline{2-4}
+\multicolumn{1}{?c?}{\multirow{2}{*}{\textbf{Coverage Criterion}}}
+& \multicolumn{3}{c?}{\textbf{\# Covered TRs}}
+& \multicolumn{1}{c|}{\multirow{2}{*}{\textbf{\# Syn. Tests}}}
+& \multicolumn{1}{c?}{\multirow{2}{*}{\textbf{\# Bugs}}}\\\cline{2-4}
 
-      & \multicolumn{1}{c|}{\textbf{\# Nodes}}
-      & \multicolumn{1}{c|}{\textbf{\# Branchs}}
-      & \multicolumn{1}{c?}{\textbf{\# Total}}
-      &&\\
+& \multicolumn{1}{c|}{\textbf{\# Nodes (K)}}
+& \multicolumn{1}{c|}{\textbf{\# Branchs (K)}}
+& \multicolumn{1}{c?}{\textbf{\# Total (K)}}
+&&\\
 
-      \toprule\\[-1.6em]
+\toprule\\[-1.6em]
 
-      Node/Branch           &  \x0 &  \x0 &  \x0 &  \x0 &  \x0 \\\hline
-      $1$-FS Node/Branch    &  \x0 &  \x0 &  \x0 &  \x0 &  \x0 \\\hline
-      $2$-FS Node/Branch    &  \x0 &  \x0 &  \x0 &  \x0 &  \x0 \\\hline
-      $1$-FCPS Node/Branch  &  \x0 &  \x0 &  \x0 &  \x0 &  \x0 \\\hline
-      $2$-FCPS Node/Branch  &  \x0 &  \x0 &  \x0 &  \x0 &  \x0 \\
+Node/Branch
+& \x{2.1}     & \x{10.0}    & \x{12.1}    & \x{2,095} & \x{45}  \\\hline
+$1$-FS Node/Branch
+& \x{61.5}    & \x{34.2}    & \x{95.7}    & \x{5,336} & \x{60}  \\\hline
+$1$-FCPS Node/Branch
+& \x{257.7}   & \x{133.2}   & \x{390.9}   & \x{5,446} & \x{75}  \\\hline
+$2$-FS Node/Branch
+& \x{1,131.5} & \x{663.3}   & \x{1,794.8} & \x{83,668}& \x{115} \\\hline
+$2$-FCPS Node/Branch
+& \x{2,854.9} & \x{1,500.4} & \x{4,355.3} & \x{88,701}& \x{118} \\
 
-      \toprule\multicolumn{1}{c}{}\\[-1.6em]
+\toprule\multicolumn{1}{c}{}\\[-1.6em]
 
-    \end{tabular}
-  }
+\end{tabular}
+}
 \end{table}
 
 \todo
@@ -190,6 +200,13 @@ more challenging work than compressing or obfuscating the code.
 
 \subsection{Impact of $k$-FCPS Coverages}\label{sec:impact-k-fcps}
 
+\begin{figure}
+  \includegraphics[width=0.85\textwidth]{img/spec-cfg-id}
+  \caption{
+    .
+  }
+  \label{fig:spec-cfg-id}
+\end{figure}
 
 \todo
 
