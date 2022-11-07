@@ -2,11 +2,11 @@
 
 To evalute feature-sensitive coverages, we apply $\tool$ to the latest language
 specification (ES13, 2022)~\cite{es13} with different $k$-FS and $k$-FCPS
-node/branch coverages to synthesize JavaScript conformance tests.
+node-or-branch coverages to synthesize JavaScript conformance tests.
 %
 As a result, we synthesize \inred{185,246} conformance tests using $\tool$ with
-five different graph coverage criteria: 1) a node/branch coverage and 2) $1$-FS,
-3) $2$-FS, 4) $1$-FCPS, and 5) $2$-FCPS node/branch coverages.
+five different graph coverage criteria: 1) a node-or-branch coverage and 2)
+$1$-FS, 3) $2$-FS, 4) $1$-FCPS, and 5) $2$-FCPS node-or-branch coverages.
 %
 Our evaluation platform is a 4.0GHz Intel(R) Core(TM) i7-6700k and 32GB of RAM
 (Samsung DDR4 2133MHz 8GB*4), and it takes \inred{72} hours to synthesize
@@ -152,15 +152,15 @@ more challenging than compressing or obfuscating the code.
 \subsection{Impact of $k$-FS Coverages}\label{sec:impact-k-fs}
 
 \begin{table}
-\label{tab:compare}
 \caption{
-  Comparison of synthesized conformance test suite guided-by five different
-  graph coverage criteria: 1) a node/branch coverage, and 2) $1$-FS, 3)
-  $2$-FS, 4) $1$-FCPS, and 5) $2$-FCPS node/branch coverages.
+  Comparison of synthesized conformance test suite guided by five different
+  graph coverage criteria: 1) a node-or-branch coverage, and 2) $1$-FS, 3)
+  $2$-FS, 4) $1$-FCPS, and 5) $2$-FCPS node-or-branch coverages.
 }
 \vspace*{-.5em}
 {
 \small
+\label{tab:compare}
 \begin{tabular}{?c?r|r|r?r|r?}
 \toprule\\[-1.6em]
 
@@ -176,15 +176,15 @@ more challenging than compressing or obfuscating the code.
 
 \toprule\\[-1.6em]
 
-node/branch
+node-or-branch
 & \x{2.1}     & \x{10.0}    & \x{12.1}    & \x{2,095} & \x{45}  \\\hline
-$1$-FS node/branch
+$1$-FS node-or-branch
 & \x{61.5}    & \x{34.2}    & \x{95.7}    & \x{5,336} & \x{60}  \\\hline
-$1$-FCPS node/branch
+$1$-FCPS node-or-branch
 & \x{257.7}   & \x{133.2}   & \x{390.9}   & \x{5,446} & \x{75}  \\\hline
-$2$-FS node/branch
+$2$-FS node-or-branch
 & \x{1,131.5} & \x{663.3}   & \x{1,794.8} & \x{83,668}& \x{115} \\\hline
-$2$-FCPS node/branch
+$2$-FCPS node-or-branch
 & \x{2,854.9} & \x{1,500.4} & \x{4,355.3} & \x{88,701}& \x{118} \\
 
 \toprule\multicolumn{1}{c}{}\\[-1.6em]
@@ -192,6 +192,46 @@ $2$-FCPS node/branch
 \end{tabular}
 }
 \end{table}
+
+%----------------------------------------%
+
+To evaluate the effect of $k$-FS coverages, we compare the synthesized
+conformance test suite guided by different $k$-FS normal/branch coverage
+criteria.
+%
+Table~\ref{tab:compare} shows the result of conformance test synthesis via
+$\tool$ with five different graph coverage criteria: 1) a node-or-branch
+coverage and 2) $1$-FS, 3) $2$-FS, 4) $1$-FCPS, and 5) $2$-FCPS node-or-branch
+coverages.
+%
+Each column denotes the number of covered $k$-FS or $k$-FCPS nodes (\textbf{\#
+nodes}), the number of covered $k$-FS or $k$-FCPS branches (\textbf{\#
+branches}), the total number of covered $k$-FS or $k$-FCPS TRs (\textbf{\#
+total}), the number of synthesized conformance tests (\textbf{\# syn. tests}),
+and the number of detected unique bugs by synthesized tests (\textbf{\# bugs}).
+%
+According to the table's first, second, and fourth rows, the number of
+synthesized tests increased \inred{2.55x (5,336 / 2,095)} from 0-FS to 1-FS and
+\inred{15.7x (83,668 / 5,336)} from 1-FS to 2-FS.
+%
+It is due to that many abstract algorithms in the language specification are
+related to the limited number of language features, but diverse language
+features could enclose each language feature.
+%
+In addition, the number of detected unique bugs also increased when using a
+higher $k$-FS normal/branch coverage.
+%
+The baseline with a simple node-or-branch coverage detects \inred{45}
+conformance bugs in engines and transpilers.
+%
+The conformance tests synthesized with $1$-FS coverage detect \inred{15 (60 -
+45)} more conformance bugs, and tests synthesized with $2$-FS coverage detect
+\inred{55 (115 - 60)} more bugs.
+
+%----------------------------------------%
+%----------------------------------------%
+
+\subsubsection{Bug Examples}\label{sec:k-fs-example}
 
 \todo
 
@@ -217,6 +257,13 @@ $2$-FCPS node/branch
   }
   \label{fig:spec-cfg-id}
 \end{figure}
+
+\todo
+
+%----------------------------------------%
+%----------------------------------------%
+
+\subsubsection{Bug Examples}\label{sec:k-fs-example}
 
 \todo
 
