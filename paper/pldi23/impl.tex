@@ -122,11 +122,20 @@ First, assume that we want to check the conformance of a JavaScript engine.
 In this case, it is enough to run the program and assertions together in the
 target engine.
 %
-If an assertion fails, we know the target engine has a conformance bug related
-to the test.
+Then, if at least one assertion fails, we know the target engine has a
+conformance bug related to the test.
+
+On the other hand, we should transpile the program in the test for JavaScript
+transpilers.
 %
-On the other hand, for JavaScript transpilers, we need to transpile the program
-first and run the transpiled program and assertions together using an engine.
+If the target transpiler abnormally terminates, it is a conformance bug because
+the program of each conformance test is valid.
+%
+Otherwise, we should run the transpiled program and assertions together using an
+engine.
 %
 Note that a trusted or already tested JavaScript engine is required to check the
-conformance of transpiler correctly.
+conformance of the transpiler correctly.
+%
+Like the engine conformance check, the target transpiler has a conformance bug
+related to the test if at least one assertion fails.

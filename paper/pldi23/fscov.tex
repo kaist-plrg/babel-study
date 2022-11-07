@@ -254,6 +254,15 @@ lengths $\norm{\pat} \leq k$ rather than equality $\norm{\pat} = k$.
 Thus, if $i \leq j$, the set of TRs in $\kpathcov{i}{\graph}$ is always a subset
 of that in $\kpathcov{j}{\graph}$, and $\kpathcov{j}{\graph}$ subsumes
 $\kpathcov{i}{\graph}$.
+%
+A \textit{branch coverage} criterion is a variant of an edge coverage that
+treats only out-edges of conditional branches as TRs.
+%
+It is possible to merge multiple coverage criteria by defining unions of TRs and
+cover relations as the TR and cover relation of the merged coverage criterion.
+%
+For example, a \textit{node/branch coverage} criterion is a merged criterion of
+node and branch coverage criteria.
 
 %----------------------------------------%
 
