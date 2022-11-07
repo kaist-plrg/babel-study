@@ -1,3 +1,132 @@
 \section{Implementation}\label{sec:impl}
 
-\todo
+This section introduces our implementation $\tool$, an extension of a
+state-of-the-art JavaScript conformance test synthesizer $\jest$~\cite{jest}, to
+support both $k$-FS and $k$-FCPS coverages.
+%
+Then, we explain how to detect conformance bugs not only in engines but also
+transpilers using the synthesized conformance tests.
+
+%----------------------------------------%
+%----------------------------------------%
+
+\subsection{Overall Structure}\label{sec:overall}
+
+\begin{figure}
+  \includegraphics[width=\textwidth]{img/overall}
+  \caption{
+    Overall structure of a JavaScript conformance test synthesizer using
+    coverage-guided fuzzing with CFG in the language specification, ECMA-262.
+  }
+  \label{fig:overall}
+\end{figure}
+
+%----------------------------------------%
+
+First, we describe the overall structure of $\tool$ and explain which parts are
+updated compared to the baseline tool $\tool$.
+%
+$\jest$ is a state-of-the-art JavaScript conformance synthesizer using
+coverage-guided fuzzing~\cite{afl} with CFG in the language specification.
+%
+It utilizes another tool $\jiset$~\cite{jiset} to handle JavaScript syntax and
+semantics described in the language specification mechanically.
+%
+However, since $\jiset$ is now deprecated and re-branded into another tool,
+$\esmeta$, $\jest$ is also updated based on $\esmeta$.\footnote{See
+\url{https://github.com/es-meta/esmeta}}
+%
+Hence, we extend the new version of $\jest$ to support both $k$-FS and $k$-FCPS
+coverages.
+%
+As depicted in Figure~\ref{fig:overall}, it takes 1) ECMA-262, the JavaScript
+official language specification, and 2) a coverage criterion $\cov{\graph}$ for
+CFG in the specification.
+%
+we mark it as red to highlight the extended part compared to the baseline.
+
+$\tool$ consists of four modules that mechanically utilize JavaScript syntax and
+semantics described in the given language specification.
+\begin{itemize}
+  \item \textsf{\textbf{Seed Synthesizer}}:
+    %
+    As the first step, \textsf{Seed Synthesizer} automatically synthesizes a set
+    of JavaScript programs as the initial \textit{program pool}.
+    %
+    It utilizes JavaScript syntax described in the language specification to
+    cover diverse alternatives in syntactic productions as much as possible.
+    %
+    Our tool uses existing two synthesizers: 1) a non-recursive synthesizer and
+    2) a built-in synthesizer.
+    %
+  \item \textsf{\textbf{Target Selector}}:
+    %
+    To measure the coverage in the CFG, \textsf{Target Selector} extracts the
+    execution path of each program in the pool by interpreting it using the
+    abstract algorithms in the specification.
+    %
+    While the baseline tool supports only node/branch coverages, we extend it to
+    support $k$-FS and $k$-FCPS node/branch coverages.
+    %
+    If a program does not cover new TRs, it removes the program from the pool.
+    %
+    Then, it selects a program as a mutation target in the pool that potentially
+    increases the coverage or stops the iteration when the current status
+    satisfies the termination condition.
+    %
+  \item \textsf{\textbf{Program Mutator}}:
+    %
+    To increase the coverage in the CFG, \textsf{Program Mutator} repeatedly
+    tries to mutate a JavaScript program to a new one based on mutation methods.
+    %
+    Our tool uses five existing mutation methods: 1) a random mutation, 2)
+    nearest syntax tree mutation, 3) string substitution, 4) object
+    substitution, and 5) statement insertion.
+    %
+  \item \textsf{\textbf{Assertion Extractor}}:
+    %
+    After the mutation iteration, \textsf{Assertion Extractor} automatically
+    extracts seven kinds of assertions from each program in the pool.
+    %
+    The assertions represent the expected final state of each program according
+    to the semantics described in the specification.
+    %
+    As a result, each pair of a program and the corresponding extracted
+    assertions is a \textit{conformance test} for JavaScript.
+\end{itemize}
+
+%----------------------------------------%
+
+\begin{figure}
+  \includegraphics[width=0.8\textwidth]{img/conform-check}
+  \caption{
+    Conformance check of both engines and transpilers with synthesized
+    conformance tests.
+  }
+  \label{fig:conform-check}
+\end{figure}
+
+%----------------------------------------%
+%----------------------------------------%
+
+\paragraph{\textbf{Conformance Check of Engines and Transpilers}}
+%
+A synthesized conformance test consists of a JavaScript program and
+corresponding assertions.
+%
+Figure~\ref{fig:conform-check} depicts how to use it to check the conformance of
+JavaScript engines and transpilers.
+%
+First, assume that we want to check the conformance of a JavaScript engine.
+%
+In this case, it is enough to run the program and assertions together in the
+target engine.
+%
+If an assertion fails, we know the target engine has a conformance bug related
+to the test.
+%
+On the other hand, for JavaScript transpilers, we need to transpile the program
+first and run the transpiled program and assertions together using an engine.
+%
+Note that a trusted or already tested JavaScript engine is required to check the
+conformance of transpiler correctly.
