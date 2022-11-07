@@ -201,9 +201,19 @@ $2$-FCPS Node/Branch
 \subsection{Impact of $k$-FCPS Coverages}\label{sec:impact-k-fcps}
 
 \begin{figure}
-  \includegraphics[width=0.85\textwidth]{img/spec-cfg-id}
+  \centering
+  \begin{subfigure}{0.45\textwidth}
+    \centering
+    \includegraphics[width=0.85\textwidth]{img/fcp-count-1}
+    \subcaption{The histogram for $k = 1$.}
+  \end{subfigure}
+  \begin{subfigure}{0.45\textwidth}
+    \centering
+    \includegraphics[width=0.85\textwidth]{img/fcp-count-1}
+    \subcaption{The histogram for $k = 2$.}
+  \end{subfigure}
   \caption{
-    .
+    The histogram of the number of $k$-FCPS-TRs corresponding to each $k$-FS-TR.
   }
   \label{fig:spec-cfg-id}
 \end{figure}
@@ -216,3 +226,66 @@ $2$-FCPS Node/Branch
 \subsection{Comparison with Test262}\label{sec:compare-test262}
 
 \todo
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{img/cov-0}
+    \subcaption{Baseline.}
+  \end{subfigure}
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{img/cov-1}
+    \subcaption{1-FS}
+  \end{subfigure}
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{img/cov-1-fcp}
+    \subcaption{1-FCPS}
+  \end{subfigure}
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{img/cov-2}
+    \subcaption{2-FS}
+  \end{subfigure}
+  \begin{subfigure}{0.19\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{img/cov-2-fcp}
+    \subcaption{2-FCPS}
+  \end{subfigure}
+  \caption{
+    The changes of $k$-FS and $k$-FCPS node/branch coverages with elapse of
+    time.
+  }
+  \label{fig:spec-cfg-id}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.19\textwidth}
+    \venn{10.3}{10.3}{10.3}
+    \subcaption{Baseline.}
+  \end{subfigure}
+  \begin{subfigure}{0.19\textwidth}
+    \venn{10.3}{10.3}{10.3}
+    \subcaption{1-FS}
+  \end{subfigure}
+  \begin{subfigure}{0.19\textwidth}
+    \venn{10.3}{10.3}{10.3}
+    \subcaption{1-FCPS}
+  \end{subfigure}
+  \begin{subfigure}{0.19\textwidth}
+    \venn{10.3}{10.3}{10.3}
+    \subcaption{2-FS}
+  \end{subfigure}
+  \begin{subfigure}{0.19\textwidth}
+    \venn{10.3}{10.3}{10.3}
+    \subcaption{2-FS}
+  \end{subfigure}
+  \caption{
+    The $k$-FS and $k$-FCPS node/branch coverages of Test262 tests and
+    synthesized tests via $\tool$.
+  }
+  \label{fig:spec-cfg-id}
+\end{figure}

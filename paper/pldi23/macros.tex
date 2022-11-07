@@ -218,3 +218,20 @@
 \newcommand{\kfcpcov}[2]{\cov{#2}^{{#1}\name{-FCPS}}}
 \newcommand{\kfcpnodecov}[2]{\cov{#2}^{{#1}\name{-FCPS}[\name{node}]}}
 \newcommand{\kfcptrset}[2]{\trset{#2}^{{#1}\name{-FCPS}}}
+
+% venn diagram
+\newcommand{\venn}[3]{%
+  \begin{tikzpicture}
+    \def\radius{8mm}
+    \coordinate (l);
+    \coordinate[xshift=\radius] (r);
+    \draw (l) circle (\radius);
+    \draw (r) circle (\radius);
+    \node[xshift=-4.0\radius] at (l) {\small #1\%};
+    \node[xshift=+4.0\radius] at (r) {\small #2\%};
+    \node[xshift=+4.0\radius] at (l) {\small #3\%};
+    \node[xshift=-7pt,yshift=\radius+10pt] at (l) {\small Test262};
+    \node[xshift=+7pt,yshift=\radius+9pt] at (r) {$\tool$};
+  \end{tikzpicture}
+  \vspace*{-.3em}
+}
