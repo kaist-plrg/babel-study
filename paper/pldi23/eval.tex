@@ -249,11 +249,45 @@ more conformance bugs, and tests synthesized with 2-FS coverage detect \inred{55
 (115 - 60)} more bugs.
 
 %----------------------------------------%
+
+\textbf{Empty Name Binding for \jscode{let} in \jscode{for}-Loops.}
+%
+ES13 provides diverse shapes of $\jscode{for}$-loops as syntactic features
+defined with the \esnt{ForStatement} syntactic production.
+%
+Among them, a \jscode{for}-loop with a \jscode{let}-binding is a syntactic
+feature for its third alternative.
+%
+While it normally has one or more name bindings, we could pass an empty list of
+name bindings using an empty object destructuring pattern: \jscode{\{\}}.
+%
+However, Babel v7.19.1 crashes when transpiling a \jscode{for}-loop with
+empty name bindings for \jscode{let}, such as a JavaScript program in
+Listing~\ref{lst:empty-let-bug}.
+%
+While the semantics that checks the empty name bindings is described in the
+\textbf{CreatePerIterationEnvironment} algorithm, other language features also
+utilize it when defining their semantics.
+%
+Hence, we failed to detect this conformance bug using the tests synthesized with
+a simple node-or-branch coverage.
+%
+On the other hand, feature-sensitive coverages could discriminate the usage of
+empty name binding checking semantics in different language features.
+%
+As a result, we successfully detected this conformance bug with 1-FS, 2-FS,
+1-FCPS, or 2-FCPS coverages.
+\begin{lstlisting}[style=JS,numbers=left,frame=single,
+caption={A crashing bug in Babel v7.19.1.},
+label={lst:empty-let-bug}
+]
+// [EXIT] Normal
+for (let {} = 0; 0; ) ;
+\end{lstlisting}
+
 %----------------------------------------%
 
-\subsubsection{Bug Examples}\label{sec:k-fs-example}
-
-\todo
+\todo\ for 2-FS
 
 %----------------------------------------%
 %----------------------------------------%
@@ -323,24 +357,56 @@ $k$-FCPS coverages than $k$-FS coverages for the same $k$.
 The conformance tests synthesized with 1-FCPS and 2-FCPS coverages detect
 \inred{15 (75 - 60)} and \inred{3 (118 - 115)} more conformance bugs than 
 1-FS and 2-FS coverages, respectively.
+%
+Now, we introduce two bug examples to show the effect of $k$-FCPS coverages
+compared to the $k$-FS coverages.
 
 %----------------------------------------%
+
+\todo\ for 1-FCPS
+
+% XXX appeared not only in 1-FCPS and 2-FCPS but also in 1-FS and 2-FS
+% \paragraph{\textbf{\jscode{String.prototype.normalize}}}
+% The \jscode{String.prototype.normalize} built-in API normalizes a given string
+% into the normalization form named by a given argument.
+% %
+% For example, \jscode{"abc".normalize("NFC")} produces the NFC normalization form
+% of "abc".
+% %
+% If an invalid name as the argument, it should throws a \textbf{RangeError}.
+% %
+% However, the JavaScript program in Listing~\ref{lst:normalize-bug} noramlly
+% terminates in GraalJS v22.2.0 while it should throw a \textbf{RangeError}
+% because of the invalid name \jscode{""}.
+% %
+% While it covers a specific branch in \textbf{ToString} abstract algorithm, the
+% semantics of \jscode{String.prototype.normalize} built-in API also utilizes this
+% algorithm to get a string from the \jscode{this} value.
+% %
+% Therefore, we failed to detect this conformance bug by the tests synthesized
+% with baseline or $k$-FS coverages.
+% %
+% On the other hand, feature call paths could discriminate two different
+% invocations of the \textbf{ToString} algorithm, and we successfully detected
+% this conformance bug with 1-FCPS and 2-FCPS coverages.
+% 
+% \begin{lstlisting}[style=JS,numbers=left,frame=single,
+% caption={Expected a \textbf{RangeError} but normally terminated in GraalJS
+% v22.2.0.},
+% label={lst:normalize-bug}
+% ]
+% // [EXIT] RangeError
+% String.prototype.normalize.call(0, "");
+% \end{lstlisting}
+
 %----------------------------------------%
 
-\subsubsection{Bug Examples}\label{sec:k-fs-example}
-
-\paragraph{textbf{String.prototype.normalize API feature}}
-
-We compare the 
-
-\todo
+\todo\ for 2-FCPS
 
 %----------------------------------------%
 %----------------------------------------%
 
 \subsection{Comparison with Test262}\label{sec:compare-test262}
-
-\todo
 
 \begin{figure}
   \centering
@@ -373,34 +439,78 @@ We compare the
     The changes of $k$-FS and $k$-FCPS node-or-branch coverages with elapse of
     time.
   }
-  \label{fig:spec-cfg-id}
+  \label{fig:cov-time}
 \end{figure}
+
+%----------------------------------------%
 
 \begin{figure}
   \centering
   \begin{subfigure}{0.19\textwidth}
-    \venn{14.9}{79.9}{5.3}{0.15}{0.80}{0.05}
+    \venn{\x{2.7K}}{\x{14.5K}}{\x{1.0K}}
+    {0.15}{0.80}{0.05}
     \subcaption{Baseline.}
   \end{subfigure}
   \begin{subfigure}{0.19\textwidth}
-    \venn{16.8}{60.3}{22.9}{0.17}{0.60}{0.23}
+    \venn{\x{19.3K}}{\x{69.4K}}{\x{26.3K}}
+    {0.17}{0.60}{0.23}
     \subcaption{1-FS}
   \end{subfigure}
   \begin{subfigure}{0.19\textwidth}
-    \venn{28.2}{46.7}{25.1}{0.28}{0.47}{0.25}
+    \venn{\x{128.8K}}{\x{213.4K}}{\x{114.7K}}
+    {0.28}{0.47}{0.25}
     \subcaption{1-FCPS}
   \end{subfigure}
   \begin{subfigure}{0.19\textwidth}
-    \venn{7.5}{10.6}{81.8}{0.07}{0.10}{0.82}
+    \venn{\x{146.2K}}{\x{206.2K}}{\x{1.6M}}
+    {0.07}{0.10}{0.82}
     \subcaption{2-FS}
   \end{subfigure}
   \begin{subfigure}{0.19\textwidth}
-    \venn{14.5}{7.2}{78.4}{0.15}{0.07}{0.78}
+    \venn{\x{612.4K}}{\x{304.4K}}{\x{3.3M}}
+    {0.15}{0.07}{0.78}
     \subcaption{2-FS}
   \end{subfigure}
   \caption{
-    The $k$-FS and $k$-FCPS node-or-branch coverages of Test262 tests and
-    synthesized tests via $\tool$.
+    Venn diagrams of covered TRs of $k$-FS and $k$-FCPS node-or-branch coverages
+    for Test262 and synthesized tests via $\tool$.
   }
-  \label{fig:spec-cfg-id}
+  \label{fig:venn-test262}
 \end{figure}
+
+
+%----------------------------------------%
+
+We compare the coverage of conformance tests automatically synthesized via
+$\tool$ with that of Test262, the official JavaScript conformance test suite.
+%
+As described in Section~\ref{sec:impl}, $\tool$ is based on $\esmeta$ and only
+targets the language features supported in the tool.
+%
+Thus, we removed \inred{23,231} out of \inred{47,141} conformance tests in
+Test262 that utilize language features not supported in $\esmeta$ for a fair
+comparison.
+%
+We measured five different $k$-FS and $k$-FCPS node-or-branch coverages for
+\inred{23,910} applicable conformance tests.
+%
+Figure~\ref{fig:cov-time} shows the change of $k$-FS and $k$-FCPS node-or-branch
+coverages with elapse of time, and the dotted line shows the coverage of Test262
+in each criterion.
+%
+Figure~\ref{fig:venn-test262} depicts Venn diagrams of covered TRs of $k$-FS and
+$k$-FCPS node-or-branch coverages for Test262 and synthesized tests via $\tool$.
+%
+In the baseline, the coverage of synthesized tests is less than that of Test262,
+and covers only \inred{1.0K} TRs that not covered by Test262.
+%
+However, the coverage of synthesized exceeds the coverage of Test262 when using
+feature-sensitive coverages.
+%
+In addition, the number of TRs only covered by synthesized tests also increases,
+and the conformance tests synthesized with $2$-FCPS-TRs cover \inred{3.3M}
+2-FCPS-TRs not covered by Test262.
+%
+We believe that this is why $\tool$ successfully detected diverse new bugs in
+existing JavaScript engines and transpilers, even though most of them are
+heavily tested using Test262.

@@ -96,6 +96,7 @@
 \newcommand{\comfort}{\textsc{Comfort}}
 
 % tool name
+% TODO change name? which one?
 \newcommand{\tool}{\jest_{\sname{fs}}}
 
 % JavaScript code style
@@ -223,7 +224,7 @@
 \tikzset{filled/.style={fill=gray, draw=none}}
 \newcommand{\venn}[6]{%
   \begin{tikzpicture}
-    \def\radius{8mm}
+    \def\radius{8.7mm}
     \def\lcircle{(l) circle (\radius)}
     \def\rcircle{(r) circle (\radius)}
     \coordinate (l);
@@ -242,33 +243,11 @@
     \end{scope}
     \draw \lcircle;
     \draw \rcircle;
-    \node[xshift=-4.0\radius] at (l) {\small #1\%};
-    \node[xshift=+4.0\radius] at (l) {\small #2\%};
-    \node[xshift=+4.0\radius] at (r) {\small #3\%};
+    \node[xshift=-4.4mm, rotate=45] at (l) {\footnotesize #1};
+    \node[xshift=+4.4mm, rotate=45] at (l) {\footnotesize #2};
+    \node[xshift=+4.4mm, rotate=45] at (r) {\footnotesize #3};
     \node[xshift=-7pt,yshift=\radius+10pt] at (l) {\small Test262};
     \node[xshift=+7pt,yshift=\radius+9pt] at (r) {$\tool$};
   \end{tikzpicture}
   \vspace*{-.3em}
 }
-
-%\newcommand{\venn}[5]{%
-%  \begin{tikzpicture}
-%    \def\radius{8mm}
-%    \def\lcircle{(l) circle (\radius)}
-%    % \def\rcircle{(r) circle (\radius)}
-%    \coordinate (l);
-%    \coordinate[xshift=\radius] (r);
-%    \begin{scope}
-%      \clip \lcircle;
-%      \fill[fill=gray, opacity=#4, draw=none] {\rcircle};
-%    \end{scope}
-%    \draw \circle;
-%    \draw \rcircle;
-%    \node[xshift=-4.0\radius] at (l) {\small #1\%};
-%    \node[xshift=+4.0\radius] at (l) {\small #2\%};
-%    \node[xshift=+4.0\radius] at (r) {\small #3\%};
-%    \node[xshift=-7pt,yshift=\radius+10pt] at (l) {\small Test262};
-%    \node[xshift=+7pt,yshift=\radius+9pt] at (r) {$\tool$};
-%  \end{tikzpicture}
-%  \vspace*{-.3em}
-%}
