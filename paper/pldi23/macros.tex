@@ -220,18 +220,55 @@
 \newcommand{\kfcptrset}[2]{\trset{#2}^{{#1}\name{-FCPS}}}
 
 % venn diagram
-\newcommand{\venn}[3]{%
+\tikzset{filled/.style={fill=gray, draw=none}}
+\newcommand{\venn}[6]{%
   \begin{tikzpicture}
     \def\radius{8mm}
+    \def\lcircle{(l) circle (\radius)}
+    \def\rcircle{(r) circle (\radius)}
     \coordinate (l);
     \coordinate[xshift=\radius] (r);
-    \draw (l) circle (\radius);
-    \draw (r) circle (\radius);
+    \begin{scope}
+      \clip \lcircle;
+      \draw[filled, opacity=#4, even odd rule] \lcircle \rcircle;
+    \end{scope}
+    \begin{scope}
+      \clip \lcircle;
+      \fill[filled, opacity=#5] {\rcircle};
+    \end{scope}
+    \begin{scope}
+      \clip \rcircle;
+      \draw[filled, opacity=#6, even odd rule] \lcircle \rcircle;
+    \end{scope}
+    \draw \lcircle;
+    \draw \rcircle;
     \node[xshift=-4.0\radius] at (l) {\small #1\%};
-    \node[xshift=+4.0\radius] at (r) {\small #2\%};
-    \node[xshift=+4.0\radius] at (l) {\small #3\%};
+    \node[xshift=+4.0\radius] at (l) {\small #2\%};
+    \node[xshift=+4.0\radius] at (r) {\small #3\%};
     \node[xshift=-7pt,yshift=\radius+10pt] at (l) {\small Test262};
     \node[xshift=+7pt,yshift=\radius+9pt] at (r) {$\tool$};
   \end{tikzpicture}
   \vspace*{-.3em}
 }
+
+%\newcommand{\venn}[5]{%
+%  \begin{tikzpicture}
+%    \def\radius{8mm}
+%    \def\lcircle{(l) circle (\radius)}
+%    % \def\rcircle{(r) circle (\radius)}
+%    \coordinate (l);
+%    \coordinate[xshift=\radius] (r);
+%    \begin{scope}
+%      \clip \lcircle;
+%      \fill[fill=gray, opacity=#4, draw=none] {\rcircle};
+%    \end{scope}
+%    \draw \circle;
+%    \draw \rcircle;
+%    \node[xshift=-4.0\radius] at (l) {\small #1\%};
+%    \node[xshift=+4.0\radius] at (l) {\small #2\%};
+%    \node[xshift=+4.0\radius] at (r) {\small #3\%};
+%    \node[xshift=-7pt,yshift=\radius+10pt] at (l) {\small Test262};
+%    \node[xshift=+7pt,yshift=\radius+9pt] at (r) {$\tool$};
+%  \end{tikzpicture}
+%  \vspace*{-.3em}
+%}

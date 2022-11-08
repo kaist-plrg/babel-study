@@ -196,19 +196,20 @@ node-or-branch
 %----------------------------------------%
 
 To evaluate the effect of $k$-FS coverages, we compare the synthesized
-conformance test suite guided by different $k$-FS normal-or-branch coverage
-criteria.
+conformance tests guided by different $k$-FS normal-or-branch coverage criteria.
 %
 Table~\ref{tab:compare} shows the result of conformance test synthesis via
 $\tool$ with five different graph coverage criteria: 1) a node-or-branch
 coverage and 2) 1-FS, 3) 2-FS, 4) 1-FCPS, and 5) 2-FCPS node-or-branch
 coverages.
 %
-Each column denotes the number of covered $k$-FS or $k$-FCPS nodes (\textbf{\#
-nodes}), the number of covered $k$-FS or $k$-FCPS branches (\textbf{\#
-branches}), the total number of covered $k$-FS or $k$-FCPS TRs (\textbf{\#
-total}), the number of synthesized conformance tests (\textbf{\# syn. tests}),
-and the number of detected unique bugs by synthesized tests (\textbf{\# bugs}).
+The first three columns denotes the number of covered $k$-FS or $k$-FCPS nodes
+(\textbf{\# nodes}), branches (\textbf{\# branches}), and any TRs (\textbf{\#
+total}).
+%
+The fourth and fifth columns denote the number of synthesized conformance tests
+(\textbf{\# syn. tests}) and the number of detected unique bugs by synthesized
+tests (\textbf{\# bugs}).
 
 %----------------------------------------%
 
@@ -223,11 +224,8 @@ It is due to that many abstract algorithms in the language specification are
 related to the limited number of language features, while most language features
 could enclose diverse language features.
 %
-Figures~\ref{fig:hist} (a) and (b) provide more detailed information about the
-increment of covered TRs.
-%
-Each of them depicts the histogram of numbers of 1-FS-TRs (or 2-FS-TRs) per
-baseline TR (or 1-FS-TR).
+For a more detailed information, we draw histograms of numbers of 1-FS-TRs per
+baseline TR and 2-FS-TRs per 1-FS-TR in Figures~\ref{fig:hist} (a) and (b).
 %
 The most significant number of 1-FS-TRs per baseline TR is \inred{X for a node
 in the X abstract algorithm because all the X utilize the X algorithm to define
@@ -381,23 +379,23 @@ We compare the
 \begin{figure}
   \centering
   \begin{subfigure}{0.19\textwidth}
-    \venn{14.9}{79.9}{5.3}
+    \venn{14.9}{79.9}{5.3}{0.15}{0.80}{0.05}
     \subcaption{Baseline.}
   \end{subfigure}
   \begin{subfigure}{0.19\textwidth}
-    \venn{16.8}{60.3}{22.9}
+    \venn{16.8}{60.3}{22.9}{0.17}{0.60}{0.23}
     \subcaption{1-FS}
   \end{subfigure}
   \begin{subfigure}{0.19\textwidth}
-    \venn{28.2}{46.7}{25.1}
+    \venn{28.2}{46.7}{25.1}{0.28}{0.47}{0.25}
     \subcaption{1-FCPS}
   \end{subfigure}
   \begin{subfigure}{0.19\textwidth}
-    \venn{7.5}{10.6}{81.8}
+    \venn{7.5}{10.6}{81.8}{0.07}{0.10}{0.82}
     \subcaption{2-FS}
   \end{subfigure}
   \begin{subfigure}{0.19\textwidth}
-    \venn{14.5}{7.2}{78.4}
+    \venn{14.5}{7.2}{78.4}{0.15}{0.07}{0.78}
     \subcaption{2-FS}
   \end{subfigure}
   \caption{
