@@ -6,7 +6,7 @@ node-or-branch coverages to synthesize JavaScript conformance tests.
 %
 As a result, we synthesize \inred{185,246} conformance tests using $\tool$ with
 five different graph coverage criteria: 1) a node-or-branch coverage and 2)
-$1$-FS, 3) $2$-FS, 4) $1$-FCPS, and 5) $2$-FCPS node-or-branch coverages.
+1-FS, 3) 2-FS, 4) 1-FCPS, and 5) 2-FCPS node-or-branch coverages.
 %
 Our evaluation platform is a 4.0GHz Intel(R) Core(TM) i7-6700k and 32GB of RAM
 (Samsung DDR4 2133MHz 8GB*4), and it takes \inred{72} hours to synthesize
@@ -61,8 +61,8 @@ research questions:
 \multirow{5}{*}{Engine}
 & V8            & v10.8.121 & 2022.10.06 & \x{0} & \x{0} & \x{3} \\\cline{2-7}
 & JSC           & v615.1.10 & 2022.10.26 & \x{4} & \x{4} & \x{14}\\\cline{2-7}
-& GrallJS       & v22.2.0   & 2022.07.26 & \x{7} & \x{7} & \x{9} \\\cline{2-7}
-& SpiderMonkey  & v107.0    & 2022.10.24 & \x{1} & \x{3} & \x{3} \\\cline{2-7}
+& GraalJS       & v22.2.0   & 2022.07.26 & \x{7} & \x{7} & \x{9} \\\cline{2-7}
+& SpiderMonkey  & v107.0b4  & 2022.10.24 & \x{1} & \x{3} & \x{3} \\\cline{2-7}
 & \multicolumn{3}{c?}{\textbf{Total}}    & \y{12}& \y{14}& \y{29}\\
 
 \toprule\\[-1.6em]
@@ -131,8 +131,8 @@ not yet responded.
 Among \inred{118} detected bugs, \inred{29} are engine bugs, and \inred{118} are
 transpiler bugs.
 %
-The two most trusted engines are V8 and SpiderMonkey because they have only three
-conformance bugs.
+The two most trusted engines are V8 and SpiderMonkey because they have only
+three conformance bugs.
 %
 Hence, we use V8 as the default engine during the transpiler conformance check.
 %
@@ -143,8 +143,8 @@ Among transpilers, Terser and JavaScript Obfuscator contain only \inred{15} and
 \inred{3} bugs, respectively, but Babel and SWC have \inred{39} and
 \inred{32} transpiler conformance bugs, respectively.
 %
-In happens because transpilers desugaring new language features to ES5.1 is a
-more challenging than compressing or obfuscating the code.
+It happens because transpilers desugaring new language features to ES5.1
+features is more challenging than compressing or obfuscating the code.
 
 %----------------------------------------%
 %----------------------------------------%
@@ -154,8 +154,8 @@ more challenging than compressing or obfuscating the code.
 \begin{table}
 \caption{
   Comparison of synthesized conformance test suite guided by five different
-  graph coverage criteria: 1) a node-or-branch coverage, and 2) $1$-FS, 3)
-  $2$-FS, 4) $1$-FCPS, and 5) $2$-FCPS node-or-branch coverages.
+  graph coverage criteria: 1) a node-or-branch coverage, and 2) 1-FS, 3) 2-FS,
+  4) 1-FCPS, and 5) 2-FCPS node-or-branch coverages.
 }
 \vspace*{-.5em}
 {
@@ -178,13 +178,13 @@ more challenging than compressing or obfuscating the code.
 
 node-or-branch
 & \x{2.1}     & \x{10.0}    & \x{12.1}    & \x{2,095} & \x{45}  \\\hline
-$1$-FS node-or-branch
+1-FS node-or-branch
 & \x{61.5}    & \x{34.2}    & \x{95.7}    & \x{5,336} & \x{60}  \\\hline
-$1$-FCPS node-or-branch
-& \x{257.7}   & \x{133.2}   & \x{390.9}   & \x{5,446} & \x{75}  \\\hline
-$2$-FS node-or-branch
+2-FS node-or-branch
 & \x{1,131.5} & \x{663.3}   & \x{1,794.8} & \x{83,668}& \x{115} \\\hline
-$2$-FCPS node-or-branch
+1-FCPS node-or-branch
+& \x{257.7}   & \x{133.2}   & \x{390.9}   & \x{5,446} & \x{75}  \\\hline
+2-FCPS node-or-branch
 & \x{2,854.9} & \x{1,500.4} & \x{4,355.3} & \x{88,701}& \x{118} \\
 
 \toprule\multicolumn{1}{c}{}\\[-1.6em]
@@ -196,12 +196,12 @@ $2$-FCPS node-or-branch
 %----------------------------------------%
 
 To evaluate the effect of $k$-FS coverages, we compare the synthesized
-conformance test suite guided by different $k$-FS normal/branch coverage
+conformance test suite guided by different $k$-FS normal-or-branch coverage
 criteria.
 %
 Table~\ref{tab:compare} shows the result of conformance test synthesis via
 $\tool$ with five different graph coverage criteria: 1) a node-or-branch
-coverage and 2) $1$-FS, 3) $2$-FS, 4) $1$-FCPS, and 5) $2$-FCPS node-or-branch
+coverage and 2) 1-FS, 3) 2-FS, 4) 1-FCPS, and 5) 2-FCPS node-or-branch
 coverages.
 %
 Each column denotes the number of covered $k$-FS or $k$-FCPS nodes (\textbf{\#
@@ -209,24 +209,46 @@ nodes}), the number of covered $k$-FS or $k$-FCPS branches (\textbf{\#
 branches}), the total number of covered $k$-FS or $k$-FCPS TRs (\textbf{\#
 total}), the number of synthesized conformance tests (\textbf{\# syn. tests}),
 and the number of detected unique bugs by synthesized tests (\textbf{\# bugs}).
+
+%----------------------------------------%
+
+According to the table's first to third rows, the number of covered
+TRs increased \inred{7.91x (95.7K / 12.1K)} from baseline to 1-FS coverage and
+\inred{18.8x (1794.8K / 95.7K)} from 1-FS to 2-FS coverages.
 %
-According to the table's first, second, and fourth rows, the number of
-synthesized tests increased \inred{2.55x (5,336 / 2,095)} from 0-FS to 1-FS and
-\inred{15.7x (83,668 / 5,336)} from 1-FS to 2-FS.
+The difference between 1-FS and 2-FS coverages is much higher than between
+baseline and 1-FS.
 %
 It is due to that many abstract algorithms in the language specification are
-related to the limited number of language features, but diverse language
-features could enclose each language feature.
+related to the limited number of language features, while most language features
+could enclose diverse language features.
 %
-In addition, the number of detected unique bugs also increased when using a
-higher $k$-FS normal/branch coverage.
+Figures~\ref{fig:hist} (a) and (b) provide more detailed information about the
+increment of covered TRs.
+%
+Each of them depicts the histogram of numbers of 1-FS-TRs (or 2-FS-TRs) per
+baseline TR (or 1-FS-TR).
+%
+The most significant number of 1-FS-TRs per baseline TR is \inred{X for a node
+in the X abstract algorithm because all the X utilize the X algorithm to define
+their semantics in the language specification.}
+%
+The most significant number of 2-FS-TRs per 1-FS-TR is \inred{X for a node whose
+most enclosing feature is X because diverse X use X.}
+%
+The number of synthesized tests increased \inred{2.55x (5,336 / 2,095)} from
+0-FS to 1-FS coverages and \inred{15.7x (83,668 / 5,336)} from 1-FS to 2-FS
+coverages.
+%
+In addition, the number of detected unique bugs also increased when using higher
+$k$-FS normal-or-branch coverages.
 %
 The baseline with a simple node-or-branch coverage detects \inred{45}
 conformance bugs in engines and transpilers.
 %
-The conformance tests synthesized with $1$-FS coverage detect \inred{15 (60 -
-45)} more conformance bugs, and tests synthesized with $2$-FS coverage detect
-\inred{55 (115 - 60)} more bugs.
+The conformance tests synthesized with 1-FS coverage detect \inred{15 (60 - 45)}
+more conformance bugs, and tests synthesized with 2-FS coverage detect \inred{55
+(115 - 60)} more bugs.
 
 %----------------------------------------%
 %----------------------------------------%
@@ -242,28 +264,76 @@ The conformance tests synthesized with $1$-FS coverage detect \inred{15 (60 -
 
 \begin{figure}
   \centering
-  \begin{subfigure}{0.45\textwidth}
+  \begin{subfigure}{0.24\textwidth}
     \centering
-    \includegraphics[width=0.85\textwidth]{img/fcp-count-1}
-    \subcaption{The histogram for $k = 1$.}
+    \includegraphics[width=\textwidth]{img/1-fs-hist}
+    \subcaption{\#1-FS-TRs / base TR.}
   \end{subfigure}
-  \begin{subfigure}{0.45\textwidth}
+  \begin{subfigure}{0.24\textwidth}
     \centering
-    \includegraphics[width=0.85\textwidth]{img/fcp-count-1}
-    \subcaption{The histogram for $k = 2$.}
+    \includegraphics[width=\textwidth]{img/2-fs-hist}
+    \subcaption{\#2-FS-TRs / 1-FS-TR.}
+  \end{subfigure}
+  \begin{subfigure}{0.24\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{img/1-fcps-hist}
+    \subcaption{\#1-FCPS-TRs / 1-FS-TR.}
+  \end{subfigure}
+  \begin{subfigure}{0.24\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{img/2-fcps-hist}
+    \subcaption{\#2-FCPS-TRs / 2-FS-TR.}
   \end{subfigure}
   \caption{
-    The histogram of the number of $k$-FCPS-TRs corresponding to each $k$-FS-TR.
+    The histogram of numbers of $k$-FS or $k$-FCPS TRs per less sensitive $k$-FS
+    or $k$-FCPS TR.
   }
-  \label{fig:spec-cfg-id}
+  \label{fig:hist}
 \end{figure}
 
-\todo
+%----------------------------------------%
+
+We also evaluate the effect of $k$-FCPS coverages compared to $k$-FS coverages.
+%
+According to the second to fifth rows in Table~\ref{tab:compare}, $\tool$ covers
+\inred{4.08x (390.9K / 95.7K)} and \inred{2.43x (4355.3/1794.8)} more TRs when
+using $k$-FCPS coverages instead of $k$-FS coverages for $k = 0$ and $k = 1$,
+respectively.
+%
+Figures~\ref{fig:hist} (c) and (d) provide more detailed information about the
+increment of covered TRs.
+%
+Each of them depicts the histogram of numbers of 1-FCPS-TRs (or 2-FCPS-TRs) per
+1-FS-TR (or 2-FS-TR).
+%
+The most significant number of 1-FCPS-TRs per 1-FS-TR is \inred{X for a node in
+the X abstract algorithm whose most enclosing feature is X.}
+%
+\inred{In the semantics of the X feature, the X abstract algorithm used in X,
+which increases the number of feature call paths.}
+%
+The most significant number of 2-FCPS-TRs per 2-FS-TR is \inred{X for a node
+whose most enclosing feature is X for the same reason.}
+%
+Because of the increased number of TRs, the number of synthesized tests also
+increased \inred{2.55x (5,336 / 2,095)} from 0-FS to 1-FS coverages and
+\inred{15.7x (83,668 / 5,336)} from 1-FS to 2-FS coverages.
+%
+In addition, the number of detected unique bugs also increased when using
+$k$-FCPS coverages than $k$-FS coverages for the same $k$.
+%
+The conformance tests synthesized with 1-FCPS and 2-FCPS coverages detect
+\inred{15 (75 - 60)} and \inred{3 (118 - 115)} more conformance bugs than 
+1-FS and 2-FS coverages, respectively.
 
 %----------------------------------------%
 %----------------------------------------%
 
 \subsubsection{Bug Examples}\label{sec:k-fs-example}
+
+\paragraph{textbf{String.prototype.normalize API feature}}
+
+We compare the 
 
 \todo
 
@@ -302,7 +372,7 @@ The conformance tests synthesized with $1$-FS coverage detect \inred{15 (60 -
     \subcaption{2-FCPS}
   \end{subfigure}
   \caption{
-    The changes of $k$-FS and $k$-FCPS node/branch coverages with elapse of
+    The changes of $k$-FS and $k$-FCPS node-or-branch coverages with elapse of
     time.
   }
   \label{fig:spec-cfg-id}
@@ -311,27 +381,27 @@ The conformance tests synthesized with $1$-FS coverage detect \inred{15 (60 -
 \begin{figure}
   \centering
   \begin{subfigure}{0.19\textwidth}
-    \venn{10.3}{10.3}{10.3}
+    \venn{14.9}{79.9}{5.3}
     \subcaption{Baseline.}
   \end{subfigure}
   \begin{subfigure}{0.19\textwidth}
-    \venn{10.3}{10.3}{10.3}
+    \venn{16.8}{60.3}{22.9}
     \subcaption{1-FS}
   \end{subfigure}
   \begin{subfigure}{0.19\textwidth}
-    \venn{10.3}{10.3}{10.3}
+    \venn{28.2}{46.7}{25.1}
     \subcaption{1-FCPS}
   \end{subfigure}
   \begin{subfigure}{0.19\textwidth}
-    \venn{10.3}{10.3}{10.3}
+    \venn{7.5}{10.6}{81.8}
     \subcaption{2-FS}
   \end{subfigure}
   \begin{subfigure}{0.19\textwidth}
-    \venn{10.3}{10.3}{10.3}
+    \venn{14.5}{7.2}{78.4}
     \subcaption{2-FS}
   \end{subfigure}
   \caption{
-    The $k$-FS and $k$-FCPS node/branch coverages of Test262 tests and
+    The $k$-FS and $k$-FCPS node-or-branch coverages of Test262 tests and
     synthesized tests via $\tool$.
   }
   \label{fig:spec-cfg-id}
