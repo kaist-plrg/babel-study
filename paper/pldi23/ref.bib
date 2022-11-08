@@ -270,6 +270,94 @@
   doi = {10.1145/3290379},
 }
 
+@inproceedings{kjs,
+  title = {{KJS: A Complete Formal Semantics of JavaScript}},
+  author = {Park, Daejun and Stef\u{a}nescu, Andrei and Ro\c{s}u, Grigore},
+  booktitle = {Proceedings of the 36th ACM SIGPLAN Conference on Programming
+               Language Design and Implementation (PLDI)},
+  year = {2015},
+  doi = {10.1145/2737924.2737991},
+}
+
+@inproceedings{ocaml-light-spec,
+  title = {A Sound Semantics for OCaml light},
+  author = {Owens, Scott},
+  booktitle = {European Symposium on Programming (ESOP)},
+  year = {2008},
+  doi = {10.1007/978-3-540-78739-6_1}
+}
+
+@article{c-light-spec,
+  title = {{Mechanized Semantics for the Clight Subset of the C language}},
+  author = {Blazy, Sandrine and Leroy, Xavier},
+  journal = {Journal of Automated Reasoning},
+  volume = {43},
+  number = {3},
+  pages = {263--288},
+  year = {2009},
+  publisher = {Springer}
+  doi = {10.1007/s10817-009-9148-3}
+}
+
+@article{ott,
+  title = {{Ott: Effective Tool Support for the Working Semanticist}},
+  author = {Sewell, Peter and Nardelli, Francesco Zappa and Owens, Scott and
+          Peskine, Gilles and Ridge, Thomas and Sarkar, Susmit and others},
+  journal = {Journal of functional programming},
+  volume = {20},
+  number = {1},
+  pages = {71--122},
+  year = {2010},
+  publisher = {Cambridge University Press}
+  doi = {10.1017/S0956796809990293}
+}
+
+@article{iris,
+  title = {Iris from the ground up: A modular foundation for higher-order
+         concurrent separation logic},
+  author = {Jung, Ralf and Krebbers, Robbert and Jourdan, Jacques-Henri and
+            Bizjak, Ale{\v{s}} and Birkedal, Lars and Dreyer, Derek},
+  journal = {Journal of Functional Programming},
+  volume = {28},
+  year = {2018},
+  publisher = {Cambridge University Press}
+  doi = {10.1017/S0956796818000151}
+}
+
+@article{kframework,
+  title = {An Overview of the K Semantic Framework},
+  author = {Roșu, Grigore and Șerb{\u{a}}nut{\u{a}}, Traian Florin},
+  journal = {The Journal of Logic and Algebraic Programming},
+  volume = {79},
+  number = {6},
+  pages = {397--434},
+  year = {2010},
+  publisher = {Elsevier}
+  doi = {10.1016/j.jlap.2010.03.012}
+}
+
+@proceedings{skel,
+  title = {{Skeletal Semantics and Their Interpretations}},
+  author = {Bodin, Martin and Gardner, Philippa and Jensen, Thomas and Schmitt,
+            Alan},
+  year = {2019},
+  booktitle = {Proceedings of the 45th ACM SIGPLAN-SIGACT Symposium on
+               Principles of Programming Languages (POPL)},
+  doi = {10.1145/3290357},
+}
+
+@inproceedings{jscert,
+  title = {{A Trusted Mechanised JavaScript Specification}},
+  author = {Bodin, Martin and Chargueraud, Arthur and Filaretti, Daniele and
+            Gardner, Philippa and Maffeis, Sergio and Naudziuniene, Daiva and
+            Schmitt, Alan and Smith, Gareth},
+  booktitle = {Proceedings of the 41st ACM SIGPLAN-SIGACT Symposium on
+               Principles of Programming Languages (POPL)},
+  year = {2014},
+  doi = {10.1145/2535838.2535876},
+}
+
+
 @inproceedings {ad-safety,
   title = {{ADsafety: Type-Based Verification of JavaScript Sandboxing}},
   author = {Joe Gibbs Politz and Spiridon Aristides Eliopoulos and Arjun Guha
@@ -733,6 +821,13 @@
   doi = {10.1145/3487075.3487107},
 }
 
+@article{fuzzil,
+  title = {{Fuzzil: Coverage Guided Fuzzing for JavaScript Engines}},
+  author = {Gro{\ss}, Samuel},
+  journal = {Department of Informatics, Karlsruhe Institute of Technology},
+  year = {2018}
+}
+
 @online{fuzzilli,
   title = {{A JavaScript Engine Fuzzer developed by Google}},
   year = {2022},
@@ -770,26 +865,8 @@
   doi = {10.1145/360248.360252},
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Others
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-@online{afl,
-  title = {{american fuzzy lop}},
-  year = {2007},
-  url = {https://lcamtuf.coredump.cx/afl/},
-}
 
-@inproceedings{deep-smith,
-  title = {{Compiler Fuzzing through Deep Learning}},
-  author = {Cummins, Chris and Petoumenos, Pavlos and Murray, Alastair and
-            Leather, Hugh},
-  booktitle = {Proceedings of the 27th ACM SIGSOFT International Symposium on
-               Software Testing and Analysis (ISSTA)},
-  year = {2018},
-  doi = {10.1145/3213846.3213848},
-}
-
-@book{testing,
+@book{cov-def,
   title = {{Introduction to Software Testing}},
   author = {Ammann, Paul and Offutt, Jeff},
   year = {2008},
@@ -797,6 +874,9 @@
   isbn = {0-52188-038-1},
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Coverage-Guided Testing
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 @inproceedings{unit-test,
   title = {{An Experimental Comparison of Four Unit Test Criteria: Mutation,
            Edge-Pair, All-Uses and Prime Path Coverage}},
@@ -805,4 +885,151 @@
                Testing, Verification, and Validation Workshops (ICSTW)},
   year = {2009},
   doi = {10.1109/ICSTW.2009.30},
+}
+
+@inproceedings{cov-trace,
+  title = {{Full-Speed Fuzzing: Reducing Fuzzing Overhead through
+           Coverage-Guided Tracing}},
+  author = {Nagy, Stefan and Hicks, Matthew},
+  booktitle = {Proceedings of 2019 IEEE Symposium on Security and Privacy (SP)},
+  year = {2019},
+  doi = {10.1109/SP.2019.00069},
+}
+
+@inproceedings{cov-fuzz-collision,
+  title = {{CollAFL: Path Sensitive Fuzzing}},
+  author = {Gan, Shuitao and Zhang, Chao and Qin, Xiaojun and Tu, Xuwen and Li,
+            Kang and Pei, Zhongyu and Chen, Zuoning},
+  booktitle = {2018 IEEE Symposium on Security and Privacy (SP)},
+  year = {2018},
+  doi = {10.1109/SP.2018.00040}
+}
+
+@inproceedings{cov-test-concurrency,
+  title = {{Coverage Guided Systematic Concurrency Testing}},
+  author = {Wang, Chao and Said, Mahmoud and Gupta, Aarti},
+  booktitle = {Proceedings of the 33rd International Conference on Software
+               Engineering (ICSE)},
+  year = {2011},
+  doi = {10.1145/1985793.1985824},
+}
+
+@inproceedings{cov-fuzz-tensor,
+  title = {{TensorFuzz: Debugging Neural Networks with Coverage-Guided Fuzzing}},
+  author = {Odena, Augustus and Olsson, Catherine and Andersen, David and
+            Goodfellow, Ian},
+  booktitle = {Proceedings of International Conference on Machine Learning
+               (ICML)},
+  year = {2019},
+}
+
+@inproceedings{cov-fuzz-dl,
+  title = {{DeepHunter: A Coverage-Guided Fuzz Testing Framework for Deep Neural
+           Networks}},
+  author = {Xie, Xiaofei and Ma, Lei and Juefei-Xu, Felix and Xue, Minhui and
+            Chen, Hongxu and Liu, Yang and Zhao, Jianjun and Li, Bo and Yin,
+            Jianxiong and See, Simon},
+  booktitle = {Proceedings of the 28th ACM SIGSOFT International Symposium on
+               Software Testing and Analysis (ISSTA)},
+  year = {2019},
+  doi = {10.1145/3293882.3330579},
+}
+
+@inproceedings{cov-neuron,
+  title = {{DeepXplore: Automated Whitebox Testing of Deep Learning Systems}},
+  author = {Pei, Kexin and Cao, Yinzhi and Yang, Junfeng and Jana, Suman},
+  booktitle = {Proceedings of the 26th Symposium on Operating Systems
+               Principles (SOSP)},
+  year = {2017},
+  doi = {10.1145/3132747.3132785},
+}
+
+@inproceedings{cov-k-neuron,
+  title = {{DeepGauge: Multi-Granularity Testing Criteria for Deep Learning
+           Systems}},
+  author = {Ma, Lei and Juefei-Xu, Felix and Zhang, Fuyuan and Sun, Jiyuan and
+            Xue, Minhui and Li, Bo and Chen, Chunyang and Su, Ting and Li, Li
+            and Liu, Yang and Zhao, Jianjun and Wang, Yadong},
+  booktitle = {Proceedings of the 33rd ACM/IEEE International Conference on
+               Automated Software Engineering (ASE)},
+  year = {2018},
+  doi = {10.1145/3238147.3238202},
+}
+
+@article{cov-dataflow,
+  title = {{A Data Flow Analysis Approach to Program Testing}},
+  author = {Herman, PM},
+  journal = {Australian Computer Journal},
+  volume = {8},
+  number = {3},
+  pages = {92--96},
+  year = {1976},
+}
+
+@article{cov-mcdc,
+  title = {{Applicability of modified condition/decision coverage to software
+           testing}},
+  author = {Chilenski, John Joseph and Miller, Steven P},
+  journal = {Software Engineering Journal},
+  volume = {9},
+  number = {5},
+  pages = {193--200},
+  year = {1994},
+  publisher = {IET},
+}
+
+@article{regression-minimize-survey,
+  title = {Regression Testing Minimisation, Selection and Prioritisation: A Survey},
+  author = {Yoo, Shin and Harman, Mark},
+  journal = {Software {T}esting, {V}erification, and {R}eliability},
+  keywords = {survey},
+  month = mar,
+  number = {2},
+  pages = {67--120},
+  volume = {22},
+  year = {2012}
+}
+
+@article{cov-param,
+  title = {{Parameter Coverage for Testing of Autonomous Driving Systems Under
+           Uncertainty}},
+  author = {Laurent, Thomas and Klikovits, Stefan and Arcaini, Paolo and
+            Ishikawa, Fuyuki and Ventresque, Anthony},
+  journal = {ACM Trans. Softw. Eng. Methodol.},
+  month = {jul},
+  year = {2022},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  issn = {1049-331X},
+  doi = {10.1145/3550270},
+  journal = {ACM Trans. Softw. Eng. Methodol.},
+}
+
+@inproceedings{cov-partition,
+  title = {{Partition-Based Coverage Metrics and Type-Guided Search in Concolic
+           Testing for JavaScript Applications}},
+  author = {Bae, Sora and Park, Joonyoung and Ryu, Sukyoung},
+  booktitle = {2017 IEEE/ACM 5th International FME Workshop on Formal Methods
+               in Software Engineering (FormaliSE)},
+  year = {2017},
+  doi = {10.1109/FormaliSE.2017.10},
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% others
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@online{afl,
+  title = {{american fuzzy lop}},
+  year = {2007},
+  url = {https://lcamtuf.coredump.cx/afl/},
+}
+
+@inproceedings{deep-smith,
+  title = {{compiler fuzzing through deep learning}},
+  author = {cummins, chris and petoumenos, pavlos and murray, alastair and
+            leather, hugh},
+  booktitle = {proceedings of the 27th acm sigsoft international symposium on
+               Software Testing and Analysis (ISSTA)},
+  year = {2018},
+  doi = {10.1145/3213846.3213848},
 }

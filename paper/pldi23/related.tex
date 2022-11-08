@@ -1,30 +1,63 @@
 \section{Related Work}\label{sec:related}
 
-\paragraph{\textbf{JavaScript Mechanized Semantics.}}
-
-\todo
-
-\paragraph{\textbf{Coverage-Guided Testing.}}
-
-\todo
-
+\paragraph{\textbf{Mechanized Specification}}
 
 \begin{itemize}
-  \item JavaScript language specificaiton: ECMA-262 (ES13, 2022)~\cite{es13}
-  \item JavaScript tests: Test262~\cite{test262}
-  \item JavaScript tools: engines~\cite{v8, jscore, graaljs, chakra,
-    spidermonkey, xs}, static analyzers~\cite{safe, safe2, tajs, wala, jsai},
-    debugger~\cite{jsexplain}, verification tools~\cite{javert, javert2,
-    ad-safety, javanni}, symbolic execution~\cite{symbolic-js, sym-js, expo-se},
-    concolic testing~\cite{jalangi, type-conc-test}.
-  \item Domain Specific Language (DSL)~\cite{dsl-survey, dsl-survey2}
-  \item JISET family: $\jiset$~\cite{jiset}, $\jest$~\cite{jest},
-    $\jstar$~\cite{jstar}, $\jsaver$~\cite{jsaver}.
-  \item Partial Evaluation~\cite{peval, peval-survey}, Program
-    Transformation~\cite{trans-ai}.
+  \item $\mathbb{K}$ framework~\cite{kframework}
+  \item Skeletal semantics~\cite{skel}
+  \item for OCaml~\cite{ocaml-light-spec}
+  \item for C~\cite{c-light-spec}
+  \item Ott~\cite{ott}
+  \item Iris~\cite{iris} for concurrent separation logic
+  \item for JavaScript
+    \begin{itemize}
+      \item JavaScript language specificaiton: ECMA-262 (ES13, 2022)~\cite{es13}
+      \item JaVerT~\cite{javert, javert2}, KJS~\cite{kjs}, JSCert~\cite{jscert}
+      \item JISET family: $\jiset$~\cite{jiset}, $\jest$~\cite{jest},
+        $\jstar$~\cite{jstar}, $\jsaver$~\cite{jsaver}.
+    \end{itemize}
+\end{itemize}
+
+\todo
+
+\paragraph{\textbf{Coverage-Guided Testing}}
+
+Coverage Criteria:
+\begin{itemize}
+  \item Structural Coverage
+    \begin{itemize}
+      \item Statement Coverage
+      \item Branch Coverage
+      \item Modified Condition/Decision Coverage (MC/DC)~\cite{cov-mcdc}
+      \item Simple/Prime Path Coverage~\cite{cov-def}
+    \end{itemize}
+  \item Dataflow Coverage~\cite{cov-dataflow}
+    \begin{itemize}
+      \item Def-Use Coverages
+    \end{itemize}
+  \item Parameter Coverage~\cite{cov-param}
+  \item Partition-based Coverage~\cite{cov-partition}
+  \item Neuron Coverage~\cite{cov-neuron, cov-k-neuron} for ML
+\end{itemize}
+
+Usage:
+\begin{itemize}
+  \item Coverage-Guided Fuzzing (CGF)~\cite{afl} for DL~\cite{cov-fuzz-dl,
+    cov-fuzz-tensor}, JavaScript engines~\cite{fuzzil}. Reducing fuzzing
+    overhead with coverage-guided tracing~\cite{cov-trace}, resolve hash
+    collision issue~\cite{cov-fuzz-collision}
+  \item Coverage-Guided Regression
+    Minimisation~\cite{regression-minimize-survey}
+\end{itemize}
+
+
+\paragraph{\textbf{Conformance Testing for JavaScript}}
+\begin{itemize}
+  \item Official JavaScript Conformance Test Suite: Test262~\cite{test262}
   \item JavaScript Engine Fuzzer~\cite{montage, langfuzz, die, favocado,
-    codealchemist, sofi, comfort, superion, fuzzilli, jsfunfuzz,
-  ifuzzer}.
+      codealchemist, sofi, comfort, superion, fuzzilli, jsfunfuzz,
+    ifuzzer} only for crahsing or security bugs.
+  \item Conformance Testing via Differential Testing with DL~\cite{comfort}.
 \end{itemize}
 
 \todo
