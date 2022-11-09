@@ -1,63 +1,148 @@
 \section{Related Work}\label{sec:related}
 
+\paragraph{\textbf{Coverage Criteria in Software Testing}}
+%
+Coverage criteria in software testing are essential in measuring the quality of
+test inputs.
+%
+The most common coverage criteria are structural coverages in a given program's
+control-flow graph (CFG).
+%
+For example, statement coverage measures whether test inputs execute all
+statements by test inputs, and branch coverage focuses on branches of the
+conditional structures, including loops.
+%
+In addition, researchers have presented their diverse variants to check whether
+test inputs cover more complex cases, such as a modified condition/decision
+coverage (MC/DC)~\cite{cov-mcdc} and simple or prime path
+coverages~\cite{cov-def}.
+%
+On the other hand, several coverage criteria utilize additional information
+beyond structural information in CFGs.
+%
+For example, data-flow coverage~\cite{cov-dataflow} measures whether test inputs
+cover possible def-use paths of variables in a given CFG.
+%
+Besides, \citet{cov-partition} presented partition-based coverage metrics, a way
+to partition test requirements based on function parameter types written in a
+dynamically-typed language.
+
+%----------------------------------------%
+
+On the other hand, model-based coverage~\cite{cov-model-book} criteria consider
+specialized abstract behavior models rather than the CFG of a program and
+define the test requirements in the model.
+%
+For instance, \citet{cov-model-api} first presented abstract models for the
+possible state transitions of server/client.
+%
+Then, they defined the coverage of such models to test the APIs of distributed
+data storage.
+%
+\citet{cov-param} designed an abstract model for autonomous driving systems
+(ADSs) and presented parameter coverage, which measures whether test inputs
+cover each parameter of ADS.
+%
+For deep neural networks (DLLs), neuron coverage~\cite{cov-neuron} and its
+variants~\cite{cov-k-neuron} have been presented and actively used in concolic
+testing~\cite{cov-concolic-dll} and coverage-guided
+fuzzing~\cite{cov-fuzz-tensor, cov-fuzz-dl} for DLLs.
+%
+However, there are no specialized coverage criteria for programming language
+tools, such as compilers, interpreters, and transpilers.
+%
+In this paper, we first presented feature-sensitive coverages as general
+extensions of graph coverages for programming language tools to discriminate
+test requirements based on enclosing language features or feature call paths.
+
+%----------------------------------------%
+
 \paragraph{\textbf{Mechanized Specification}}
 
-\begin{itemize}
-  \item $\mathbb{K}$ framework~\cite{kframework}
-  \item Skeletal semantics~\cite{skel}
-  \item for OCaml~\cite{ocaml-light-spec}
-  \item for C~\cite{c-light-spec}
-  \item Ott~\cite{ott}
-  \item Iris~\cite{iris} for concurrent separation logic
-  \item for JavaScript
-    \begin{itemize}
-      \item JavaScript language specificaiton: ECMA-262 (ES13, 2022)~\cite{es13}
-      \item JaVerT~\cite{javert, javert2}, KJS~\cite{kjs}, JSCert~\cite{jscert}
-      \item JISET family: $\jiset$~\cite{jiset}, $\jest$~\cite{jest},
-        $\jstar$~\cite{jstar}, $\jsaver$~\cite{jsaver}.
-    \end{itemize}
-\end{itemize}
+Researchers have presented mechanized specifications to formally describe the
+semantics of diverse programming languages, such as
+OCaml~\cite{ocaml-light-spec}, C~\cite{c-light-spec}, C++\cite{cpp-spec},
+Java~\cite{k-java}, and POSIX shell~\cite{posix-shell-spec}.
+%
+At the same time, general metalanguages or frameworks for mechanized language
+specifications have also emerge as.
+%
+For example, \citet{ott} presented Ott as a tool that compiles language
+semantics into proof assistant code for Coq, HOL, and Isabelle/HOL and supports
+a metalanguage used in defining language semantics as inference rules.
+%
+The $\kframework$ framework~\cite{kframework} proposed a formalism for writing
+operational semantics and provides a derivation of verifiers directly from the
+semantics.
+%
+\citet{skel} developed a skeletal semantics framework in Coq for creating
+big-step semantics by focusing on the structure of the semantics.
 
-\todo
+%----------------------------------------%
 
-\paragraph{\textbf{Coverage-Guided Testing}}
+For the JavaScript programming language, diverse mechanized specifications have
+been presented based on ECMA-262~\cite{es13}, the official language
+specification written in a natural language.
+%
+For example, $\lambdajs$~\cite{lambdajs} was the first core calculus of ES5.1
+and provided a desugaring of non-core language features.
+%
+KJS~\cite{kjs} utilizes the $\kframework$ framework, and \citet{javert}
+presented a metalanguage, $\jsil$, for ES5.1.
+%
+Researchers have used such mechanized specification in diverse fields:
+verification~\cite{javert}, symbolic execution~\cite{javert2}, abstract
+interpretation-based static analysis~\cite{wala, tajs, jsai, safe, safe2}, and
+double debugger~\cite{jsexplain}.
+%
+However, most JavaScript mechanized specifications focused on only ES5.1,
+released in 2011, and required manual description of the semantics.
+%
+On the other hand, $\esmeta$ supports a metalanguage $\ires$ for the latest
+version of ECMA-262 and the automatic extraction of mechanized specification
+used in conformance test synthesis~\cite{jest}, specification type
+analysis~\cite{jstar}, and static analyzer derivation~\cite{jsaver}.
+%
+Hence, we implemented $\tool$ based on $\esmeta$ to synthesize conformance tests
+from the latest specification (ES13, 2022) with feature-sensitive coverages.
 
-Coverage Criteria:
-\begin{itemize}
-  \item Structural Coverage
-    \begin{itemize}
-      \item Statement Coverage
-      \item Branch Coverage
-      \item Modified Condition/Decision Coverage (MC/DC)~\cite{cov-mcdc}
-      \item Simple/Prime Path Coverage~\cite{cov-def}
-    \end{itemize}
-  \item Dataflow Coverage~\cite{cov-dataflow}
-    \begin{itemize}
-      \item Def-Use Coverages
-    \end{itemize}
-  \item Parameter Coverage~\cite{cov-param}
-  \item Partition-based Coverage~\cite{cov-partition}
-  \item Neuron Coverage~\cite{cov-neuron, cov-k-neuron} for ML
-\end{itemize}
-
-Usage:
-\begin{itemize}
-  \item Coverage-Guided Fuzzing (CGF)~\cite{afl} for DL~\cite{cov-fuzz-dl,
-    cov-fuzz-tensor}, JavaScript engines~\cite{fuzzil}. Reducing fuzzing
-    overhead with coverage-guided tracing~\cite{cov-trace}, resolve hash
-    collision issue~\cite{cov-fuzz-collision}
-  \item Coverage-Guided Regression
-    Minimisation~\cite{regression-minimize-survey}
-\end{itemize}
-
+%----------------------------------------%
 
 \paragraph{\textbf{Conformance Testing for JavaScript}}
-\begin{itemize}
-  \item Official JavaScript Conformance Test Suite: Test262~\cite{test262}
-  \item JavaScript Engine Fuzzer~\cite{montage, langfuzz, die, favocado,
-      codealchemist, sofi, comfort, superion, fuzzilli, jsfunfuzz,
-    ifuzzer} only for crahsing or security bugs.
-  \item Conformance Testing via Differential Testing with DL~\cite{comfort}.
-\end{itemize}
-
-\todo
+%
+Diverse host environments support JavaScript engines for server-side
+programming, cross-platform desktop or mobile applications, PDF files, and even
+embedded systems.
+%
+In addition, JavaScript transpilers become essential tools in the deployment
+process of JavaScript applications.
+%
+Therefore, ensuring the conformance of engines and transpilers according to the
+language specification is crucial to consistent execution environments for
+JavaScript.
+%
+The current solution is to maintain conformance tests by hand, and engine and
+transpiler developers commonly utilize Test262~\cite{test262}, the official
+JavaScript conformance test suite.
+%
+Researchers have focused on testing JavaScript engines to detect bugs using
+generation-based fuzzing~\cite{die, codealchemist, favocado, sofi} and
+mutation-based fuzzing~\cite{die, codealchemist, ifuzzer, superion}.
+%
+In addition, they often utilize deep learning~\cite{montage, comfort} to
+generate JavaScript programs in advance and differential
+testing~\cite{jit-picking} to check the correctness of execution results.
+%
+However, most existing techniques focused on detecting crashing bugs or security
+vulnerabilities rather than conformance bugs.
+%
+While $\comfort$~\cite{comfort} targets conformance bugs, it heavily relies on
+the results of differential testing instead of the language semantics described
+in ECMA-262.
+%
+On the other hand, $\jest$~\cite{jest} is the first tool that automatically
+synthesizes JavaScript conformance tests according to the language semantics
+described in the language specification.
+%
+We implemented $\tool$ by augmenting it with $k$-FS and $k$-FCPS coverages and
+outperformed the ability of conformance bug detection of the $\jest$.
