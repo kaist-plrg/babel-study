@@ -7,7 +7,7 @@ Then, we introduce a \textit{feature-sensitive (FS) coverage} as a general
 extension of graph coverages to fully discriminate semantics between different
 language features.
 %
-Finally, we define a \textit{feature call path-sensitive (FCPS) coverage} as a
+Finally, we define a \textit{feature-call-path-sensitive (FCPS) coverage} as a
 variant of FS coverage to distinguish different parts in the semantics of the
 same language features.
 
@@ -551,13 +551,13 @@ contain conformance and crashing bugs only reproducible with a combination of
 %----------------------------------------%
 %----------------------------------------%
 
-\subsection{Feature Call Path-Sensitive (FCPS) Coverages}\label{sec:fcps-cov}
+\subsection{Feature-Call-Path-Sensitive (FCPS) Coverages}\label{sec:fcps-cov}
 
 As explained in Section~\ref{sec:same-feat}, a more fine-grained set of test
 requirements is necessary to distinguish different parts of the semantics even
 in the same language features.
 %
-To resolve this problem, we define a \textit{feature call path-sensitive (FCPS)
+To resolve this problem, we define a \textit{feature-call-path-sensitive (FCPS)
 coverage} as a variant of FS coverage.
 %
 The main idea of FCPS coverage is to distinguish TRs using paths from the most
@@ -566,12 +566,12 @@ enclosing language features.
 However, if we keep paths as it is, the number of TRs exponentially increases
 because of the path explosion caused by sequential branches.
 %
-Hence, we simplify a path $\pat$ to a corresponding \textit{feature call path}
+Hence, we simplify a path $\pat$ to a corresponding \textit{feature-call-path}
 $\fcp \in \fcpset = \featset \times \css{\patset{\graph}}$, which consists of
 the most enclosing feature and a subsequence of the call-site stack
 $\css{\pat}$ from the feature.
 %
-We define the \textit{feature call path extractor} $\extfcp:
+We define the \textit{feature-call-path extractor} $\extfcp:
 \css{\patset{\graph}} \rightarrow (\fcpset \uplus \{ \bot \})$ as follows:
 %
 \begin{equation}\label{equ:extfcp}
@@ -594,7 +594,7 @@ We define the \textit{feature call path extractor} $\extfcp:
 %
 where $\fcp = \extfcp([\node_1, \cdots, \node_{m-1}])$.
 %
-Initially, this algorithm starts with $\bot$, which denotes no feature call path
+Initially, this algorithm starts with $\bot$, which denotes no feature-call-path
 for $\pat$, because there is no enclosing feature in the beginning ($m = 0$).
 %
 Then, it recursively keeps the call-sites in a given call-site
@@ -604,25 +604,25 @@ However, it refreshes the result when there exists a mapping from the current
 call-site to a language feature ($\featmap(\node_m) = \feat$).
 %
 In addition, it removes cycles in the result to prevent a possibly infinite
-length of feature call path and remove the meaningless cases ($\exists i. \tst
+length of feature-call-path and remove the meaningless cases ($\exists i. \tst
 \node'_i = \node_m$).
 
 %----------------------------------------%
 
-\begin{definition}[Feature Call Path-Sensitive (FCPS)
+\begin{definition}[Feature-Call-Path-Sensitive (FCPS)
   Coverage]\label{def:fcps-cov}
   For a given graph coverage $\cov{\graph} = (\trset{\graph}, \cover)$, the
-  \textit{feature call path-sensitive (FCPS) coverage} $\fcov{\graph} =
+  \textit{feature-call-path-sensitive (FCPS) coverage} $\fcov{\graph} =
   (\fcptrset{\graph}, \cover)$ is defined as follows:
   \begin{itemize}
-    \item the set of \textbf{feature call path-sensitive test requirements
+    \item the set of \textbf{feature-call-path-sensitive test requirements
       (FCPS-TRs)} $\fcptrset{\graph}$ is a set of original TRs optionally tagged
-      with feature call paths.
+      with feature-call-paths.
       \[
         \fcptrset{\graph} = \trset{\graph} \times (\fcpset \uplus \{ \bot \})
       \]
     \item a path $\pat$ \textbf{covers} a FCPS-TR $(\tr, \fcp)$ when $\pat$
-      covers the original TR $\tr$ and $\fcp$ is the feature call path extracted
+      covers the original TR $\tr$ and $\fcp$ is the feature-call-path extracted
       from $\pat$:
       \[
         \pat \cover (\tr, \fcp) \iff \pat \cover \tr \wedge
@@ -673,11 +673,11 @@ It depicts an excerpt from the CFG of abstract algorithms in ES13 related to
 $\idfeat$, a syntactic feature defined by the first alternative of
 \esnt{IdentifierReference} and its \textbf{Evaluation} SDO. 
 %
-Assume that we do not remove cycles in the feature call paths $\fcpset$ during
+Assume that we do not remove cycles in the feature-call-paths $\fcpset$ during
 the extraction algorithm $\extfcp$.
 %
 Then, since the algorithm \textbf{GetIdentifierReference} contains a
-self-recursion, there exists an infinite number of possible feature call paths
+self-recursion, there exists an infinite number of possible feature-call-paths
 from $\idfeat$ to node 29:
 %
 \begin{equation}\label{fcp-inf-example}
@@ -687,8 +687,8 @@ from $\idfeat$ to node 29:
   \cdots
 \end{equation}
 %
-However, we remove cycles in feature call paths to resolve this issue, and there
-exists only two possible feature call paths: $(\idfeat, [27, 28])$ and
+However, we remove cycles in feature-call-paths to resolve this issue, and there
+exists only two possible feature-call-paths: $(\idfeat, [27, 28])$ and
 $(\idfeat, [27, 28, 30])$.
 
 %----------------------------------------%
@@ -721,20 +721,20 @@ where $\fcps = \extfcps{k}([\node_1, \cdots, \node_{m-1}])$.
 
 %----------------------------------------%
 
-\begin{definition}[$k$-Limiting Feature Call Path-Sensitive ($k$-FCPS)
+\begin{definition}[$k$-Limiting Feature-Call-Path-Sensitive ($k$-FCPS)
   Coverage]\label{def:k-fcps-cov}
   For a given graph coverage $\cov{\graph} = (\trset{\graph}, \cover)$, the
-  \textit{$k$-limiting feature call path-sensitive ($k$-FCPS) coverage}
+  \textit{$k$-limiting feature-call-path-sensitive ($k$-FCPS) coverage}
   $\kfcpcov{k}{\graph} = (\kfcptrset{k}{\graph}, \cover)$ is defined as follows:
   \begin{itemize}
-    \item the set of \textbf{$k$-feature call path-sensitive test requirements
+    \item the set of \textbf{$k$-feature-call-path-sensitive test requirements
       ($k$-FCPS-TRs)} $\kfcptrset{k}{\graph}$ is a set of original TRs tagged
-      with extends feature call paths bounded by $k$:
+      with extends feature-call-paths bounded by $k$:
       \[
         \kfcptrset{k}{\graph} = \trset{\graph} \times \fcpset^{\leq k}
       \]
     \item a path $\pat$ \textbf{covers} a $k$-FCPS-TR $(\tr, \fcps)$ when $\pat$
-      covers the original TR $\tr$ and $\fcps$ is the extended feature call path
+      covers the original TR $\tr$ and $\fcps$ is the extended feature-call-path
       extracted from $\pat$:
       \[
         \pat \cover (\tr, \fcps) \iff \pat \cover \tr \wedge

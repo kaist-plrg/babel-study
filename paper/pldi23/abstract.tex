@@ -1,56 +1,52 @@
 \begin{abstract}
-  A \textit{conformance test} suite is essential to support consistent execution
-  environments for JavaScript.
+  The \textit{conformance testing} of programming language implementations is
+  crucial to support their consistent execution environments.
   %
-  It is challenging to automatically synthesize them because of 1) the complex
-  language semantics with a highly dynamic nature and 2) the fast-evolving
-  language specification written in a natural language, English.
+  However, manually maintaining a conformance test suite for a real-world
+  programming language is cumbersome and labor-intensive.
   %
-  Researchers have presented a way to automatically synthesize conformance tests
-  for JavaScript using \textit{coverage-guided fuzzing} with the control-flow
-  graph (CFG) in the language specification.
+  Thus, researchers have presented a way to automatically test it using
+  differential testing and measure its \textit{coverage} to evaluate it or
+  minimize the size of the test suite.
   %
-  However, existing work utilizes simple \textit{node/branch coverages}.
+  One way to define the coverage of the conformance test suite is by using the
+  graph coverage in a \textit{mechanized specification} for the language.
   %
-  We found that their test requirements are not enough to distinguish the
-  semantics of different \textit{language features} defined with shared abstract
-  algorithms in the specification.
-  %
-  As a result, it weakens the fuzzing guidance and even removes meaningful
-  conformance tests in the final test suite.
-  %
-  In addition, existing work focuses on conformance checks only for engines but
-  does not consider transpilers even though developers heavily utilize them.
+  But, unfortunately, it might degrade the quality of conformance testing in two
+  cases when sharing the helper functions 1) in the semantics for different
+  language features or 2) in different parts of the semantics for the same
+  language features.
 
   %----------------------------------------%
 
-  This paper introduces a novel \textit{feature-sensitive coverage}, which
-  discriminates the test requirements with their enclosing language features.
+  This paper introduces a novel \textit{feature-sensitive (FS) coverage} to
+  resolve the problem.
   %
-  We observe that specific abstract algorithms in the JavaScript language
-  specification are coupled with language features.
+  It is a general extension of graph coverages that discriminates original test
+  requirements using the most enclosing language features.
   %
-  We utilize this information to enhance the quality of the coverage-guided
-  fuzzing for conformance test synthesis.
+  In addition, we also define a \textit{feature-call-path-sensitive (FCPS)
+  coverage} as its variant and extend them using $k$-limiting approaches.
   %
-  fuzzing for conformance test synthesis.
+  To evaluate the effect of the feature-sensitive coverage and its variants, we
+  apply them to the graph coverages in the mechanized specification for
+  JavaScript.
   %
-  We implemented $\tool$ by extending a state-of-the-art JavaScript conformance
-  test synthesizer, $\jest$, with our feature-sensitive coverage.
+  Then, we implemented $\tool$ with the family of feature-sensitive coverages by
+  extending $\jest$, a state-of-the-art JavaScript conformance test synthesizer
+  using coverage-guided mutational fuzzing.
   %
   For the latest language specification (ES13, 2022), our tool automatically
-  synthesized \inred{5,000} conformance tests in \inred{100} hours.
+  synthesized \inred{95,000} conformance tests in \inred{50} hours with five
+  different settings.
   %
-  We checked conformance of not only engines but also transpilers with the
-  synthesized conformance tests for evaluation.
+  We checked the conformance of the existing eight mainstream JavaScript engines
+  and transpilers with the synthesized conformance tests for evaluation, and we
+  discovered bugs in all of them.
   %
-  The evaluation targets were \inred{eight} mainstream tools (\inred{four}
-  engines and \inred{four} transpilers), and we discovered bugs in all of them.
+  Our tool detected \inred{115} unique conformance bugs (\inred{40} in engines
+  and \inred{75} in transpilers).
   %
-  Our tool detected \inred{50} unique conformance bugs (\inred{20} in engines
-  and \inred{30} in transpilers), while the baseline tool detected only
-  \inred{16} engine bugs.
-  %
-  We had reported all detected bugs, developers confirmed all of them, and
+  We had reported all of them, developers confirmed \inred{80} bugs, and
   \inred{40} were newly discovered bugs.
 \end{abstract}

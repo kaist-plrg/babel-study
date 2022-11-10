@@ -19,10 +19,10 @@ Jython, IronPython, etc.
 Therefore, ensuring consistent execution environments in different
 implementations of the same language becomes crucial.
 %
-Unfortunately, since maintaining a conformance test suite for real-world
-programming languages is cumbersome and labor-intensive, only a restricted number
-of programming languages, such as JavaScript~\cite{test262} and
-XML~\cite{xml-test-suite}, provide their official conformance test suites.
+Unfortunately, since manually maintaining a conformance test suite for
+a real-world programming language is cumbersome and labor-intensive, only a
+restricted number of programming languages, such as JavaScript~\cite{test262}
+and XML~\cite{xml-test-suite}, provide their official conformance test suites.
 %
 Therefore, researchers have presented a way to automatically test the
 conformance of multiple implementations using differential
@@ -73,8 +73,8 @@ selects the program that covers the target branch as a mutation target.
 
 %----------------------------------------%
 
-One way to define the coverage of the conformance test suite is using the graph
-coverage in a \textit{mechanized specification} for the language.
+One way to define the coverage of the conformance test suite is by using the
+graph coverage in a \textit{mechanized specification} for the language.
 %
 A possible other approach is to utilize the code coverage, such as structural
 coverage or data-flow coverage, in the language implementation as the coverage
@@ -184,8 +184,8 @@ test requirements using the most enclosing language features.
 The FS coverage resolves the problem when sharing the same helper functions
 in the semantics for different language features.
 %
-We also define a \textit{feature call path-sensitive (FCPS) coverage} as its
-variant with feature call paths from language features to test requirements.
+We also define a \textit{feature-call-path-sensitive (FCPS) coverage} as its
+variant with feature-call-paths from language features to test requirements.
 %
 The FCPS coverage resolves the problem when sharing the same helper functions in
 different parts of the semantics for the same language features.
@@ -202,13 +202,15 @@ synthesizer using coverage-guided mutational fuzzing, and we implemented $\tool$
 by extending it with the family of feature-sensitive coverages
 %
 For the latest language specification (ES13, 2022), our tool automatically
-synthesized \inred{95,000} conformance tests in \inred{50} hours.
+synthesized \inred{95,000} conformance tests in \inred{50} hours with five
+different settings.
 %
-We checked the conformance of engines and transpilers with the synthesized
-conformance tests for evaluation.
+We checked the conformance of existing JavaScript engines and transpilers with
+the synthesized conformance tests for evaluation.
 %
-The evaluation targets were \inred{eight} mainstream tools (\inred{four} engines
-and \inred{four} transpilers), and we discovered bugs in all of them.
+The evaluation targets were \inred{eight} mainstream implementations
+(\inred{four} engines and \inred{four} transpilers), and we discovered bugs in
+all of them.
 %
 Our tool detected \inred{115} unique conformance bugs (\inred{40} in engines and
 \inred{75} in transpilers).
@@ -232,8 +234,8 @@ We summarize our contributions as follows:
     It could resolve the problem when sharing the same helper
     functions in the semantics for different language features.
   \item 
-    We also define \textit{feature call path-sensitive (FCPS) coverage} as its
-    variants with feature call paths from language features to test requirements
+    We also define \textit{feature-call-path-sensitive (FCPS) coverage} as its
+    variants with feature-call-paths from language features to test requirements
     to distinguish different parts in the semantics of the same language
     features.
 
