@@ -1,11 +1,11 @@
 \section{Implementation}\label{sec:impl}
 
 This section introduces our implementation $\tool$, an extension of a
-state-of-the-art JavaScript conformance test synthesizer $\jest$~\cite{jest}, to
-support both $k$-FS and $k$-FCPS coverages.
+state-of-the-art JavaScript conformance test synthesizer $\jest$~\cite{jest},
+that supports both $k$-FS and $k$-FCPS coverage criteria.
 %
-Then, we explain how to detect conformance bugs not only in engines but also
-transpilers using the synthesized conformance tests.
+Then, we explain how to detect conformance in JavaScript engines and transpilers
+using the synthesized conformance tests.
 
 %----------------------------------------%
 %----------------------------------------%
@@ -16,7 +16,8 @@ transpilers using the synthesized conformance tests.
   \includegraphics[width=\textwidth]{img/overall}
   \caption{
     Overall structure of a JavaScript conformance test synthesizer using
-    coverage-guided fuzzing with CFG in the language specification, ECMA-262.
+    coverage-guided fuzzing using the CFG of a mechanized specification
+    extracted from the language specification, ECMA-262.
   }
   \label{fig:overall}
 \end{figure}
@@ -24,26 +25,26 @@ transpilers using the synthesized conformance tests.
 %----------------------------------------%
 
 First, we describe the overall structure of $\tool$ and explain which parts are
-updated compared to the baseline tool $\tool$.
+updated compared to the baseline tool.
 %
 $\jest$ is a state-of-the-art JavaScript conformance synthesizer using
-coverage-guided fuzzing~\cite{afl} with CFG in the language specification.
+coverage-guided fuzzing~\cite{afl} using the CFG in the language specification.
 %
-It utilizes another tool $\jiset$~\cite{jiset} to handle JavaScript syntax and
-semantics described in the language specification mechanically.
+It utilizes another tool $\jiset$~\cite{jiset} to automatically extract a
+mechanized specification directly from a given version of ECMA-262.
 %
-However, since $\jiset$ is now deprecated and re-branded into another tool,
-$\esmeta$, $\jest$ is also updated based on $\esmeta$.\footnote{See
-\url{https://github.com/es-meta/esmeta}}
+We extend $\jest$ to support both $k$-FS and $k$-FCPS coverage criteria.
 %
-Hence, we extend the new version of $\jest$ to support both $k$-FS and $k$-FCPS
-coverages.
+Note that $\jest$ is recently updated based on $\esmeta$, a re-branded version
+of $\jiset$ becuase it is deprecated now.\footnote{
+  See \url{https://github.com/es-meta/esmeta}
+}
 %
-As depicted in Figure~\ref{fig:overall}, it takes 1) ECMA-262, the JavaScript
-official language specification, and 2) a coverage criterion $\cov{\graph}$ for
-CFG in the specification.
+As depicted in Figure~\ref{fig:overall}, it takes 1) the mechanized
+specification for JavaScript, and 2) a coverage criterion $\cov{\graph}$ for CFG
+of the specification.
 %
-we mark it as red to highlight the extended part compared to the baseline.
+We mark the extended part compared to the baseline as red to highlight.
 
 $\tool$ consists of four modules that mechanically utilize JavaScript syntax and
 semantics described in the given language specification.
@@ -65,8 +66,9 @@ semantics described in the given language specification.
     execution path of each program in the pool by interpreting it using the
     abstract algorithms in the specification.
     %
-    While the baseline tool supports only a node-or-branch coverage, we extend
-    it to support $k$-FS and $k$-FCPS node-or-branch coverages.
+    While the baseline tool supports only a node-or-branch coverage criterion,
+    we extend it to support $k$-FS and $k$-FCPS node-or-branch coverage
+    criteria as well.
     %
     If a program does not cover new TRs, it removes the program from the pool.
     %
