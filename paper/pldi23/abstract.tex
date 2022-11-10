@@ -1,52 +1,40 @@
 \begin{abstract}
-  The \textit{conformance testing} of programming language implementations is
-  crucial to support their consistent execution environments.
-  %
-  However, manually maintaining a conformance test suite for a real-world
-  programming language is cumbersome and labor-intensive.
-  %
-  Thus, researchers have presented a way to automatically test it using
-  differential testing and measure its \textit{coverage} to evaluate it or
-  minimize the size of the test suite.
-  %
-  One way to define the coverage of the conformance test suite is by using the
-  graph coverage in a \textit{mechanized specification} for the language.
-  %
-  But, unfortunately, it might degrade the quality of conformance testing in two
-  cases when sharing the helper functions 1) in the semantics for different
-  language features or 2) in different parts of the semantics for the same
-  language features.
+The \textit{conformance testing} of programming language implementations is
+crucial to support correct and consistent execution environments.
+Because manually maintaining conformance tests for real-world
+programming languages is cumbersome and labor-intensive,
+researchers have presented various ways to make conformance tests effective and efficient.
+One such approach is to use graph coverage, one of the most widely-used coverage criteria,
+to generate tests that reach different parts of a \textit{mechanized language specification}.
+Since mechanized specifications use functions to describe
+the semantics of language features, traditional graph coverage
+criteria for software work as they are.
+However, they may not produce high-quality conformance tests
+because language implementations often have
+specialized execution paths for different features,
+even when their semantics descriptions use the same functions.
+Traditional graph coverage may not distinguish test requirements of
+such language features, which degrades the quality of conformance testing.
+Similarly, it may not distinguish test requirements of different
+parts of the same language feature when their semantics descriptions
+use the same functions.
 
-  %----------------------------------------%
-
-  This paper introduces a novel \textit{feature-sensitive (FS) coverage} to
-  resolve the problem.
-  %
-  It is a general extension of graph coverages that discriminates original test
-  requirements using the most enclosing language features.
-  %
-  In addition, we also define a \textit{feature-call-path-sensitive (FCPS)
-  coverage} as its variant and extend them using $k$-limiting approaches.
-  %
-  To evaluate the effect of the feature-sensitive coverage and its variants, we
-  apply them to the graph coverages in the mechanized specification for
-  JavaScript.
-  %
-  Then, we implemented $\tool$ with the family of feature-sensitive coverages by
-  extending $\jest$, a state-of-the-art JavaScript conformance test synthesizer
-  using coverage-guided mutational fuzzing.
-  %
-  For the latest language specification (ES13, 2022), our tool automatically
-  synthesized \inred{95,000} conformance tests in \inred{50} hours with five
-  different settings.
-  %
-  We checked the conformance of the existing eight mainstream JavaScript engines
-  and transpilers with the synthesized conformance tests for evaluation, and we
-  discovered bugs in all of them.
-  %
-  Our tool detected \inred{115} unique conformance bugs (\inred{40} in engines
-  and \inred{75} in transpilers).
-  %
-  We had reported all of them, developers confirmed \inred{80} bugs, and
-  \inred{40} were newly discovered bugs.
+We present \textit{feature-sensitive (FS) coverage} as a novel coverage criterion
+to generate high-quality conformance tests for language implementations. 
+It is a general extension of graph coverage, which refines
+conventional test requirements using the innermost enclosing language features.
+We also introduce \textit{feature-call-path-sensitive (FCPS) coverage},
+a variant of FS coverage, and extend both coverage criteria using the $k$-limiting approach.
+To evaluate the effectiveness of the new coverage criteria for language implementations,
+we apply them to a mechanized specification for JavaScript.
+We extend $\jest$, the state-of-the-art JavaScript conformance test synthesizer
+using coverage-guided mutational fuzzing, with various FS and FCPS coverage criteria.
+For the latest JavaScript language specification (ES13, 2022), our tool automatically
+synthesizes \inred{95,000} conformance tests in \inred{50} hours with five coverage criteria.
+We evaluated the conformance of eight mainstream JavaScript implementations
+(four engines and four transpilers) with the synthesized conformance
+tests and discovered bugs in all of them.
+Our tool detected \inred{115} distinct conformance bugs (\inred{40} in engines
+and \inred{75} in transpilers), \inred{80} of which were confirmed by
+the developers and \inred{40} of which were newly discovered bugs.
 \end{abstract}
