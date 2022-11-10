@@ -17,8 +17,9 @@ the JavaScript mechanized specification using ECMA-262.
 Then, we explain the control-flow graph (CFG) in the mechanized specification
 and how to use it in coverage-guided fuzzing as an example.
 %
-Finally, we explain why a simple node coverage cannot fully discriminate
-different semantics in different language features or even in the same features.
+Finally, we explain why a simple node coverage criterion cannot fully
+discriminate different semantics in different language features or even in the
+same features.
 
 %----------------------------------------%
 %----------------------------------------%
@@ -348,8 +349,9 @@ The \textbf{Number} built-method describes the semantics of a built-in
 
 %----------------------------------------%
 
-To define the coverage of a conformance test suite using the graph coverage, we
-need a directed graph in the mechanized specification for JavaScript.
+To define the coverage of a conformance test suite using the graph coverage
+criteria, we need a directed graph in the mechanized specification for
+JavaScript.
 %
 The control flow graph (CFG) is the most common way to construct a directed
 graph from the JavaScript mechanized specification.
@@ -394,9 +396,9 @@ in the branch labeled 20 with BigInt values as both sides of operands.
 
 \subsection{Motivation}\label{sec:motiv}
 
-Unfortunately, a simple node coverage in CFGs of mechanized specifications
-cannot fully discriminate different semantics in different language features or
-even in the same features.
+Unfortunately, a simple node coverage criterion in CFGs of mechanized
+specifications cannot fully discriminate different semantics in different
+language features or even in the same features.
 %
 We explain such cases with simple examples in the CFG depicted in
 Figure~\ref{fig:spec-cfg}.
