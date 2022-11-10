@@ -62,7 +62,7 @@ Since mechanized specifications use functions to describe the semantics of langu
 we can easily convert them as directed graphs and traditional graph coverage
 criteria for software work as they are.
 For example, $\kjava$~\cite{k-java} is a mechanized specification for Java
-defined with the $\kframework$ framework, which describes a language semantics
+defined with the $\kframework$ framework, which describes language semantics
 as a set of reduction rules.
 Consider a directed graph whose nodes are reduction rules and edges are
 their dependencies in $\kjava$.
@@ -76,7 +76,7 @@ denoting $\kjava$.
 However, graph coverage may not produce high-quality conformance tests
 for mechanized language specifications.
 Mechanized specifications are usually defined in a modular way with helper functions.
-Such a modular definition has advantages of preventing duplicated or similar
+Such a modular definition has the advantages of preventing duplicated or similar
 definitions of language semantics, reducing the size of the mechanized
 specification, and enhancing its readability.
 At the same time, reusing the same helper function for different parts
@@ -86,7 +86,7 @@ may degrade the quality of conformance testing.
 
 First, traditional graph coverage may not distinguish test requirements of
 different language features when their semantics descriptions
-use the same functions, which degrades the quality of conformance testing.
+use the same functions, degrading conformance testing quality.
 For example, consider a mechanized specification for JavaScript that represents the
 abstract algorithms described in the official language specification, ECMA-262~\cite{es13}.
 Here, most of the semantics for the addition and subtraction operators are
@@ -95,10 +95,10 @@ If conformance tests for addition operators already cover the possible test
 requirements in the algorithm, most conformance tests for subtraction operators
 are removed after the coverage-guided test minimization process.
 However, real-world JavaScript engines are highly optimized and often have
-specialized execution paths for different language features
+specialized execution paths for different language features,
 even when their semantics descriptions use the same functions.
 Therefore, we need to test possible edge cases for the subtraction operator as
-well even though similar edge cases for the addition operator are already tested.
+well, even though similar edge cases for the addition operator are already tested.
 
 %----------------------------------------%
 
