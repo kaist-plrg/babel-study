@@ -42,14 +42,14 @@ to reduce the number of tests, and
 
 %----------------------------------------%
 
-One approach to make high-quality conformance tests is to use graph coverage
+One approach to making high-quality conformance tests is to use graph coverage
 to generate tests for \textit{mechanized language specifications}.
 %
 While we can use code coverage rather than graph coverage
 to generate tests for ``actual language implementations,''
 it will lead to different coverage information for different implementations.
 On the contrary, graph coverage for mechanized language specifications
-will lead to a uniform coverage information for different implementations.
+will lead to uniform coverage information for different implementations.
 %
 Various programming languages, such as OCaml~\cite{ocaml-light-spec},
 C~\cite{c-light-spec}, C++\cite{cpp-spec}, Java~\cite{k-java},
@@ -139,11 +139,11 @@ We select JavaScript as the evaluation target language because
 2) it has the official conformance test suite, Test262~\cite{test262}.
 We extend $\jest$~\cite{jest}, the state-of-the-art JavaScript conformance test
 synthesizer using coverage-guided mutational fuzzing, with various FS
-and and FCPS coverage criteria.
+and FCPS coverage criteria.
 For the latest language specification (ES13, 2022), our tool automatically
 synthesizes \inred{95,000} conformance tests in \inred{50} hours with five coverage criteria.
 We evaluated the conformance of eight mainstream JavaScript implementations
-(four engines and four transpilers) with the synthesized conformance tests,
+(four engines and four transpilers) with the synthesized conformance tests
 and discovered bugs in all of them.
 Our tool detected \inred{115} distinct conformance bugs (\inred{40} in engines
 and \inred{75} in transpilers), \inred{80} of which were confirmed by
