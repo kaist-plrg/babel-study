@@ -278,7 +278,7 @@ JavaScript provides diverse built-in APIs as opaque functions, such as
 A \textit{built-in method} defines the semantics of a built-in API.
 For example, Figure~\ref{fig:builtin-number} describes the semantics of the
 \jscode{Number}\footnote{
-\url{https://262.ecma-international.org/13.0/\#sec-number-objects}
+\url{https://262.ecma-international.org/13.0/\#sec-number-constructor-number-value}
 } built-in API.
 Since its primary functionality is to convert a given JavaScript value to its
 corresponding Number value, it also uses the normal algorithm \textbf{ToNumeric}
@@ -400,7 +400,7 @@ edge case when the right-hand side of the \scode{+} operator is a BigInt value.
 In the remainder of the paper, we formally define a feature-sensitive coverage
 criterion and its variants to resolve the problems (Section~\ref{sec:fscov}).
 Then, we explain how to implement a conformance test synthesizer with
-feature-sensitive coverage criteria in Section~\ref{sec:impl}.
+feature-sensitive coverage criteria (Section~\ref{sec:impl}).
 Finally, after evaluating feature-sensitive coverage criteria with
 mainstream JavaScript implementations (Section~\ref{sec:eval}),
 we discuss related work (Section~\ref{sec:related})
