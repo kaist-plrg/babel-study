@@ -1,15 +1,16 @@
 \section{Evaluation}\label{sec:eval}
 
-To evalute feature-sensitive coverages, we apply $\tool$ to the latest language
-specification (ES13, 2022)~\cite{es13} with different $k$-FS and $k$-FCPS
-node-or-branch coverages to synthesize JavaScript conformance tests.
+To evalute feature-sensitive coverage criteria, we apply $\tool$ to the latest
+language specification (ES13, 2022)~\cite{es13} with different $k$-FS and
+$k$-FCPS node-or-branch coverage criteria to synthesize JavaScript conformance
+tests.
 %
-As a result, we synthesize \inred{185,246} conformance tests using $\tool$ with
+As a result, we synthesize \inred{237,981} conformance tests using $\tool$ with
 five different graph coverage criteria: 1) a node-or-branch coverage and 2)
-1-FS, 3) 2-FS, 4) 1-FCPS, and 5) 2-FCPS node-or-branch coverages.
+1-FS, 3) 2-FS, 4) 1-FCPS, and 5) 2-FCPS node-or-branch coverage criteria.
 %
 Our evaluation platform is a 4.0GHz Intel(R) Core(TM) i7-6700k and 32GB of RAM
-(Samsung DDR4 2133MHz 8GB*4), and it takes \inred{72} hours to synthesize
+(Samsung DDR4 2133MHz 8GB*4), and it takes \inred{50} hours to synthesize
 conformance tests.
 %
 We evaluated the synthesized conformance test suite with the following four
@@ -18,12 +19,12 @@ research questions:
   \item \textbf{RQ1 (Conformance Bug Detection):} How many conformance bugs of
     JavaScript engines and transpilers do conformance tests synthesized by
     $\tool$ detect? (Section~\ref{sec:conform-bug})
-  \item \textbf{RQ2 (Impact of $k$-FS Coverages):} What effect do $k$-FS
-    coverages have in detecting conformance bugs?
+  \item \textbf{RQ2 (Impact of $k$-FS Coverage Criteria):} Are $k$-FS coverage
+    criteria effective in detecting conformance bugs?
     (Section~\ref{sec:impact-k-fs})
-  \item \textbf{RQ3 (Impact of $k$-FCPS Coverages):} What effect do $k$-FCPS
-    coverages have in detecting conformance bugs compared to $k$-FS coverages?
-    (Section~\ref{sec:impact-k-fcps})
+  \item \textbf{RQ3 (Impact of $k$-FCPS Coverage Criteria):} Are $k$-FS coverage
+    criteria more effective than $k$-FS coverage criteria in detecting
+    conformance bugs? (Section~\ref{sec:impact-k-fcps})
   \item \textbf{RQ4 (Comparison with Test262):} Could conformance tests
     synthesized by $\tool$ improve Test262, the official JavaScript conformance
     suite maintained by hand? (Section~\ref{sec:compare-test262})
@@ -92,7 +93,7 @@ eight mainstream tools (four engines and four transpilers) listed in
 Table~\ref{tab:conform-bugs}.
 %
 We select them as evaluation targets because they support all the language
-features in ES13.
+features in ES13;
 %
 V8, JSC, and SpiderMonkey are JavaScript engines used in web browsers, Google
 Chrome, Apple Safari, and Mozilla Firefox, respectively.
@@ -113,7 +114,7 @@ reverse-engineering.
 %----------------------------------------%
 
 Table~\ref{tab:conform-bugs} gives the distribution of the detected conformance
-bugs by \inred{185,246} synthesized conformance tests.
+bugs by \inred{237,981} synthesized conformance tests.
 %
 We found conformance bugs in all the evaluation targets using the synthesized
 conformance tests.
@@ -131,10 +132,8 @@ not yet responded.
 Among \inred{118} detected bugs, \inred{29} are engine bugs, and \inred{118} are
 transpiler bugs.
 %
-The two most trusted engines are V8 and SpiderMonkey because they have only
-three conformance bugs.
-%
-Hence, we use V8 as the default engine during the transpiler conformance check.
+Because V8 is the most trusted engine containing only three conformance bugs, we
+use it as the default engine during the transpiler conformance check.
 %
 If V8 fails a conformance test, we use another JavaScript engine that passes the
 test for the conformance check of a transpiler.
@@ -149,13 +148,13 @@ features is more challenging than compressing or obfuscating the code.
 %----------------------------------------%
 %----------------------------------------%
 
-\subsection{Impact of $k$-FS Coverages}\label{sec:impact-k-fs}
+\subsection{Impact of $k$-FS Coverage Criteria}\label{sec:impact-k-fs}
 
 \begin{table}
 \caption{
   Comparison of synthesized conformance test suite guided by five different
-  graph coverage criteria: 1) a node-or-branch coverage, and 2) 1-FS, 3) 2-FS,
-  4) 1-FCPS, and 5) 2-FCPS node-or-branch coverages.
+  graph coverage criteria: 1) a node-or-branch coverage criterion, and 2) 1-FS,
+  3) 2-FS, 4) 1-FCPS, and 5) 2-FCPS node-or-branch coverage criteria.
 }
 \vspace*{-.5em}
 {
@@ -177,15 +176,15 @@ features is more challenging than compressing or obfuscating the code.
 \toprule\\[-1.6em]
 
 node-or-branch
-& \x{2.1}     & \x{10.0}    & \x{12.1}    & \x{2,095} & \x{45}  \\\hline
+& \x{10.0}    & \x{5.6}     & \x{15.6}    & \x{2,111} & \x{45}  \\\hline
 1-FS node-or-branch
-& \x{61.5}    & \x{34.2}    & \x{95.7}    & \x{5,336} & \x{60}  \\\hline
+& \x{79.3}    & \x{45.7}    & \x{125.0}   & \x{6,766} & \x{60}  \\\hline
 2-FS node-or-branch
-& \x{1,131.5} & \x{663.3}   & \x{1,794.8} & \x{83,668}& \x{115} \\\hline
+& \x{1,199.8} & \x{696.3}   & \x{1,896.1} & \x{97,423}& \x{115} \\\hline
 1-FCPS node-or-branch
-& \x{257.7}   & \x{133.2}   & \x{390.9}   & \x{5,446} & \x{75}  \\\hline
+& \x{179.7}   & \x{97.6}    & \x{277.3}   & \x{9,092} & \x{75}  \\\hline
 2-FCPS node-or-branch
-& \x{2,854.9} & \x{1,500.4} & \x{4,355.3} & \x{88,701}& \x{118} \\
+& \x{2,323.1} & \x{1,297.6} & \x{3,620.7} & \x{122,589}& \x{118} \\
 
 \toprule\multicolumn{1}{c}{}\\[-1.6em]
 
@@ -195,15 +194,15 @@ node-or-branch
 
 %----------------------------------------%
 
-To evaluate the effect of $k$-FS coverages, we compare the synthesized
+To evaluate the impact of $k$-FS coverage criteria, we compare the synthesized
 conformance tests guided by different $k$-FS normal-or-branch coverage criteria.
 %
 Table~\ref{tab:compare} shows the result of conformance test synthesis via
 $\tool$ with five different graph coverage criteria: 1) a node-or-branch
-coverage and 2) 1-FS, 3) 2-FS, 4) 1-FCPS, and 5) 2-FCPS node-or-branch
-coverages.
+coverage criterion and 2) 1-FS, 3) 2-FS, 4) 1-FCPS, and 5) 2-FCPS node-or-branch
+coverage criteria.
 %
-The first three columns denotes the number of covered $k$-FS or $k$-FCPS nodes
+The first three columns denote the number of covered $k$-FS or $k$-FCPS nodes
 (\textbf{\# nodes}), branches (\textbf{\# branches}), and any TRs (\textbf{\#
 total}).
 %
@@ -213,12 +212,12 @@ tests (\textbf{\# bugs}).
 
 %----------------------------------------%
 
-According to the table's first to third rows, the number of covered
-TRs increased \inred{7.91x (95.7K / 12.1K)} from baseline to 1-FS coverage and
-\inred{18.8x (1794.8K / 95.7K)} from 1-FS to 2-FS coverages.
+According to the result, the number of covered TRs increased \inred{8.03x
+(125.0K / 15.6K)} from baseline to 1-FS coverage criterion and \inred{15.17x
+(1,896.1K / 125.0K)} from 1-FS to 2-FS coverage criteria.
 %
-The difference between 1-FS and 2-FS coverages is much higher than between
-baseline and 1-FS.
+The difference between 1-FS and 2-FS coverage criteria is much higher than
+between baseline and 1-FS.
 %
 It is due to that many abstract algorithms in the language specification are
 related to the limited number of language features, while most language features
@@ -227,34 +226,41 @@ could enclose diverse language features.
 For a more detailed information, we draw histograms of numbers of 1-FS-TRs per
 baseline TR and 2-FS-TRs per 1-FS-TR in Figures~\ref{fig:hist} (a) and (b).
 %
-The most significant number of 1-FS-TRs per baseline TR is \inred{X for a node
-in the X abstract algorithm because all the X utilize the X algorithm to define
-their semantics in the language specification.}
+The most significant number of 1-FS-TRs per baseline TR is \inred{303} for a
+node in the \textbf{[[GetOwnProperty]]} algorithm.
 %
-The most significant number of 2-FS-TRs per 1-FS-TR is \inred{X for a node whose
-most enclosing feature is X because diverse X use X.}
+It happens because the semantics of many syntactic or built-in API features use
+this algorithm to access object properties.
 %
-The number of synthesized tests increased \inred{2.55x (5,336 / 2,095)} from
-0-FS to 1-FS coverages and \inred{15.7x (83,668 / 5,336)} from 1-FS to 2-FS
-coverages.
+The most significant number of 2-FS-TRs per 1-FS-TR is \inred{116} for a node
+whose most enclosing feature is the syntactic feature $\idfeat$ for identifier
+references explained in Section~\ref{sec:fcps-cov}.
+%
+It is due to that identifier references can be used in diverse places in other
+syntactic features.
+%
+The number of synthesized tests increased \inred{3.21x (6,766 / 2,111)} from
+0-FS to 1-FS coverage criteria and \inred{14.4x (97,423 / 6,766)} from 1-FS to
+2-FS coverage criteria.
 %
 In addition, the number of detected unique bugs also increased when using higher
-$k$-FS normal-or-branch coverages.
+$k$-FS normal-or-branch coverage criteria.
 %
 The baseline with a simple node-or-branch coverage detects \inred{45}
 conformance bugs in engines and transpilers.
 %
-The conformance tests synthesized with 1-FS coverage detect \inred{15 (60 - 45)}
-more conformance bugs, and tests synthesized with 2-FS coverage detect \inred{55
-(115 - 60)} more bugs.
+The conformance tests synthesized with 1-FS coverage criterion detect \inred{15
+(60 - 45)} more conformance bugs, and tests synthesized with 2-FS coverage
+criterion detect \inred{55 (115 - 60)} more bugs.
 %
-Now, we introduce two bug examples to show the effect of $k$-FS coverages.
+Now, we introduce two bug examples to show the effect of $k$-FS coverage
+criteria.
 
 %----------------------------------------%
 
-\paragraph{\textbf{Empty Name Binding for \jscode{let} in \jscode{for}-Loops}}
+\paragraph{\textbf{Empty Name Binding for \jscode{let} in \jscode{for}-Loop}}
 %
-ES13 provides diverse shapes of $\jscode{for}$-loops as syntactic features
+JavaScript provides diverse shapes of $\jscode{for}$-loops as syntactic features
 defined with the \esnt{ForStatement} syntactic production.
 %
 Among them, a \jscode{for}-loop with a \jscode{let}-binding is a syntactic
@@ -272,14 +278,18 @@ While the semantics that checks the empty name bindings is described in the
 utilize it when defining their semantics.
 %
 Hence, we failed to detect this conformance bug using the tests synthesized with
-a simple node-or-branch coverage.
+a simple node-or-branch coverage criterion.
 %
-On the other hand, feature-sensitive coverages could discriminate the usage of
-empty name binding checking semantics in different language features.
+On the other hand, feature-sensitive coverage criteria could discriminate the
+usage of empty name binding checking semantics in different language features.
 %
 As a result, we successfully detected this conformance bug with 1-FS, 2-FS,
-1-FCPS, or 2-FCPS coverages.
-\begin{lstlisting}[style=JS,numbers=left,frame=single,
+1-FCPS, or 2-FCPS coverage criteria.
+\begin{lstlisting}[
+style=JS,
+basicstyle=\footnotesize\ttfamily,
+numbers=left,
+frame=single,
 caption={A crashing bug in Babel v7.19.1.},
 label={lst:empty-let-bug}
 ]
@@ -289,12 +299,63 @@ for (let {} = 0; 0; ) ;
 
 %----------------------------------------%
 
-\todo\ for 2-FS
+\paragraph{\textbf{Computed Property for \jscode {async} Method in
+\jscode{class}}}
+%
+JavaScript provides \textit{computed properties} as syntactic features to
+allow defining property names using any expressions.
+%
+For example, let's define an object using a computed property: \jscode{let x =
+\{ [ "a" + "b" ]() \{ return 42 \} \}}.
+%
+Then, \jscode{x} is an object having a property \jscode{ab} that stores a
+function as a method of the object: \jscode{x.ab() === 42}.
+%
+In addition, it also assigns the \jscode{name} property of the function as the
+property name: \jscode{x.ab.name === "ab"}.
+%
+However, JSC v615.1.10 does not follow this semantics when the computed property
+is used for a \jscode{async} method inside the classes.
+%
+For example, the conformance test in
+Listing~\ref{lst:comp-prop-async-method-bug} checks whether the \jscode{name}
+property of the \jscode{async} method in the class \jscode{C} is \jscode{"f"}.
+%
+However, the \jscode{name} property is \jscode{"async"} instead of \jscode{"f"}
+in the JSC engine.
+%
+Since it is a combination of a \jscode{class}, a \jscode{async} method, and a
+computed property, 0 or 1-FS coverage criteria cannot keep it in the final
+program pool.
+%
+On the other hand, 2-FS coverage criterion could discriminate it with other
+tests.
+%
+If a conformance test covers 2-FS-TR consisting of two syntactic features
+\esnt{AsyncMethod} production with \textbf{PropMethod} SDO and
+\esnt{ComputedProeprtyName} production with \textbf{PropMethod} SDO, this
+conformance bug could be reproducible.
+%
+As a result, we successfully detected this conformance bug with tests
+synthesized with 2-FS, 2-FCPS coverage criterion.
+\begin{lstlisting}[
+style=JS,
+basicstyle=\footnotesize\ttfamily,
+numbers=left,
+frame=single,
+caption={Wrong name for an \jscode{async} method of \jscode{class} with a
+computed property in JSC v615.1.10.},
+label={lst:comp-prop-async-method-bug}
+]
+// [EXIT] Normal
+class C { async ["f"] () {} }
+$assert.sameValue(C.prototype.f.name, "f");
+\end{lstlisting}
 
 %----------------------------------------%
 %----------------------------------------%
 
-\subsection{Impact of $k$-FCPS Coverages}\label{sec:impact-k-fcps}
+\subsection{Impact of $k$-FCPS Coverage Criteria}\label{sec:impact-k-fcps}
 
 \begin{figure}
   \centering
@@ -327,11 +388,12 @@ for (let {} = 0; 0; ) ;
 
 %----------------------------------------%
 
-We also evaluate the effect of $k$-FCPS coverages compared to $k$-FS coverages.
+We also evaluate the effect of $k$-FCPS coverage criteria compared to $k$-FS
+coverage criteria.
 %
-According to the second to fifth rows in Table~\ref{tab:compare}, $\tool$ covers
-\inred{4.08x (390.9K / 95.7K)} and \inred{2.43x (4355.3/1794.8)} more TRs when
-using $k$-FCPS coverages instead of $k$-FS coverages for $k = 0$ and $k = 1$,
+According to Table~\ref{tab:compare}, $\tool$ covers \inred{2.22x (277.3K /
+125.0K)} and \inred{1.91x (3,620.3K / 1,896.1K)} more TRs when using $k$-FCPS
+coverage criteria instead of $k$-FS coverage criteria for $k = 0$ and $k = 1$,
 respectively.
 %
 Figures~\ref{fig:hist} (c) and (d) provide more detailed information about the
@@ -340,70 +402,73 @@ increment of covered TRs.
 Each of them depicts the histogram of numbers of 1-FCPS-TRs (or 2-FCPS-TRs) per
 1-FS-TR (or 2-FS-TR).
 %
-The most significant number of 1-FCPS-TRs per 1-FS-TR is \inred{X for a node in
-the X abstract algorithm whose most enclosing feature is X.}
+The most significant number of 1-FCPS-TRs per 1-FS-TR is \inred{70} for a node
+in the \jscode{Array.prototype.splice} built-in method.
 %
-\inred{In the semantics of the X feature, the X abstract algorithm used in X,
-which increases the number of feature-call-paths.}
+It is a powerful language feature that changes the contents of an array by
+removing or replacing existing elements and/or adding new elements in place.
 %
-The most significant number of 2-FCPS-TRs per 2-FS-TR is \inred{X for a node
-whose most enclosing feature is X for the same reason.}
+Thus, its semantics of uses diverse helper functions, and the number of possible
+feature-call-paths in this featuer is large.
+%
+The most significant number of 2-FCPS-TRs per 2-FS-TR is \inred{53} for a node
+whose most enclosing feature is a syntactic feature for \jscode{yield}
+expressions because it touches various helper functions for asynchronous
+behaviors.
 %
 Because of the increased number of TRs, the number of synthesized tests also
-increased \inred{2.55x (5,336 / 2,095)} from 0-FS to 1-FS coverages and
-\inred{15.7x (83,668 / 5,336)} from 1-FS to 2-FS coverages.
+increased \inred{1.34x (9,092 / 6,766)} from 0-FS to 1-FS coverage criteria and
+\inred{1.26x (122,569 / 9,092)} from 1-FS to 2-FS coverage criteria.
 %
 In addition, the number of detected unique bugs also increased when using
-$k$-FCPS coverages than $k$-FS coverages for the same $k$.
+$k$-FCPS coverage criteria than $k$-FS coverage criteria for the same $k$.
 %
-The conformance tests synthesized with 1-FCPS and 2-FCPS coverages detect
-\inred{15 (75 - 60)} and \inred{3 (118 - 115)} more conformance bugs than 
-1-FS and 2-FS coverages, respectively.
+The conformance tests synthesized with 1-FCPS and 2-FCPS coverage criteria
+detect \inred{15 (75 - 60)} and \inred{3 (118 - 115)} more conformance bugs than
+1-FS and 2-FS coverage criteria, respectively.
 %
-Now, we introduce two bug examples to show the effect of $k$-FCPS coverages
-compared to the $k$-FS coverages.
+Now, we introduce a conformance bug example to show the impact of $k$-FCPS
+coverage criteria compared to the $k$-FS coverage criteria.
 
 %----------------------------------------%
 
-\todo\ for 1-FCPS
+\paragraph{\textbf{\jscode{String.prototype.normalize}}}
+%
+The \jscode{String.prototype.normalize} built-in API normalizes a given string
+into the normalization form named by a given argument.
+%
+For example, \jscode{"abc".normalize("NFC")} produces the NFC normalization form
+of "abc".
+%
+If an invalid name as the argument, it should throws a \textbf{RangeError}.
+%
+However, the JavaScript program in Listing~\ref{lst:normalize-bug} noramlly
+terminates in GraalJS v22.2.0 while it should throw a \textbf{RangeError}
+because of the invalid name \jscode{""}.
+%
+While it covers a specific branch in \textbf{ToString} abstract algorithm, the
+semantics of \jscode{String.prototype.normalize} built-in API also utilizes this
+algorithm to get a string from the \jscode{this} value.
+%
+Therefore, we failed to detect this conformance bug by the tests synthesized
+with baseline or $k$-FS coverage criteria.
+%
+On the other hand, feature-call-paths could discriminate two different
+invocations of the \textbf{ToString} algorithm, and we successfully detected
+this conformance bug with 1-FCPS and 2-FCPS coverage criteria.
 
-% XXX appeared not only in 1-FCPS and 2-FCPS but also in 1-FS and 2-FS
-% \paragraph{\textbf{\jscode{String.prototype.normalize}}}
-% The \jscode{String.prototype.normalize} built-in API normalizes a given string
-% into the normalization form named by a given argument.
-% %
-% For example, \jscode{"abc".normalize("NFC")} produces the NFC normalization form
-% of "abc".
-% %
-% If an invalid name as the argument, it should throws a \textbf{RangeError}.
-% %
-% However, the JavaScript program in Listing~\ref{lst:normalize-bug} noramlly
-% terminates in GraalJS v22.2.0 while it should throw a \textbf{RangeError}
-% because of the invalid name \jscode{""}.
-% %
-% While it covers a specific branch in \textbf{ToString} abstract algorithm, the
-% semantics of \jscode{String.prototype.normalize} built-in API also utilizes this
-% algorithm to get a string from the \jscode{this} value.
-% %
-% Therefore, we failed to detect this conformance bug by the tests synthesized
-% with baseline or $k$-FS coverages.
-% %
-% On the other hand, feature-call-paths could discriminate two different
-% invocations of the \textbf{ToString} algorithm, and we successfully detected
-% this conformance bug with 1-FCPS and 2-FCPS coverages.
-% 
-% \begin{lstlisting}[style=JS,numbers=left,frame=single,
-% caption={Expected a \textbf{RangeError} but normally terminated in GraalJS
-% v22.2.0.},
-% label={lst:normalize-bug}
-% ]
-% // [EXIT] RangeError
-% String.prototype.normalize.call(0, "");
-% \end{lstlisting}
-
-%----------------------------------------%
-
-\todo\ for 2-FCPS
+\begin{lstlisting}[
+style=JS,
+basicstyle=\footnotesize\ttfamily,
+numbers=left,
+frame=single,
+caption={Expected a \textbf{RangeError} but normally terminated in GraalJS
+v22.2.0.},
+label={lst:normalize-bug}
+]
+// [EXIT] RangeError
+String.prototype.normalize.call(0, "");
+\end{lstlisting}
 
 %----------------------------------------%
 %----------------------------------------%
@@ -438,8 +503,8 @@ compared to the $k$-FS coverages.
     \subcaption{2-FCPS}
   \end{subfigure}
   \caption{
-    The changes of $k$-FS and $k$-FCPS node-or-branch coverages with elapse of
-    time.
+    The changes of $k$-FS and $k$-FCPS node-or-branch coverage criteria with
+    elapse of time.
   }
   \label{fig:cov-time}
 \end{figure}
@@ -474,8 +539,8 @@ compared to the $k$-FS coverages.
     \subcaption{2-FS}
   \end{subfigure}
   \caption{
-    Venn diagrams of covered TRs of $k$-FS and $k$-FCPS node-or-branch coverages
-    for Test262 and synthesized tests via $\tool$.
+    Venn diagrams of covered TRs of $k$-FS and $k$-FCPS node-or-branch coverage
+    criteria for Test262 and synthesized tests via $\tool$.
   }
   \label{fig:venn-test262}
 \end{figure}
@@ -483,8 +548,9 @@ compared to the $k$-FS coverages.
 
 %----------------------------------------%
 
-We compare the coverage of conformance tests automatically synthesized via
-$\tool$ with that of Test262, the official JavaScript conformance test suite.
+We compare the coverage criteria of conformance tests automatically synthesized
+via $\tool$ with that of Test262, the official JavaScript conformance test
+suite.
 %
 As described in Section~\ref{sec:impl}, $\tool$ is based on $\esmeta$ and only
 targets the language features supported in the tool.
@@ -493,15 +559,15 @@ Thus, we removed \inred{23,231} out of \inred{47,141} conformance tests in
 Test262 that utilize language features not supported in $\esmeta$ for a fair
 comparison.
 %
-We measured five different $k$-FS and $k$-FCPS node-or-branch coverages for
-\inred{23,910} applicable conformance tests.
+We measured five different $k$-FS and $k$-FCPS node-or-branch coverage criteria
+for \inred{23,910} applicable conformance tests.
 %
-Figure~\ref{fig:cov-time} shows the change of $k$-FS and $k$-FCPS node-or-branch
-coverages with elapse of time, and the dotted line shows the coverage of Test262
-in each criterion.
+Figure~\ref{fig:cov-time} shows the change of $k$-FS-TPs and $k$-FCPS-TPs with
+elapse of time, and the dotted line shows the coverage of Test262 in each
+criterion.
 %
 Figure~\ref{fig:venn-test262} depicts Venn diagrams of covered TRs of $k$-FS and
-$k$-FCPS node-or-branch coverages for Test262 and synthesized tests via $\tool$.
+$k$-FCPS node-or-branch coverage  for Test262 and synthesized tests via $\tool$.
 %
 In the baseline, the coverage of synthesized tests is less than that of Test262,
 and covers only \inred{1.0K} TRs that not covered by Test262.
