@@ -75,7 +75,7 @@ coverage criteria with the following four research questions:
 }
 \vspace*{-.5em}
 {
-\small
+\footnotesize
 \label{tab:conform-bugs}
 \begin{tabular}{?c?l|l|l?r|r|r?}
 \toprule\\[-1.6em]
@@ -94,26 +94,26 @@ coverage criteria with the following four research questions:
 \toprule\\[-1.6em]
 
 \multirow{5}{*}{Engine}
-& V8            & v10.8.121 & 2022.10.06 & \x{0} & \x{0} & \x{3} \\\cline{2-7}
-& JSC           & v615.1.10 & 2022.10.26 & \x{4} & \x{4} & \x{14}\\\cline{2-7}
-& GraalJS       & v22.2.0   & 2022.07.26 & \x{7} & \x{7} & \x{9} \\\cline{2-7}
-& SpiderMonkey  & v107.0b4  & 2022.10.24 & \x{1} & \x{3} & \x{3} \\\cline{2-7}
-& \multicolumn{3}{c?}{\textbf{Total}}    & \y{12}& \y{14}& \y{29}\\
+& V8            & v10.8.121 & 2022.10.06 & \x{0} & \x{0} & \x{2} \\\cline{2-7}
+& JSC           & v615.1.10 & 2022.10.26 & \x{8} & \x{8} & \x{12}\\\cline{2-7}
+& GraalJS       & v22.2.0   & 2022.07.26 & \x{9} & \x{9} & \x{9} \\\cline{2-7}
+& SpiderMonkey  & v107.0b4  & 2022.10.24 & \x{1} & \x{2} & \x{3} \\\cline{2-7}
+& \multicolumn{3}{c?}{\textbf{Total}}    & \y{18}& \y{19}& \y{24}\\
 
 \toprule\\[-1.6em]
 
 \multirow{5}{*}{Transpiler}
-& Babel         & v7.19.1   & 2022.09.15 & \x{33}& \x{33}& \x{39}\\\cline{2-7}
-& SWC           & v1.3.10   & 2022.10.21 & \x{30}& \x{30}& \x{32}\\\cline{2-7}
+& Babel         & v7.19.1   & 2022.09.15 & \x{27}& \x{27}& \x{31}\\\cline{2-7}
+& SWC           & v1.3.10   & 2022.10.21 & \x{22}& \x{22}& \x{37}\\\cline{2-7}
 & Terser        & v5.15.1   & 2022.10.05 & \x{1} & \x{1} & \x{15}\\\cline{2-7}
-& Obfuscator    & v4.0.0    & 2022.02.15 & \x{0} & \x{0} & \x{3} \\\cline{2-7}
-& \multicolumn{3}{c?}{\textbf{Total}}    & \y{64}& \y{64}& \y{89}\\
+& Obfuscator    & v4.0.0    & 2022.02.15 & \x{0} & \x{0} & \x{5} \\\cline{2-7}
+& \multicolumn{3}{c?}{\textbf{Total}}    & \y{50}& \y{50}& \y{83}\\
 
 \toprule\multicolumn{1}{c}{}\\[-1.6em]
 
 
 \multicolumn{4}{?c?}{\textbf{Total}}
-& \y{76}& \y{78}& \y{118}\\
+& \y{69}& \y{69}& \y{107}\\
 
 \toprule\multicolumn{1}{c}{}\\[-1.6em]
 \end{tabular}
@@ -141,42 +141,128 @@ not yet responded.
 Among \inred{107} detected bugs, \inred{24} are engine bugs, and \inred{83} are
 transpiler bugs.
 %
+Now, we intorudce interesting bugs detected by our synthesized conformance
+tests in eight implementations.
 
-V8 (All engine);
-% https://github.com/oracle/graaljs/issues/673
-% https://github.com/tc39/ecma262/issues/2659
-% (EXAMPLE) null [ { [ Symbol . toPrimitive ] : () => { REF_ERR; } } ] 
-Graal - order of delete and short circuit => unreachable code becomes rechable
-% https://github.com/oracle/graaljs/issues/655
-% https://github.com/oracle/graaljs/issues/671
-% (EXAMPLE) function f() { /* unreachable */ } false && delete f();
-SpiderMonkey -
-2015 
-assing argumetns -> async function parameter
-expected -> unhandled rejected promise 
-result -> throw 
-Test262 x
-% https://github.com/tc39/proposal-async-await/issues/60
-% https://bugzilla.mozilla.org/show_bug.cgi?id=1799288
-% (EXAMPLE) (async function ([]) {})();
-JSC - property order
-% https://bugs.webkit.org/show_bug.cgi?id=247429
-SWC - Are you running fuzzer? If you don't mind, can you run it for the minifier
-instead?
-% https://github.com/swc-project/swc/issues/6375
-Babel - Temporal Dead Zone (TDZ) -> realize many TDZ bugs in Babel -> create
-"Spec: TDZ" label
-% https://github.com/babel/babel/issues/15150
-% (EXAMPLE) let x = x;
-% (EXAMPLE with TDZ option) const x = 0; x = 1;
+%----------------------------------------%
 
-
-Among transpilers, Terser and JavaScript Obfuscator contain only \inred{15} and
-\inred{3} bugs, respectively, but Babel and SWC have \inred{39} and
-\inred{32} transpiler conformance bugs, respectively.
+\paragraph{\textbf{Order of Execution}}
 %
-It happens because transpilers desugaring new language features to ES5.1
-features is more challenging than compressing or obfuscating the code.
+JavaScript engines must follow the execution order of each language feature
+described in the language specification.
+%
+However, we detected a severe bug\footnote{
+  We anonymized links of bug reports for double-blinded reviewing.
+  % TODO during camera-ready
+  % https://github.com/oracle/graaljs/issues/655
+  % https://github.com/oracle/graaljs/issues/671
+} related to the execution order of \jscode{delete} operation that causes
+the exeuction of originally unreachable code in the GraalJS engine.
+%
+For example, while the following code should return \jscode{false}, it throws an
+exception with \jscode{"ERR"} by executing the originally unreachable code
+inside the arrow function in GraalJS:
+%
+\begin{lstlisting}[style=JS, basicstyle=\footnotesize\ttfamily]
+false && delete (() => { throw "ERR"; })(); // expected: false
+\end{lstlisting}
+%
+In addition, we detected another bug\footnote{
+  We anonymized links of bug reports for double-blinded reviewing.
+  % TODO during camera-ready
+  % V8 - https://bugs.chromium.org/p/v8/issues/detail?id=13469
+  % GraalJS - https://github.com/oracle/graaljs/issues/673
+  % JSC - https://bugs.webkit.org/show_bug.cgi?id=247723
+  % SpiderMonkey - https://bugzilla.mozilla.org/show_bug.cgi?id=1800062
+  % ECAM-262 - https://github.com/tc39/ecma262/issues/2659
+} related to the execution order of property read in the V8 engine.
+%
+% For example, while the following code should throw an exception with
+% \jscode{"ERR"}, V8 throws a \textbf{TypeError} exception:
+%
+% \begin{lstlisting}[style=JS, basicstyle=\footnotesize\ttfamily]
+% null [ { [Symbol.toPrimitive ] : () => { throw "ERR"; } } ];
+% \end{lstlisting}
+%
+More interesting point is that all target engines contain this conformance bugs.
+%
+Thus, ECMA-262 may have to be updated based on majority of the semantics used in
+the implementations.
+
+%----------------------------------------%
+
+\paragraph{\textbf{Asynchronous Function / Generator}}
+One of the complex language features in JavaScript is asynchronous functions and
+generators introduced in ES6 (2015).
+%
+We detected a severe bug\footnote{
+  We anonymized links of bug reports for double-blinded reviewing.
+  % TODO during camera-ready
+  % https://github.com/tc39/proposal-async-await/issues/60
+  % https://bugzilla.mozilla.org/show_bug.cgi?id=1799288
+} in the SpiderMonkey engine that breaks the logic of asynchronous function
+calls.
+%
+For example, the following code must return a rejected \jscode{Promise} object
+because a non-iterable object \jscode{\{\}} is assigned to an array
+destructuring pattern \jscode{[]} in \jscode{async} arrow function:
+%
+\begin{lstlisting}[style=JS, basicstyle=\footnotesize\ttfamily]
+(async function ([]) {})(); // expected: a rejected Promise object
+\end{lstlisting}
+%
+However, it unexpectedly terminates with a \textbf{TypeError} exception in 
+the SpiderMonkey engine.
+%
+According to a developer of SpiderMonkey, it happens because no test is added to
+Test262 after changing the semantics of \jscode{async} functions.
+%
+{
+  \small
+  \begin{quote}
+    The async-function spec was changed at some point \textelp{}
+    this is also not covered by test262.
+  \end{quote}
+}
+%
+\noindent
+We also detected other similar bugs related to generators in the SWC transpiler,
+and its main developer appreciated our work and requested us to apply our tool
+for SWC using the \scode{jsc.minify} option as well.\footnote{
+  We anonymized links of bug reports for double-blinded reviewing.
+  % TODO during camera-ready
+  % https://github.com/swc-project/swc/issues/6375
+}
+
+%----------------------------------------%
+% \paragraph{\textbf{JSC}}
+% %
+% For JSC, we detected a conformance bug related to the order of properties for
+% \jscode{class} expressions.
+% % https://bugs.webkit.org/show_bug.cgi?id=247429
+% In the following code, the variable \jscode{order} should be an array
+% \jscode{["length", "name", "prototype"]}:
+% \begin{lstlisting}[style=JS, basicstyle=\footnotesize\ttfamily]
+% class C { static D = class {}; } let order = Reflect.ownKeys(C.D);
+% \end{lstlisting}
+% %
+% However, it becomes \jscode{["length", "prototype", "name"]} in JSC.
+% %
+% This conformance bug is a hard-to-find bug because it is reproducible only when
+% a \jscode{class} expression is assigned to a static field of another
+% \jscode{class} declaration or expression.
+
+%----------------------------------------%
+
+% %
+% Based on our bug reports, the developers of the Babel transpiler realilzed that
+% Babel have many \textit{temporal dead zone (TDZ)} bugs caused by \jscode{let} or
+% \jscode{const}.
+% % https://github.com/babel/babel/issues/15150
+% % (EXAMPLE) let x = x;
+% % (EXAMPLE with TDZ option) const x = 0; x = 1;
+% Thus, they created a special label \name{Spec: TDZ} to highlight issues related
+% to TDZ bugs and started to fix bugs related to TDZ bugs.
 
 %----------------------------------------%
 %----------------------------------------%
@@ -191,7 +277,7 @@ features is more challenging than compressing or obfuscating the code.
 }
 \vspace*{-.5em}
 {
-\small
+\footnotesize
 \label{tab:compare}
 \begin{tabular}{?c?r|r|r?r|r?}
 \toprule\\[-1.6em]
