@@ -27,7 +27,7 @@
 & JSC           & v615.1.10 & 2022.10.26 & 15 & 15 & 24\\\cline{2-7}
 & GraalJS       & v22.2.0   & 2022.07.26 & 9 & 9 & 10 \\\cline{2-7}
 & SpiderMonkey  & v107.0b4  & 2022.10.24 & 1 & 3 & 4 \\\cline{2-7}
-& \multicolumn{3}{c?}{\textbf{Total}}    & 25& 27& 38\\
+& \multicolumn{3}{c?}{\textbf{Total}}    & \textbf{25}& \textbf{27}& \textbf{42}\\
 
 \toprule\\[-1.6em]
 
@@ -36,13 +36,13 @@
 & SWC           & v1.3.10   & 2022.10.21 & 27& 27& 41\\\cline{2-7}
 & Terser        & v5.15.1   & 2022.10.05 & 1 & 1 & 18\\\cline{2-7}
 & Obfuscator    & v4.0.0    & 2022.02.15 & 0 & 0 & 7 \\\cline{2-7}
-& \multicolumn{3}{c?}{\textbf{Total}}    & 58& 58& 94\\
+& \multicolumn{3}{c?}{\textbf{Total}}    & \textbf{58}& \textbf{58}& \textbf{101}\\
 
 \toprule\multicolumn{1}{c}{}\\[-1.6em]
 
 
 \multicolumn{4}{c?}{\textbf{Total}}
-& 83& 85& 132\\
+& \textbf{83}& \textbf{85}& \textbf{143}\\
 
 \toprule\multicolumn{1}{c}{}\\[-1.6em]
 \end{tabular}
@@ -103,16 +103,16 @@ if a test fails on all engines, we do not use the test.
 Table~\ref{tab:conform-bugs} summarizes the conformance bugs
 detected by $\tool$ in all the evaluation targets.
 We manually inspected the failed conformance test cases,
-found 132 distinct conformance bugs, and reported them to
+found 143 distinct conformance bugs, and reported them to
 the corresponding developers.
 %
-As a result, 85 out of 132 bugs were officially confirmed, and
+As a result, 85 out of 143 bugs were officially confirmed, and
 83 were newly discovered bugs.
 %
 The other 47 reported bugs are still under review, or developers have
 not yet responded.
 %
-Among 132 detected bugs, 38 are engine bugs, and 94 are
+Among 143 detected bugs, 42 are engine bugs, and 101 are
 transpiler bugs.
 We present two real-world bug examples.
 
@@ -293,10 +293,10 @@ The fifth and the sixth columns denote the numbers of synthesized conformance te
 
 The results show that higher $k$-FS coverage criteria are more
 effective than lower $k$-FS.
-On average, 8.01 (125.0K / 15.6K) 1-FS-TRs exist per each 0-FS-TR, and 15.17 (1,896.1K
+On average, 8.03 (125.0K / 15.6K) 1-FS-TRs exist per each 0-FS-TR, and 15.17 (1,896.1K
 / 125.0K) 2-FS-TRs exist per each 1-FS-TR.
 %
-It means that each node or branch is used in 8.01 different language features,
+It means that each node or branch is used in 8.03 different language features,
 and each language feature could be used in 15.17 other language features on average.
 %
 For a more detailed information, we draw a histogram of the number of covered
