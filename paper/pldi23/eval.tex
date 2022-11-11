@@ -204,7 +204,7 @@ We detected a severe bug\footnote{
 calls.
 %
 For example, the following code must return a rejected \jscode{Promise} object
-because a non-iterable object \jscode{\{\}} is assigned to an array
+because a non-iterable value \jscode{undefined} is assigned to an array
 destructuring pattern \jscode{[]} in \jscode{async} arrow function:
 %
 \begin{lstlisting}[style=JS, basicstyle=\footnotesize\ttfamily]
@@ -225,14 +225,13 @@ Test262 after changing the semantics of \jscode{async} functions.
   \end{quote}
 }
 %
-\noindent
-We also detected other similar bugs related to generators in the SWC transpiler,
-and its main developer appreciated our work and requested us to apply our tool
-for SWC using the \scode{jsc.minify} option as well.\footnote{
-  We anonymized links of bug reports for double-blinded reviewing.
-  % TODO during camera-ready
-  % https://github.com/swc-project/swc/issues/6375
-}
+% We also detected other similar bugs related to generators in the SWC transpiler,
+% and its main developer appreciated our work and requested us to apply our tool
+% for SWC using the \scode{jsc.minify} option as well.\footnote{
+%   We anonymized links of bug reports for double-blinded reviewing.
+%   % TODO during camera-ready
+%   % https://github.com/swc-project/swc/issues/6375
+% }
 
 %----------------------------------------%
 % \paragraph{\textbf{JSC}}
@@ -272,8 +271,8 @@ for SWC using the \scode{jsc.minify} option as well.\footnote{
 \begin{table}
 \caption{
   Comparison of synthesized conformance test suite guided by five different
-  graph coverage criteria: 1) a node-or-branch coverage criterion, and 2) 1-FS,
-  3) 2-FS, 4) 1-FCPS, and 5) 2-FCPS node-or-branch coverage criteria.
+  graph coverage criteria: 1) 0-FS, 2) 1-FS, 3) 2-FS, 4) 1-FCPS, and 5) 2-FCPS
+  node-or-branch coverage criteria.
 }
 \vspace*{-.5em}
 {
@@ -294,7 +293,7 @@ for SWC using the \scode{jsc.minify} option as well.\footnote{
 
 \toprule\\[-1.6em]
 
-node-or-branch
+0-FS node-or-branch
 & \x{10.0}    & \x{5.6}     & \x{15.6}    & \x{2,111} & \x{45}  \\\hline
 1-FS node-or-branch
 & \x{79.3}    & \x{45.7}    & \x{125.0}   & \x{6,766} & \x{60}  \\\hline
