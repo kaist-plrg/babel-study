@@ -103,7 +103,7 @@ if a test fails on all engines, we do not use the test.
 Table~\ref{tab:conform-bugs} summarizes the conformance bugs
 detected by $\tool$ in all the evaluation targets.
 We manually inspected the failed conformance test cases,
-categorized them as \inred{107} distinct conformance bugs, and reported them to
+found \inred{107} distinct conformance bugs, and reported them to
 the corresponding developers.
 %
 As a result, \inred{69} out of \inred{107} bugs were officially confirmed, and
@@ -525,108 +525,57 @@ while 1-FCPS and 2-FCPS coverage criteria can.
 
 \begin{figure}
   \centering
-  \begin{subfigure}{0.19\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{img/cov-0}
-    \subcaption{Baseline.}
+  \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=\textwidth]{img/test262-time}
+    \caption{The changes by time.}
   \end{subfigure}
-  \begin{subfigure}{0.19\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{img/cov-1}
-    \subcaption{1-FS}
-  \end{subfigure}
-  \begin{subfigure}{0.19\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{img/cov-1-fcp}
-    \subcaption{1-FCPS}
-  \end{subfigure}
-  \begin{subfigure}{0.19\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{img/cov-2}
-    \subcaption{2-FS}
-  \end{subfigure}
-  \begin{subfigure}{0.19\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{img/cov-2-fcp}
-    \subcaption{2-FCPS}
+  \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=\textwidth]{img/test262-venn}
+    \caption{The venn diagrams.}
   \end{subfigure}
   \caption{
-    The changes of $k$-FS and $k$-FCPS node-or-branch coverage criteria with
-    elapse of time.
+    The changes by time and venn diagrams of covered $k$-FS-TPs and
+    $k$-FCPS-TPs for the synthesized conformance tests (\sname{syn-test}) via
+    $\tool$ and conformance tests in Test262 (\sname{test262}).
   }
-  \label{fig:cov-time}
+  \label{fig:test262}
 \end{figure}
 
 %----------------------------------------%
 
-\begin{figure}
-  \centering
-  \begin{subfigure}{0.19\textwidth}
-    \venn{\x{2.7K}}{\x{14.5K}}{\x{1.0K}}
-    {0.15}{0.80}{0.05}
-    \subcaption{Baseline.}
-  \end{subfigure}
-  \begin{subfigure}{0.19\textwidth}
-    \venn{\x{19.3K}}{\x{69.4K}}{\x{26.3K}}
-    {0.17}{0.60}{0.23}
-    \subcaption{1-FS}
-  \end{subfigure}
-  \begin{subfigure}{0.19\textwidth}
-    \venn{\x{128.8K}}{\x{213.4K}}{\x{114.7K}}
-    {0.28}{0.47}{0.25}
-    \subcaption{1-FCPS}
-  \end{subfigure}
-  \begin{subfigure}{0.19\textwidth}
-    \venn{\x{146.2K}}{\x{206.2K}}{\x{1.6M}}
-    {0.07}{0.10}{0.82}
-    \subcaption{2-FS}
-  \end{subfigure}
-  \begin{subfigure}{0.19\textwidth}
-    \venn{\x{612.4K}}{\x{304.4K}}{\x{3.3M}}
-    {0.15}{0.07}{0.78}
-    \subcaption{2-FS}
-  \end{subfigure}
-  \caption{
-    Venn diagrams of covered TRs of $k$-FS and $k$-FCPS node-or-branch coverage
-    criteria for Test262 and synthesized tests via $\tool$.
-  }
-  \label{fig:venn-test262}
-\end{figure}
-
-
-%----------------------------------------%
-
-We compare the coverage criteria of conformance tests automatically synthesized
-via $\tool$ with that of Test262, the official JavaScript conformance test
-suite.
+We compare the coverage of automatically synthesized conformance tests with that
+of Test262, the official JavaScript conformance test suite.
 %
-As described in Section~\ref{sec:impl}, $\tool$ is based on $\esmeta$ and only
-targets the language features supported in the tool.
+As described in Section~\ref{sec:impl}, the baseline tool $\jest$ relies on the
+mechanized specification extracted from $\esmeta$.
 %
-Thus, we removed \inred{23,231} out of \inred{47,141} conformance tests in
-Test262 that utilize language features not supported in $\esmeta$ for a fair
+Thus, we need to filter out conformance tests in Test262 that utilize language
+features not supported in the extracted mechanized specification for a fair
 comparison.
 %
-We measured five different $k$-FS and $k$-FCPS node-or-branch coverage criteria
-for \inred{23,910} applicable conformance tests.
+We follow the methodology usually used in prior work~\cite{kjs, jiset, javert}
+to remove inapplicable tests in Test262.
 %
-Figure~\ref{fig:cov-time} shows the change of $k$-FS-TPs and $k$-FCPS-TPs with
-elapse of time, and the dotted line shows the coverage of Test262 in each
-criterion.
+Then, we measured the coverage of 23,910 applicable Test262 conformance tests
+with five different $k$-FS and $k$-FCPS node-or-branch coverage criteria.
 %
-Figure~\ref{fig:venn-test262} depicts Venn diagrams of covered TRs of $k$-FS and
-$k$-FCPS node-or-branch coverage  for Test262 and synthesized tests via $\tool$.
+Figure~\ref{fig:test262} shows (a) the changes by time and (b) venn diagrams of
+covered $k$-FS-TPs and $k$-FCPS-TPs for the synthesized conformance tests
+(\sname{syn-test}) via $\tool$ and conformance tests in Test262
+(\sname{test262}).
 %
-In the baseline, the coverage of synthesized tests is less than that of Test262,
-and covers only \inred{1.0K} TRs that not covered by Test262.
+Without any feature-sensitive coverages, the coverage of synthesized tests is
+less than that of Test262, and only 5.2\% (0.9K) 0-FS-TRs are newly covered by
+the synthesized tests.
 %
-However, the coverage of synthesized exceeds the coverage of Test262 when using
-feature-sensitive coverages.
+On the other hand, number of $k$-FS-TRs only covered by synthesized tests
+increase when using higher $k$: 28.7K (19.0\%) 1-FS-TRs and 1.65M (80.8\%)
+2-FS-TRs.
 %
-In addition, the number of TRs only covered by synthesized tests also increases,
-and the conformance tests synthesized with $2$-FCPS-TRs cover \inred{3.3M}
-2-FCPS-TRs not covered by Test262.
+In addition, the number of 1-FCPS-TRs (or 2-FCPS-TRs) only covered by
+synthesized tests is higher than the number of 1-FS-TRs (or 2-FS-TRs): increse
+when using higher $k$: 80.0K (21.6\%) 1-FCPS-TRs and 3.26M (82.0\%) 2-FCPS-TRs.
 %
 We believe that this is why $\tool$ successfully detected diverse new bugs in
-existing JavaScript engines and transpilers, even though most of them are
-heavily tested using Test262.
+existing JavaScript implementations, even though they are heavily tested
+using Test262.
