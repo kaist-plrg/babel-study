@@ -61,9 +61,9 @@ This section evaluates feature-sensitive coverage criteria with the following re
   \item \textbf{RQ3 (Effectiveness of $k$-FCPS Coverage Criteria):} Are $k$-FCPS
     coverage criteria more effective than $k$-FS coverage criteria in detecting
     conformance bugs? (Section~\ref{sec:impact-k-fcps})
-  \item \textbf{RQ4 (Comparison with Test262):} \inblue{Can conformance tests
-    synthesized by $\tool$ improve Test262, the official JavaScript conformance
-    suite maintained by hand? (Section~\ref{sec:compare-test262})}
+  \item \textbf{RQ4 (Comparison with Test262):} Can conformance tests
+    synthesized by $\tool$ complement Test262, the official JavaScript conformance
+    suite maintained manually? (Section~\ref{sec:compare-test262})
 \end{itemize}
 
 We apply $\tool$ to the latest language specification (ES13, 2022)~\cite{es13},
@@ -525,57 +525,60 @@ while 1-FCPS and 2-FCPS coverage criteria can.
 
 \begin{figure}
   \centering
-  \begin{subfigure}{0.49\textwidth}
-    \includegraphics[width=\textwidth]{img/test262-time}
-    \caption{The changes by time.}
-  \end{subfigure}
+%
   \begin{subfigure}{0.49\textwidth}
     \includegraphics[width=\textwidth]{img/test262-venn}
-    \caption{The venn diagrams.}
+    \caption{Covered TRs by synthesized tests and Test262}
   \end{subfigure}
-  \caption{
-    The changes by time and venn diagrams of covered $k$-FS-TPs and
-    $k$-FCPS-TPs for the synthesized conformance tests (\sname{syn-test}) via
-    $\tool$ and conformance tests in Test262 (\sname{test262}).
+%
+  \begin{subfigure}{0.49\textwidth}
+    \includegraphics[width=\textwidth]{img/test262-time}
+    \caption{Covered TRs over time}
+  \end{subfigure}
+%
+  \caption{Covered $k$-FS-TRs and $k$-FCPS-TRs for synthesized tests via $\tool$ and Test262
   }
   \label{fig:test262}
+\vspace*{-1em}
 \end{figure}
 
 %----------------------------------------%
 
 We compare the coverage of automatically synthesized conformance tests with that
 of Test262, the official JavaScript conformance test suite.
-%
 As described in Section~\ref{sec:impl}, the baseline tool $\jest$ relies on the
-mechanized specification extracted from $\esmeta$.
-%
-Thus, we need to filter out conformance tests in Test262 that utilize language
-features not supported in the extracted mechanized specification for a fair
-comparison.
-%
-We follow the methodology usually used in prior work~\cite{kjs, jiset, javert}
+mechanized specification extracted by $\esmeta$.
+Thus, we filter out conformance tests in Test262 that utilize language
+features not supported in the extracted mechanized specification.
+We use the conventional methodology in the literature~\cite{kjs, jiset, javert}
 to remove inapplicable tests in Test262.
-%
 Then, we measured the coverage of 23,910 applicable Test262 conformance tests
-with five different $k$-FS and $k$-FCPS node-or-branch coverage criteria.
-%
-Figure~\ref{fig:test262} shows (a) the changes by time and (b) venn diagrams of
-covered $k$-FS-TPs and $k$-FCPS-TPs for the synthesized conformance tests
-(\sname{syn-test}) via $\tool$ and conformance tests in Test262
-(\sname{test262}).
-%
+with five $k$-FS and $k$-FCPS node-or-branch coverage criteria.
+
+
+Figure~\ref{fig:test262} shows
+(b) venn diagrams of
+the numbers of covered $k$-FS-TRs and 
+$k$-FCPS-TRs for the synthesized conformance tests (\sname{syn-test}) via
+$\tool$ and applicable conformance tests in Test262 (\sname{test262}) and
+(b) their changes over time.
 Without any feature-sensitive coverages, the coverage of synthesized tests is
 less than that of Test262, and only 5.2\% (0.9K) 0-FS-TRs are newly covered by
 the synthesized tests.
 %
-On the other hand, number of $k$-FS-TRs only covered by synthesized tests
-increase when using higher $k$: 28.7K (19.0\%) 1-FS-TRs and 1.65M (80.8\%)
-2-FS-TRs.
+On the other hand, the numbers of $k$-FS-TRs covered by only synthesized tests
+increase when using higher $k$: 28.7K (19.0\%) for 1-FS-TRs and 1.65M (80.8\%)
+for 2-FS-TRs.
 %
-In addition, the number of 1-FCPS-TRs (or 2-FCPS-TRs) only covered by
-synthesized tests is higher than the number of 1-FS-TRs (or 2-FS-TRs): increse
-when using higher $k$: 80.0K (21.6\%) 1-FCPS-TRs and 3.26M (82.0\%) 2-FCPS-TRs.
+In addition, the number of 1-FCPS-TRs (or 2-FCPS-TRs) covered by only
+synthesized tests is higher than the number of 1-FS-TRs (or 2-FS-TRs)
+covered by only synthesized tests:
+80.0K (21.6\%) for 1-FCPS-TRs and 3.26M (82.0\%) for 2-FCPS-TRs.
+Figure~\ref{fig:test262}(b) also shows that the coverage of Test262 is
+better than that of synthesized tests without any feature-sensitive
+coverages, but the coverage of synthesized tests outperforms that of
+Test262 with $2$-FS-TRs and $2$-FCPS-TRs.
 %
 We believe that this is why $\tool$ successfully detected diverse new bugs in
-existing JavaScript implementations, even though they are heavily tested
-using Test262.
+existing JavaScript implementations, even though they have been heavily tested
+using Test262 and various fuzzing techniques.
