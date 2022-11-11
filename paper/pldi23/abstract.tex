@@ -21,12 +21,12 @@ use the same functions.
 
 We present \textit{feature-sensitive (FS) coverage} as a novel coverage criterion
 to generate high-quality conformance tests for language implementations. 
-It is a general extension of graph coverage, which refines
+It is a general extension of graph coverage, refining
 conventional test requirements using the innermost enclosing language features.
 We also introduce \textit{feature-call-path-sensitive (FCPS) coverage},
 a variant of FS coverage, and extend both coverage criteria using the $k$-limiting approach.
 To evaluate the effectiveness of the new coverage criteria for language implementations,
-we apply them to a mechanized specification for JavaScript.
+we apply them to a mechanized specification of JavaScript.
 We extend $\jest$, the state-of-the-art JavaScript conformance test synthesizer
 using coverage-guided mutational fuzzing, with various FS and FCPS coverage criteria.
 For the latest JavaScript language specification (ES13, 2022), our tool automatically
@@ -34,7 +34,7 @@ synthesizes \inred{95,000} conformance tests in \inred{50} hours with five cover
 We evaluated the conformance of eight mainstream JavaScript implementations
 (four engines and four transpilers) with the synthesized conformance
 tests and discovered bugs in all of them.
-Our tool detected \inred{115} distinct conformance bugs (\inred{40} in engines
+The tool detected \inred{115} distinct conformance bugs (\inred{40} in engines
 and \inred{75} in transpilers), \inred{80} of which were confirmed by
 the developers and \inred{40} of which were newly discovered bugs.
 \end{abstract}

@@ -13,7 +13,7 @@ Therefore, ensuring correct and consistent execution environments in different
 implementations of the same language becomes crucial.
 However, since manually maintaining conformance test suites for
 real-world programming languages is cumbersome and labor-intensive, only a
-restricted number of programming languages, such as JavaScript~\cite{test262}
+small number of programming languages, such as JavaScript~\cite{test262}
 and XML~\cite{xml-test-suite}, provide their official conformance test suites.
 Thus, researchers have presented ways to test the
 conformance of multiple implementations using differential
@@ -49,13 +49,13 @@ While we can use code coverage rather than graph coverage
 to generate tests for ``actual language implementations,''
 it will lead to different coverage information for different implementations.
 On the contrary, graph coverage for mechanized language specifications
-will lead to uniform coverage information for different implementations.
+will lead to uniform coverage information for multiple implementations.
 %
 Various programming languages, such as OCaml~\cite{ocaml-light-spec},
 C~\cite{c-light-spec}, C++\cite{cpp-spec}, Java~\cite{k-java},
 JavaScript~\cite{jiset}, and POSIX shell~\cite{posix-shell-spec},
 have mechanized specifications that formally describe their
-semantics using diverse metalanguage and frameworks, such as Ott~\cite{ott}, Skel~\cite{skel}, and the
+semantics using diverse metalanguages and frameworks, such as Ott~\cite{ott}, Skel~\cite{skel}, and the
 $\kframework$ framework~\cite{kframework}.
 %
 Since mechanized specifications use functions to describe the semantics of language features,
@@ -66,18 +66,17 @@ defined with the $\kframework$ framework, which describes language semantics
 as a set of reduction rules.
 Consider a directed graph whose nodes are reduction rules and edges are
 their dependencies in $\kjava$.
-Then, we can measure the coverage of a test suite based on whether each test
-covers the test requirements of a graph coverage criterion in the directed graph
-denoting $\kjava$.
+Then, we can measure the coverage of a test suite in the directed graph denoting $\kjava$
+based on whether each test covers the test requirements of a graph coverage criterion.
 
 %----------------------------------------%
 
 \paragraph{\textbf{Challenges}}
 However, graph coverage may not produce high-quality conformance tests
 for mechanized language specifications.
-Mechanized specifications are usually defined in a modular way with helper functions.
+Mechanized specifications are usually written in a modular way with helper functions.
 Such a modular definition has the advantages of preventing duplicated or similar
-definitions of language semantics, reducing the size of the mechanized
+definitions of language semantics, reducing the size of a mechanized
 specification, and enhancing its readability.
 At the same time, reusing the same helper function for different parts
 may degrade the quality of conformance testing.
@@ -90,9 +89,9 @@ use the same functions, degrading conformance testing quality.
 For example, consider a mechanized specification for JavaScript that represents the
 abstract algorithms described in the official language specification, ECMA-262~\cite{es13}.
 Here, most of the semantics for the addition and subtraction operators are
-defined with the same \textbf{EvaluateStringOrNumericBinaryExpression} algorithm as a helper function.
-If conformance tests for addition operators already cover the possible test
-requirements in the algorithm, most conformance tests for subtraction operators
+defined using the same \textbf{EvaluateStringOrNumericBinaryExpression} algorithm as a helper function.
+If conformance tests for the addition operator already cover the test
+requirements in the algorithm, most conformance tests for the subtraction operator
 are removed after the coverage-guided test minimization process.
 However, real-world JavaScript engines are highly optimized and often have
 specialized execution paths for different language features,
@@ -102,14 +101,14 @@ well, even though similar edge cases for the addition operator are already teste
 
 %----------------------------------------%
 
-Similarly, it may not distinguish test requirements of different
+Furthermore, it may not distinguish test requirements of different
 parts of the same language feature when their semantics descriptions
-use the same functions, which degrades the quality of conformance testing.
+use the same functions, degrading the quality of conformance testing.
 For example, consider the mechanized specification for JavaScript again.
 In JavaScript, the \jscode{String.prototype.normalize} built-in API normalizes
 a given string into a normalization form named by a given argument.
 The definition of the semantics for this built-in API feature uses
-\textbf{ToString} algorithm as a helper function twice to represent
+the \textbf{ToString} algorithm as a helper function twice to represent
 conversions to strings for 1) \jscode{this} value and 2) the first argument of the API call.
 Assume that a conformance test suite already covers the test requirements in the
 \textbf{ToString} algorithm thanks to various values for \jscode{this} value.
@@ -121,9 +120,9 @@ of the conversion from the first argument to string when performing coverage-gui
 \paragraph{\textbf{This Work}}
 
 To alleviate this problem, we introduce \textit{feature-sensitive (FS) coverage},
-a novel coverage criterion to generate high-quality conformance testing for
+a novel coverage criterion to generate high-quality conformance tests for
 programming language implementations. It is a general extension of graph coverage,
-which refines test requirements using the innermost enclosing language features.
+refining test requirements using the innermost enclosing language features.
 FS coverage resolves the problem of sharing the same helper functions
 for the semantics of different language features.
 We also present a \textit{feature-call-path-sensitive (FCPS) coverage},
@@ -131,7 +130,7 @@ a variant of FS coverage with feature-call-paths from language features to test 
 FCPS coverage resolves the problem of sharing the same helper functions
 for the semantics of different parts of the same language feature.
 In addition, we extend both coverage criteria using the $k$-limiting approach as $k$-FS
-coverage and $k$-FCPS coverage, respectively.
+coverage and $k$-FCPS coverage.
 To evaluate the effectiveness of the new coverage criteria,
 we apply them to a real-world programming language, JavaScript.
 We select JavaScript as the evaluation target language because
@@ -145,7 +144,7 @@ synthesizes \inred{95,000} conformance tests in \inred{50} hours with five cover
 We evaluated the conformance of eight mainstream JavaScript implementations
 (four engines and four transpilers) with the synthesized conformance tests
 and discovered bugs in all of them.
-Our tool detected \inred{115} distinct conformance bugs (\inred{40} in engines
+The tool detected \inred{115} distinct conformance bugs (\inred{40} in engines
 and \inred{75} in transpilers), \inred{80} of which were confirmed by
 the developers and \inred{40} of which were newly discovered bugs.
 
@@ -157,7 +156,7 @@ We summarize our contributions as follows:
   \item
     We introduce novel \textit{feature-sensitive (FS) coverage} to discriminate
     test requirements with the innermost enclosing language features to enhance
-    the quality of conformance testing of programming language implementations.
+    the quality of conformance testing for programming language implementations.
     It can resolve the problem of sharing the same helper
     functions for the semantics of different language features.
   \item 
@@ -169,5 +168,5 @@ We summarize our contributions as follows:
     the traditional coverage criteria in the
     context of conformance bug detection in eight mainstream
     JavaScript implementations (four engines and four transpilers) with the latest ECMA-262
-    (ES13, 2022).
+    (ES13, 2022). The tool uncovered \inred{40} brand-new bugs.
 \end{itemize}

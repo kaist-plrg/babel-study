@@ -5,7 +5,7 @@ for a directed graph and explains representative coverage criteria as examples.
 Then, we introduce \textit{feature-sensitive (FS) coverage} criteria as general
 extensions of graph coverage criteria to discriminate semantics between
 different language features.
-Finally, we define a \textit{feature-call-path-sensitive (FCPS) coverage}
+Finally, we define \textit{feature-call-path-sensitive (FCPS) coverage}
 criteria as variants of FS coverage criteria to distinguish different parts in
 the semantics of the same language feature.
 
@@ -120,7 +120,7 @@ depeicted as follows:
 \]
 And, $\patmap{\graph}(\subtest)$ is equal to $\patmap{\graph}(\addtest)$ except
 for nodes labeled 4, 5, and 6 in the $\textbf{Evaluation}$ SDO for subtraction
-rather than 1, 2 and 3 in the $\textbf{Evaluation}$ SDO for addition.
+rather than 1, 2, and 3 in the $\textbf{Evaluation}$ SDO for addition.
 %
 The following path $\pat$ is a subpath of both $\patmap{\graph}(\addtest)$ and
 $\patmap{\graph}(\subtest)$:
@@ -262,10 +262,10 @@ The complete path coverage criterion might have infinite TRs because of
 recursions and loop structures.
 %
 To resolve this problem, \citet{cov-def} have presented a \textit{simple path
-coverage} criterion that deals with only simple paths as TRs.
+coverage} criterion that considers only simple paths as TRs.
 %
 A path $\node_0 \edge{\annot_0} \cdots \edge{\annot_{m-1}} \node_m$ is
-\textit{simple} if no duplicated nodes in the path, with the exception that the
+\textit{simple} if there are no duplicated nodes in the path, with the exception that the
 first and last nodes may be identical: $\forall i, j. \; \node_i = \node_j
 \Rightarrow (i = j \vee \{ i, j \} = \{ 0, m \})$.
 %
@@ -287,11 +287,11 @@ Consider the CFG $\graph$ in Figure~\ref{fig:spec-cfg} and the test
 set $T$ in (\ref{equ:testset}), including $\addtest$ and $\subtest$.
 %
 If we measure the 3-limiting path coverage $\kpathcov{3}{\graph}$ for
-$T$, both a node labeled 17 and the path $\pat$ in (\ref{equ:subpath}) are
+$T$, both the node labeled 17 and the path $\pat$ in (\ref{equ:subpath}) are
 test requirements $\trset{\graph}$.
 %
 First, the prefix path, whose last node is 17, of $\patmap{\graph}(\addtest)$
-covers both TRs: node labeled 17 and $\pat$.
+covers both TRs: the node labeled 17 and $\pat$.
 %
 Thus, the test $\addtest$ for addition covers both of them.
 %
@@ -299,7 +299,7 @@ Similarly, the test $\subtest$ for subtraction covers both of them for the same
 reason.
 %
 Unfortunately, either $\addtest$ or $\subtest$ might be removed in the program
-pool because they cover the same TRs, node labeled 17 and the path $\pat$.
+pool because they cover the same TRs, the node labeled 17 and the path $\pat$.
 
 
 %----------------------------------------%
@@ -398,15 +398,14 @@ $
 
 \paragraph{\textbf{Example}}
 %
-For the CFG $\graph$ in Figure~\ref{fig:spec-cfg}, we could define the
-feature mapping:
+For the CFG $\graph$ in Figure~\ref{fig:spec-cfg}, the feature mapping is as follows:
 \begin{equation}\label{equ:featmap}
   \featmap(\node) = \left\{
-    \begin{array}{llll}
-      \addfeat & \tif \node \in \{ 1, 2, 3\} &
+    \begin{array}{lllll}
+      \addfeat & \tif \node \in \{ 1, 2, 3\} &\qquad\qquad&
       \numfeat & \tif \node \in \{ 23, 24, 25, 26 \} \\
 
-      \subfeat & \tif \node \in \{ 4, 5, 6\} &
+      \subfeat & \tif \node \in \{ 4, 5, 6\} &&
       \bot & \telse
     \end{array}
   \right.
@@ -435,13 +434,13 @@ feature of $\addpat$ is $\extfeat(\css{\addpat}) = \featmap(1) =
 \addfeat$.
 %
 Hence, if we use a FS node coverage criterion $\fnodecov{\graph}$, the path
-$\addpat$ covers a FS-TS $(17, \addfeat)$, and the test $\addtest$ for addition
+$\addpat$ covers a FS-TR $(17, \addfeat)$, and the test $\addtest$ for addition
 covers it as well.
 %
 In a similar way, we know that the innermost enclosing language feature of $\subpat$
 is $\extfeat(\css{\subpat}) = \featmap(4) = \subfeat$.
 %
-It means that $\subtest$ covers a new FS-TS $(17, \subfeat)$ instead of $(17,
+It means that $\subtest$ covers a new FS-TR $(17, \subfeat)$ instead of $(17,
 \addfeat)$ and remains in the program pool.
 
 %----------------------------------------%
@@ -455,7 +454,7 @@ criteria. The extended feature extractor $\extfeats{k}: \css{\patset{\graph}}
     \begin{array}{ll}
       \epsilon & \tif k = 0 \vee m = 0\\
 
-      \extfeats{k-1}([\node_1, \cdots, \node_{m-1}]) + \feat & \tif
+      \extfeats{k-1}([\node_1, \cdots, \node_{m-1}]) \cdot \feat & \tif
       \featmap(\node_m) = \feat\\
 
       \extfeats{k}([\node_1, \cdots, \node_{m-1}]) & \telse\\
@@ -494,7 +493,7 @@ $
 Consider a JavaScript program \jscode{[] - (2n + 1)} as a test $\test$ with the
 graph in Figure~\ref{fig:spec-cfg}.
 %
-It throws a \textbf{TypeError} exception in node labeled 17 during the execution
+It throws a \textbf{TypeError} exception in the node labeled 17 during the execution
 of its sub-expression \jscode{2n + 1}.
 %
 Let $\pat$ be a prefix path, whose last node is labeled 17, of the execution path
@@ -518,14 +517,14 @@ edge cases in JavaScript engines and transpilers because they are heavily
 optimized and handle even the same language features differently depending on which
 language features are used together.
 %
-For example, a \textit{destructuring pattern} helps developers easily declare
+For example, a \textit{destructuring pattern}~\cite{jsdp} helps developers easily declare
 variables with the values stored in the properties of an object or an array.
 %
 However, JavaScript engines and transpilers often have a different execution
 path to handle the pattern when it is declared in a \jscode{for-in/of} statement.
 %
 Actually, the GraalJS~\cite{graaljs} engine and the Babel~\cite{babel}
-transpiler contain conformance bugs and crashing bugs that are
+transpiler contain conformance bugs and crashing bugs, respectively, that are
 reproducible only with a combination of a destructuring pattern and a \jscode{for-in/of}
 statement.\footnote{
   We anonymized links of bug reports for double-blinded reviewing.
@@ -541,7 +540,7 @@ statement.\footnote{
 Criteria}\label{sec:fcps-cov}
 
 As explained in Section~\ref{sec:same-feat}, a more fine-grained set of test
-requirements is necessary to distinguish different parts of the semantics even
+requirements is necessary to distinguish different parts of the semantics
 in the same language feature.
 Thus, we define \textit{feature-call-path-sensitive (FCPS)
 coverage} criteria as variants of FS coverage criteria.
@@ -549,7 +548,7 @@ coverage} criteria as variants of FS coverage criteria.
 The core idea is to distinguish TRs using paths from the innermost enclosing language
 features.
 %
-However, if we keep paths as it is, the number of TRs exponentially increases
+However, if we keep paths as they are, the number of TRs exponentially increases
 because of the path explosion caused by sequential branches.
 %
 Hence, we abstract a path $\pat$ to a corresponding \textit{feature-call-path}
@@ -573,7 +572,7 @@ We define the \textit{feature-call-path extractor} $\extfcp:
       \tif \fcp = (\feat, [\node'_0, \cdots, \node'_{m'}]) \wedge
       \exists i. \tst \node'_i = \node_m\\
 
-      (\feat, \nodes + \node_m) & \tif \fcp = (\feat, \nodes)\\
+      (\feat, \nodes \cdot \node_m) & \tif \fcp = (\feat, \nodes)\\
     \end{array}
   \right.
 \end{equation}
@@ -590,7 +589,7 @@ However, it refreshes the result when there exists a mapping from the current
 call-site to a language feature ($\featmap(\node_m) = \feat$).
 %
 It also removes cycles to prevent a possibly infinite
-length of feature-call-path and remove the duplicated cases ($\exists i. \tst
+length of feature-call-path and removes duplicated cases ($\exists i. \tst
 \node'_i = \node_m$).
 
 %----------------------------------------%
@@ -660,7 +659,7 @@ the extraction algorithm $\extfcp$.
 %
 Then, since the algorithm \textbf{GetIdentifierReference} contains a
 self-recursion, there exists an infinite number of possible feature-call-paths
-from $\idfeat$ to node labeled 29:
+from $\idfeat$ to the node labeled 29:
 %
 \begin{equation}\label{fcp-inf-example}
   (\idfeat, [27, 28]) \qquad
@@ -669,7 +668,7 @@ from $\idfeat$ to node labeled 29:
   \cdots
 \end{equation}
 %
-However, we remove cycles in feature-call-paths to resolve this issue, and there
+Thus, we remove cycles in feature-call-paths to resolve this issue, and there
 exists only two possible feature-call-paths: $(\idfeat, [27, 28])$ and
 $(\idfeat, [27, 28, 30])$.
 
@@ -684,7 +683,7 @@ we define $k$-FCPS coverage criteria by extending $\extfcp$ into $\extfcps{k}:
     \begin{array}{ll}
       (\epsilon, \epsilon) & \tif k = 0 \vee m = 0\\
 
-      (\feats + \feat, [\node_m]) & \tif \featmap(\node_m) = \feat \wedge
+      (\feats \cdot \feat, [\node_m]) & \tif \featmap(\node_m) = \feat \wedge
       \extfcps{k-1}([\node_1, \cdots, \node_{m-1}]) = (\feats, \_)\\
 
       \fcps & \tif \fcps = (\epsilon, \epsilon)\\
@@ -693,7 +692,7 @@ we define $k$-FCPS coverage criteria by extending $\extfcp$ into $\extfcps{k}:
       \tif \fcp = (\feats, [\node'_0, \cdots, \node'_{m'}]) \wedge
       \exists i. \tst \node'_i = \node_m\\
 
-      (\feats, \nodes + \node_m) & \tif \fcp = (\feats, \nodes)\\
+      (\feats, \nodes \cdot \node_m) & \tif \fcp = (\feats, \nodes)\\
     \end{array}
   \right.
 \end{equation}
@@ -719,11 +718,11 @@ $
 $
     \item a path $\pat$ \textbf{covers} a $k$-FCPS-TR $(\tr, \fcps)$ when $\pat$
       covers the original TR $\tr$ and $\fcps$ is the extended feature-call-path
-      extracted from $\pat$:
-$
+extracted from $\pat$ bounded by $k$:
+\[
         \pat \cover (\tr, \fcps) \iff \pat \cover \tr \wedge
         \extfcps{k}(\css{\pat}) = \fcps
-$
+\]
   \end{itemize}
 \end{definition}
 
@@ -773,7 +772,7 @@ annotated with equations in Theorem~\ref{thm:subs}.
   condition for each valid TR $\tr' \in \trset{\graph}'$:
   %
   \begin{equation}\label{equ:subs-lemma}
-    \forall \test \in \testset. \; \test \cover \tr \Rightarrow \test \cover' \tr'
+    \forall \test \in \testset. \; \test \cover \tr \Rightarrow \test \cover' \tr'.
   \end{equation}
   %
   Then, $\cov{\graph}$ subsumes $\cov{\graph}'$ ($\cov{\graph}
@@ -812,11 +811,11 @@ annotated with equations in Theorem~\ref{thm:subs}.
   is valid.
   %
   There exists a prefix path $\pat$ of $\patmap{\graph}(\test)$ such that $\pat
-  \cover (\tr, \feats)$ ($\because$ (\ref{equ:test-cover}))
+  \cover (\tr, \feats)$ ($\because$ (\ref{equ:test-cover})).
   %
   Then, a $k$-FS-TR $(\tr, \extfeats{k}(\css{\pat}))$ satisfies the condition
   (\ref{equ:subs-lemma}) because of the inductive definition of $\extfeats{k}$
   in (\ref{equ:extfeats}).
   %
-  Finally, $k$-FS coverage criteria subsumes $(k-1)$-FS coverage criteria.
+  Finally, $k$-FS coverage criteria subsume $(k-1)$-FS coverage criteria.
 \end{proof}

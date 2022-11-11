@@ -1,7 +1,7 @@
 \section{Implementation}\label{sec:impl}
 
 This section introduces our JavaScript
-conformance test synthesizer supporting $k$-FS and $k$-FCPS coverage criteria,
+conformance test synthesizer supporting $k$-FS and $k$-FCPS coverage criteria
 and explains how it can detect conformance bugs in JavaScript implementations.
 
 %----------------------------------------%
@@ -41,7 +41,7 @@ $\tool$ consists of four modules:
     of JavaScript programs as the initial \textit{program pool}.
     It uses the JavaScript syntax described in the language specification to
     cover diverse alternatives in syntactic productions.
-    $\tool$ uses existing two synthesizers: 1) a non-recursive synthesizer and
+    $\tool$ uses two existing synthesizers: 1) a non-recursive synthesizer and
     2) a built-in synthesizer.
     %
   \item \textsf{\textbf{Target Selector}}:
@@ -56,14 +56,14 @@ $\tool$ consists of four modules:
     %
     If a program does not cover new TRs, it removes the program from the pool.
     %
-    Then, it selects a program as a mutation target in the pool that potentially
+    Then, it selects a program in the pool as a mutation target that potentially
     increases the coverage or stops the iteration when the current status
     satisfies the termination condition.
     %
   \item \textsf{\textbf{Program Mutator}}:
     %
     To increase the coverage in the CFG, \textsf{Program Mutator} repeatedly
-    tries to mutate a JavaScript program to a new one based on mutation methods.
+    tries to mutate a JavaScript program to a new one using mutation methods.
     %
     $\tool$ uses five mutation methods: 1) random mutation, 2)
     nearest syntax tree mutation, 3) string substitution, 4) object
