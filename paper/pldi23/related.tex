@@ -1,56 +1,18 @@
 \section{Related Work}\label{sec:related}
 
 \paragraph{\textbf{Coverage Criteria in Software Testing}}
-%
-Coverage criteria in software testing are essential in measuring the quality of
-test inputs.
-%
+Coverage criteria in software testing are essential in measuring the quality of test inputs.
 The most common coverage criteria are structural coverages in a given program's
-control-flow graph (CFG).
-%
-For example, statement coverage measures whether test inputs execute all
-statements by test inputs, and branch coverage focuses on branches of the
-conditional structures, including loops.
-%
-In addition, researchers have presented their diverse variants to check whether
-test inputs cover more complex cases, such as a modified condition/decision
-coverage (MC/DC)~\cite{cov-mcdc} and simple or prime path
-coverages~\cite{cov-def}.
-%
-On the other hand, several coverage criteria utilize additional information
-beyond structural information in CFGs.
-%
-For example, data-flow coverage~\cite{cov-dataflow} measures whether test inputs
-cover possible def-use paths of variables in a given CFG.
-%
-Besides, \citet{cov-partition} presented partition-based coverage metrics, a way
-to partition test requirements based on function parameter types written in a
-dynamically-typed language.
-
-%----------------------------------------%
-
+control-flow graph (CFG)~\cite{cov-mcdc,cov-def} also utilizing
+data-flow information~\cite{cov-dataflow} and type information~\cite{cov-partition}.
 On the other hand, model-based coverage~\cite{cov-model-book} criteria consider
-specialized abstract behavior models rather than the CFG of a program and
-define the test requirements in the model.
-%
-For instance, \citet{cov-model-api} first presented abstract models for the
-possible state transitions of server/client.
-%
-Then, they defined the coverage of such models to test the APIs of distributed
-data storage.
-%
-\citet{cov-param} designed an abstract model for autonomous driving systems
-(ADSs) and presented parameter coverage, which measures whether test inputs
-cover each parameter of ADS.
-%
-For deep neural networks (DLLs), neuron coverage~\cite{cov-neuron} and its
-variants~\cite{cov-k-neuron} have been presented and actively used in concolic
-testing~\cite{cov-concolic-dll} and coverage-guided
-fuzzing~\cite{cov-fuzz-tensor, cov-fuzz-dl} for DLLs.
-%
+specialized abstract behavior models and define the test requirements in the model.
+Such models include state transitions~\cite{cov-model-api},
+autonomous driving systems~\cite{cov-param},
+deep neural networks (DLLs)~\cite{cov-neuron,cov-k-neuron,cov-concolic-dll,
+cov-fuzz-tensor, cov-fuzz-dl}.
 However, there are no specialized coverage criteria for programming language
 tools, such as compilers, interpreters, and transpilers.
-%
 In this paper, we first presented feature-sensitive coverages as general
 extensions of graph coverages for programming language tools to discriminate
 test requirements based on enclosing language features or feature-call-paths.
