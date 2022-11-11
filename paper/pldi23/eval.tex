@@ -1,31 +1,65 @@
 \section{Evaluation}\label{sec:eval}
 
 To evalute feature-sensitive coverage criteria, we apply $\tool$ to the latest
-language specification (ES13, 2022)~\cite{es13} with different $k$-FS and
-$k$-FCPS node-or-branch coverage criteria to synthesize JavaScript conformance
-tests.
-%
-As a result, we synthesize \inred{237,981} conformance tests using $\tool$ with
-five different graph coverage criteria: 1) a node-or-branch coverage and 2)
-1-FS, 3) 2-FS, 4) 1-FCPS, and 5) 2-FCPS node-or-branch coverage criteria.
-%
-Our evaluation platform is a 4.0GHz Intel(R) Core(TM) i7-6700k and 32GB of RAM
-(Samsung DDR4 2133MHz 8GB*4), and it takes \inred{50} hours to synthesize
+language specification (ES13, 2022)~\cite{es13} to synthesize JavaScript
 conformance tests.
 %
-We evaluated the synthesized conformance test suite with the following four
-research questions:
+Our tool synthesizes 237,981 conformance tests in 50 hours using $\tool$ with
+five different graph coverage criteria: 1) 0-FS, 2) 1-FS, 3) 2-FS, 4) 1-FCPS,
+and 5) 2-FCPS node-or-branch coverage.
+%
+We performe our experiments with five Ubuntu machines with a 4.0GHz Intel(R)
+Core(TM) i7-6700k and 32GB of RAM (Samsung DDR4 2133MHz 8GB*4).
+
+%----------------------------------------%
+
+Using the synthesized JavaScript conformance tests, we check the conformance of
+eight mainstream implementations (four engines and four transpilers) listed in
+Table~\ref{tab:conform-bugs}.
+%
+We select them as evaluation targets because they support all the language
+features in ES13;
+%
+V8, JSC, and SpiderMonkey are JavaScript engines used in web browsers, Google
+Chrome, Apple Safari, and Mozilla Firefox, respectively.
+%
+GraalJS is a JavaScript engine built on GraalVM, a JDK distribution developed by
+Oracle written for JVM languages along with support for cloud-native and
+polyglot.
+%
+Babel and SWC are transpilers that desugar new language features into old ones,
+usually ES5.1 features, for legacy host environments.
+%
+Terser is a code compressor that reduces the code size by removing code
+fragments, making names smaller, or inlining variable references.
+%
+Finally, JavaScript Obfuscator obfuscates code to make it hard to understand and
+reverse-engineering.
+%
+For the transpiler conformance check, we use the V8 engine as the default engine
+to execute the transpiled code with assertions.
+%
+If a test fails in V8, we search for another engine that passes the test and use
+it for the transpiler conformance check.
+%
+However, we do not use the test for transpiler conformance check if it fails on
+all engines.
+
+%----------------------------------------%
+
+We evaluate the synthesized conformance tests using our feature-sensitive
+coverage criteria with the following four research questions:
 \begin{itemize}
-  \item \textbf{RQ1 (Conformance Bug Detection):} How many conformance bugs of
-    JavaScript engines and transpilers do conformance tests synthesized by
-    $\tool$ detect? (Section~\ref{sec:conform-bug})
+  \item \textbf{RQ1 (Conformance Bug Detection):} How many conformance bugs are
+    detected in JavaScript implementations by synthesized conformance tests?
+    (Section~\ref{sec:conform-bug})
   \item \textbf{RQ2 (Impact of $k$-FS Coverage Criteria):} Are $k$-FS coverage
     criteria effective in detecting conformance bugs?
     (Section~\ref{sec:impact-k-fs})
   \item \textbf{RQ3 (Impact of $k$-FCPS Coverage Criteria):} Are $k$-FCPS
     coverage criteria more effective than $k$-FS coverage criteria in detecting
     conformance bugs? (Section~\ref{sec:impact-k-fcps})
-  \item \textbf{RQ4 (Comparison with Test262):} Could conformance tests
+  \item \textbf{RQ4 (Comparison with Test262):} Can conformance tests
     synthesized by $\tool$ improve Test262, the official JavaScript conformance
     suite maintained by hand? (Section~\ref{sec:compare-test262})
 \end{itemize}
@@ -88,56 +122,55 @@ research questions:
 
 %----------------------------------------%
 
-Using the synthesized JavaScript conformance tests, we check the conformance of
-eight mainstream tools (four engines and four transpilers) listed in
-Table~\ref{tab:conform-bugs}.
-%
-We select them as evaluation targets because they support all the language
-features in ES13;
-%
-V8, JSC, and SpiderMonkey are JavaScript engines used in web browsers, Google
-Chrome, Apple Safari, and Mozilla Firefox, respectively.
-%
-GraalJS is a JavaScript engine built on GraalVM, a JDK distribution developed by
-Oracle written for JVM languages along with support for cloud-native and
-polyglot.
-%
-Babel and SWC are transpilers that desugar new language features into old ones,
-usually ES5.1 features, for legacy host environments.
-%
-Terser is a code compressor that reduces the code size by removing code
-fragments, making names smaller, or inlining variable references.
-%
-Finally, JavaScript Obfuscator obfuscates code to make it hard to understand and
-reverse-engineering.
-
-%----------------------------------------%
-
 Table~\ref{tab:conform-bugs} gives the distribution of the detected conformance
-bugs by \inred{237,981} synthesized conformance tests.
+bugs by 237,981 synthesized conformance tests.
 %
 We found conformance bugs in all the evaluation targets using the synthesized
 conformance tests.
 %
 In addition, we manually inspected the failed conformance test cases,
-categorized them as \inred{118} unique conformance bugs, and reported them to
-the developers of the target tools.
+categorized them as \inred{107} distinct conformance bugs, and reported them to
+the developers of implementations.
 %
-As a result, \inred{78} out of \inred{118} bugs were officially confirmed, and
-\inred{76} were newly discovered bugs.
+As a result, \inred{69} out of \inred{107} bugs were officially confirmed, and
+\inred{68} were newly discovered bugs.
 %
-The other \inred{40} reported bugs are still under review, or developers have
+The other \inred{38} reported bugs are still under review, or developers have
 not yet responded.
 %
-Among \inred{118} detected bugs, \inred{29} are engine bugs, and \inred{118} are
+Among \inred{107} detected bugs, \inred{24} are engine bugs, and \inred{83} are
 transpiler bugs.
 %
-Because V8 is the most trusted engine containing only three conformance bugs, we
-use it as the default engine during the transpiler conformance check.
-%
-If V8 fails a conformance test, we use another JavaScript engine that passes the
-test for the conformance check of a transpiler.
-%
+
+V8 (All engine);
+% https://github.com/oracle/graaljs/issues/673
+% https://github.com/tc39/ecma262/issues/2659
+% (EXAMPLE) null [ { [ Symbol . toPrimitive ] : () => { REF_ERR; } } ] 
+Graal - order of delete and short circuit => unreachable code becomes rechable
+% https://github.com/oracle/graaljs/issues/655
+% https://github.com/oracle/graaljs/issues/671
+% (EXAMPLE) function f() { /* unreachable */ } false && delete f();
+SpiderMonkey -
+2015 
+assing argumetns -> async function parameter
+expected -> unhandled rejected promise 
+result -> throw 
+Test262 x
+% https://github.com/tc39/proposal-async-await/issues/60
+% https://bugzilla.mozilla.org/show_bug.cgi?id=1799288
+% (EXAMPLE) (async function ([]) {})();
+JSC - property order
+% https://bugs.webkit.org/show_bug.cgi?id=247429
+SWC - Are you running fuzzer? If you don't mind, can you run it for the minifier
+instead?
+% https://github.com/swc-project/swc/issues/6375
+Babel - Temporal Dead Zone (TDZ) -> realize many TDZ bugs in Babel -> create
+"Spec: TDZ" label
+% https://github.com/babel/babel/issues/15150
+% (EXAMPLE) let x = x;
+% (EXAMPLE with TDZ option) const x = 0; x = 1;
+
+
 Among transpilers, Terser and JavaScript Obfuscator contain only \inred{15} and
 \inred{3} bugs, respectively, but Babel and SWC have \inred{39} and
 \inred{32} transpiler conformance bugs, respectively.
