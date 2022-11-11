@@ -1,40 +1,26 @@
-\section{Implementation}\label{sec:impl}
-
-This section introduces our JavaScript
-conformance test synthesizer supporting $k$-FS and $k$-FCPS coverage criteria
-and explains how it can detect conformance bugs in JavaScript implementations.
 
 %----------------------------------------%
 %----------------------------------------%
-
-\subsection{Overall Structure}\label{sec:overall}
+%
+%\subsection{Overall Structure}\label{sec:overall}
 
 \begin{figure}
-  \includegraphics[width=\textwidth]{img/overall}
-  \caption{
-    Overall structure of a JavaScript conformance test synthesizer using
-    coverage-guided fuzzing with the CFG of a mechanized specification
-    extracted from the language specification, ECMA-262
-  }
+  \includegraphics[width=.9\textwidth]{img/overall}
+\vspace*{-.5em}
+  \caption{Overall structure of $\tool$}
   \label{fig:overall}
 \end{figure}
 
-Figure~\ref{fig:overall} illustrates the overall structure of $\tool$,
-an extension of the state-of-the-art JavaScript conformance synthesizer $\jest$~\cite{jiset}
-to support $k$-FS and $k$-FCPS coverage criteria.
-$\jest$ uses $\esmeta$\footnote{
-  See \url{https://github.com/es-meta/esmeta}
-} to automatically extract a mechanized specification from ECMA-262.
-$\tool$ takes 1) the extracted mechanized specification
+\section{Implementation}\label{sec:impl}
+
+This section introduces our JavaScript
+conformance test synthesizer supporting $k$-FS and $k$-FCPS coverage criteria,
+$\tool$, and explains how it can detect conformance bugs in JavaScript implementations.
+Figure~\ref{fig:overall} illustrates its overall structure.
+$\tool$ takes 1) a mechanized specification extracted by $\esmeta$~\cite{esmeta}
 and 2) a coverage criterion $\cov{\graph}$ and performs
 coverage-guided fuzzing~\cite{afl} using the CFG of the mechanized specification.
-We show the extension in red.
-
-
-%----------------------------------------%
-
-
-$\tool$ consists of four modules:
+It uses the following four modules from $\jest$~\cite{jest}:
 \begin{itemize}
   \item \textsf{\textbf{Seed Synthesizer}}:
     As the first step, \textsf{Seed Synthesizer} automatically synthesizes a set
@@ -83,35 +69,31 @@ $\tool$ consists of four modules:
 
 %----------------------------------------%
 
-\begin{figure}
-  \includegraphics[width=\textwidth]{img/conform-check}
-\vspace*{-1.5em}
-  \caption{
-    Conformance check of JavaScript engines and transpilers with synthesized
-    conformance tests
-  }
-  \label{fig:conform-check}
-\end{figure}
+% \begin{figure}
+%   \includegraphics[width=\textwidth]{img/conform-check}
+% \vspace*{-1.5em}
+%   \caption{
+%     Conformance check of JavaScript engines and transpilers with synthesized
+%     conformance tests
+%   }
+%   \label{fig:conform-check}
+% \end{figure}
 
 %----------------------------------------%
 %----------------------------------------%
 
-\subsection{Conformance Check of Engines and Transpilers}
+%\paragraph{Conformance Check of Engines and Transpilers}
 %
 A synthesized conformance test consists of a JavaScript program and
 corresponding assertions.
-Figure~\ref{fig:conform-check} depicts how to use it to check the conformance of
-JavaScript engines and transpilers.
-
 To check a JavaScript engine's conformance,
 it is enough to run the program in the test and assertions together using the target engine.
 If at least one assertion fails, the target engine has a conformance bug related to the test.
-
 To check a JavaScript transpiler's conformance,
 we should transpile the program in the test using the target transpiler.
 If the transpiler abnormally terminates, it has a conformance bug because
 programs in conformance tests are valid.
 Otherwise, we should run the transpiled program and assertions together
 using a trusted engine.
-Like the engine conformance checking, the target transpiler has a conformance bug
-related to the test if at least one assertion fails.
+%Like the engine conformance checking,
+If at least one assertion fails, the target transpiler has a conformance bug related to the test.
