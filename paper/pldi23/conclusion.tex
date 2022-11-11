@@ -1,3 +1,33 @@
 \section{Conclusion}\label{sec:conclusion}
 
-\todo
+The conformance testing of programming language implementations is crucial to
+support correct and consistent execution environments.
+%
+Graph coverage is one of the most widely-used coverage criteria in evaluating
+the quality of conformance tests.
+%
+While graph coverage in mechanized language specifications is one of good
+options as uniform coverage for multiple implementations, it does not produce
+high-quality conformance tests.
+%
+To resolve this problem, this paper introduce \textit{feature-sensitive (FS)
+coverage} as a novel coverage criterion to generate high-quality conformance
+tests.
+%
+The core idea is refining conventional test requirements using the innermost
+enclosing language features.
+%
+We also present \textit{feature-call-path-sensitive (FCPS) coverage} as its
+variant with feature-call-paths from language features to test requirements.
+%
+In addition, we extend both coverage criteria using the $k$-limiting approach as
+$k$-FS coverage and $k$-FCPS coverage.
+%
+Finally, we experimentally show that the new coverage criteria outperform the
+traditional coverage criteria in the context of conformance bug detection in
+eight mainstream JavaScript implementations (four engines and four transpilers)
+with the latest ECMA-262 (ES13, 2022).
+%
+The tool detected \inred{115} distinct conformance bugs (\inred{40} in engines
+and \inred{75} in transpilers), \inred{80} of which were confirmed by the
+developers and \inred{40} of which were newly discovered bugs.
