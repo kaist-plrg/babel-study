@@ -56,12 +56,13 @@ We use the notation $\prefix$ for a prefix relation, and $\getfirst(\pat)$ and
 $\getlast(\pat)$ denote the first and last nodes of the path $\pat$,
 respectively.
 %
-A path $\pat$ is \textit{full} when it starts at an initial node and ends at a
-final node: $\getfirst(\pat) \in \inodeset \wedge \getlast(\pat) \in \fnodeset$.
+A path $\pat$ is a \textit{test path} when it starts at an initial node and ends
+at a final node: $\getfirst(\pat) \in \inodeset \wedge \getlast(\pat) \in
+\fnodeset$.
 %
 Then, $\patmap{\graph} : \testset \rightarrow \patset{\graph}$ is a mapping from
-a \textit{test} $\test \in \testset$ to a full path in the graph $\graph$, and
-we call $\patmap{\graph}(\test)$ the \textit{execution path} of $\test$.
+a \textit{test} $\test \in \testset$ to a test path in $\graph$, and we call
+$\patmap{\graph}(\test)$ the \textit{execution path} of $\test$.
 
 %----------------------------------------%
 
@@ -119,11 +120,12 @@ depeicted as follows:
   \end{array}
 \]
 And, $\patmap{\graph}(\subtest)$ is equal to $\patmap{\graph}(\addtest)$ except
-for nodes labeled 4, 5, and 6 in the $\textbf{Evaluation}$ SDO for subtraction
-rather than 1, 2, and 3 in the $\textbf{Evaluation}$ SDO for addition.
+for nodes labeled 1, 2, and 3 in the $\textbf{Evaluation}$ SDO for addition
+replaced with nodes labeled 4, 5, and 6 in the $\textbf{Evaluation}$ SDO for
+subtraction.
 %
-The following path $\pat$ is a subpath of both $\patmap{\graph}(\addtest)$ and
-$\patmap{\graph}(\subtest)$:
+Note that the following path $\pat$ is a subpath of both
+$\patmap{\graph}(\addtest)$ and $\patmap{\graph}(\subtest)$:
 \begin{equation}\label{equ:subpath}
   \pat = 22 \ret 15 \fedge 16 \tedge \colorbox{lightred}{17}
 \end{equation}
@@ -172,22 +174,22 @@ a prefix path $\pat$ of its execution path that covers the TR:
 \end{equation}
 %
 A test set $T \subseteq \testset$ \textit{satisfies} ($\sat$) the criterion
-$\cov{\graph}$ when it covers all valid TRs:
+$\cov{\graph}$ when it covers all feasible TRs:
 \begin{equation}\label{equ:sat}
   T \sat \cov{\graph}
   \iff
   \forall \tr \in \trset{\graph}. \;
-  \tr \; \text{is valid} \; \Rightarrow
+  \tr \; \text{is feasible} \; \Rightarrow
   \exists \test \in T. \tst \test \cover \tr
 \end{equation}
-where a TR $\tr$ is \textit{valid} if there exists a possible test $\test \in
+where a TR $\tr$ is \textit{feasible} if there exists a possible test $\test \in
 \testset$ that covers $\tr$.
 %
 If $T \sat \cov{\graph} \Rightarrow T \sat \cov{\graph}'$ for any test set $T$,
 we say that $\cov{\graph}$ \textit{subsumes} $\cov{\graph}'$ and use the
 notation: $\cov{\graph} \subs \cov{\graph}'$.
 %
-The subsumption relation between graph coverage criteria is a partial order.
+The subsumption relation between graph coverage criteria is a preorder.
 
 %----------------------------------------%
 
@@ -348,7 +350,7 @@ path $\pat$ as a sequence of nodes constructed by:
   \right.
 \end{equation}
 In other words, $\css{\pat}$ keeps only call-sites not matched with return-sites
-in the path $\pat$.  A \textit{call-site} is a node having a call edge ($\call$)
+in the path $\pat$;  a \textit{call-site} is a node having a call edge ($\call$)
 as its out-edge, and a \textit{return-site} is a node having a return edge
 ($\ret$) as its in-edge.
 %
@@ -379,8 +381,7 @@ for the path $\pat$.
   $\fcov{\graph} = (\ftrset{\graph}, \cover)$ is defined as follows:
   \begin{itemize}
     \item the set of \textbf{feature-sensitive test requirements (FS-TRs)}
-      $\ftrset{\graph}$ is a set of original TRs optionally tagged with language
-      features:
+      $\ftrset{\graph}$ is a set of original TRs optionally with language features:
 $
         \ftrset{\graph} = \trset{\graph} \times (\featset \uplus \{ \bot \})
 $
@@ -398,7 +399,8 @@ $
 
 \paragraph{\textbf{Example}}
 %
-For the CFG $\graph$ in Figure~\ref{fig:spec-cfg}, assume that the feature mapping is as follows:
+For the CFG $\graph$ in Figure~\ref{fig:spec-cfg}, assume that the feature
+mapping is as follows:
 \begin{equation}\label{equ:featmap}
   \featmap(\node) = \left\{
     \begin{array}{lllll}
@@ -471,8 +473,8 @@ criteria. The extended feature extractor $\extfeats{k}: \css{\patset{\graph}}
   $\kfcov{k}{\graph} = (\kftrset{k}{\graph}, \cover)$ is defined as follows:
   \begin{itemize}
     \item the set of \textbf{$k$-feature-sensitive test requirements
-      ($k$-FS-TRs)} $\kftrset{k}{\graph}$ is a set of original TRs tagged with
-      at most $k$ language features:
+      ($k$-FS-TRs)} $\kftrset{k}{\graph}$ is a set of original TRs with at most
+      $k$ language features:
 $
         \kftrset{k}{\graph} = \trset{\graph} \times \featset^{\leq k}
 $
@@ -601,8 +603,8 @@ length of feature-call-path and removes duplicated cases ($\exists i. \tst
   = (\fcptrset{\graph}, \cover)$ is defined as follows:
   \begin{itemize}
     \item the set of \textbf{feature-call-path-sensitive test requirements
-      (FCPS-TRs)} $\fcptrset{\graph}$ is a set of original TRs optionally tagged
-      with feature-call-paths:
+      (FCPS-TRs)} $\fcptrset{\graph}$ is a set of original TRs optionally with
+      feature-call-paths:
 $
         \fcptrset{\graph} = \trset{\graph} \times (\fcpset \uplus \{ \bot \})
 $
@@ -689,10 +691,10 @@ we define $k$-FCPS coverage criteria by extending $\extfcp$ into $\extfcps{k}:
       \fcps & \tif \fcps = (\epsilon, \epsilon)\\
 
       (\feats, [\node'_0, \cdots, \node'_i]) &
-      \tif \fcp = (\feats, [\node'_0, \cdots, \node'_{m'}]) \wedge
+      \tif \fcps = (\feats, [\node'_0, \cdots, \node'_{m'}]) \wedge
       \exists i. \tst \node'_i = \node_m\\
 
-      (\feats, \nodes \cdot \node_m) & \tif \fcp = (\feats, \nodes)\\
+      (\feats, \nodes \cdot \node_m) & \tif \fcps = (\feats, \nodes)\\
     \end{array}
   \right.
 \end{equation}
@@ -711,8 +713,8 @@ set of extended feature-call-paths, and $\fcps = \extfcps{k}([\node_1, \cdots,
   as follows:
   \begin{itemize}
     \item the set of \textbf{$k$-feature-call-path-sensitive test requirements
-      ($k$-FCPS-TRs)} $\kfcptrset{k}{\graph}$ is a set of original TRs tagged
-      with the extended feature-call-paths bounded by $k$:
+      ($k$-FCPS-TRs)} $\kfcptrset{k}{\graph}$ is a set of original TRs with the
+      extended feature-call-paths bounded by $k$:
 $
         \kfcptrset{k}{\graph} = \trset{\graph} \times \fcpset^{\leq k}
 $
@@ -768,8 +770,8 @@ annotated with equations in Theorem~\ref{thm:subs}.
   Consider two graph coverage criteria $\cov{\graph} = (\trset{\graph}, \cover)$
   and $\cov{\graph}' = (\trset{\graph}', \cover')$.
   %
-  If there exists a valid TR $\tr \in \trset{\graph}$ that satisfies the following
-  condition for each valid TR $\tr' \in \trset{\graph}'$:
+  If there exists a feasible TR $\tr \in \trset{\graph}$ that satisfies the following
+  condition for each feasible TR $\tr' \in \trset{\graph}'$:
   %
   \begin{equation}\label{equ:subs-lemma}
     \forall \test \in \testset. \; \test \cover \tr \Rightarrow \test \cover' \tr'.
@@ -781,11 +783,11 @@ annotated with equations in Theorem~\ref{thm:subs}.
 \begin{proof}
   Assume $T \sat \cov{\graph}$.
   %
-  For a given valid TR $\tr' \in \trset{\graph}'$, let $\tr \in \trset{\graph}$
-  be the valid TR satisfying (\ref{equ:subs-lemma}).
+  For a given feasible TR $\tr' \in \trset{\graph}'$, let $\tr \in \trset{\graph}$
+  be the feasible TR satisfying (\ref{equ:subs-lemma}).
   %
   Then, there exists a test $\test \in T$ such that $\test \cover \tr$ because
-  $\tr$ is valid and $T \sat \cov{\graph}$.
+  $\tr$ is feasible and $T \sat \cov{\graph}$.
   %
   Finally, $\test \cover \tr'$.
 \end{proof}
@@ -806,9 +808,9 @@ annotated with equations in Theorem~\ref{thm:subs}.
   %
   Let $k > 0$.
   %
-  For a given valid $(k-1)$-FS-TR $(\tr, \feats)$, there exists a test $\test
+  For a given feasible $(k-1)$-FS-TR $(\tr, \feats)$, there exists a test $\test
   \in \testset$ such that $\test \cover (\tr, \feats)$ because $(\tr, \feats)$
-  is valid.
+  is feasible.
   %
   There exists a prefix path $\pat$ of $\patmap{\graph}(\test)$ such that $\pat
   \cover (\tr, \feats)$ ($\because$ (\ref{equ:test-cover})).

@@ -13,6 +13,9 @@ PDF = $(PACKAGE).pdf
 
 all: pdf
 
+watch:
+	latexmk -pdf -pvc $(PACKAGE)
+
 pdf:
 	pdflatex $(PACKAGE)
 	- bibtex $(PACKAGE)

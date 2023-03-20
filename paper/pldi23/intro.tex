@@ -58,9 +58,9 @@ have mechanized specifications that formally describe their
 semantics using diverse metalanguages and frameworks, such as Ott~\cite{ott}, Skel~\cite{skel}, and the
 $\kframework$ framework~\cite{kframework}.
 %
-Since mechanized specifications use functions to describe the semantics of language features,
-we can easily convert them as directed graphs and traditional graph coverage
-criteria for software work as they are.
+Mechanized specifications use functions or inductive definitions to describe the
+semantics of language features. Thus, it is possible to convert them as directed
+graphs and adapt them to apply traditional graph coverage criteria for software.
 For example, $\kjava$~\cite{k-java} is a mechanized specification for Java
 defined with the $\kframework$ framework, which describes language semantics
 as a set of reduction rules.
@@ -89,7 +89,8 @@ use the same functions, degrading conformance testing quality.
 For example, consider a mechanized specification for JavaScript that represents the
 abstract algorithms described in the official language specification, ECMA-262~\cite{es13}.
 Here, most of the semantics for the addition and subtraction operators are
-defined using the same \textbf{EvaluateStringOrNumericBinaryExpression} algorithm as a helper function.
+defined using the same \textbf{EvaluateStringOrNumericBinaryExpression}
+algorithm as a helper function.
 If conformance tests for the addition operator already cover the test
 requirements in the algorithm, most conformance tests for the subtraction operator
 are removed after the coverage-guided test minimization process.
