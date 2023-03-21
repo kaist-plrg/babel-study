@@ -11,7 +11,7 @@ We have addressed the comments as follows:
 Two reviewers suggested a title change: "... of Programming Language
 Implementations" to "... of JavaScript Implementations."
 
-We considered changing the title, but we decided to keep the original title 
+We considered changing the title, but we decided to keep the original title
 because the _feature-sensitive coverage criteria_ are general graph coverage criteria
 applicable to mechanized specifications of any programming languages after adapting them into graphs.
 
@@ -67,7 +67,7 @@ In addition, to make the differences between `covers` and `visits` clear, we add
 
 Reviewer D suggested including more illustrative figures and examples in the
 paper. While we agree that more figures and examples would make the paper more understandable,
-we could add them due to the page limit. We plan to include them in an extended version of the paper.
+we cannot add them due to the page limit. We plan to include them in an extended version of the paper.
 
 ## Comment D5
 
