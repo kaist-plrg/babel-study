@@ -329,7 +329,7 @@ programming languages is cumbersome and labor-intensive,
 researchers have presented various ways to make conformance tests effective and efficient.
 One such approach is to use graph coverage, one of the most widely-used coverage criteria,
 to generate tests that reach different parts of a \textit{mechanized language specification}.
-Since mechanized specifications use functions to describe
+Since mechanized specifications use functions or inductive definitions to describe
 the semantics of language features, traditional graph coverage
 criteria for software work as they are.
 However, they may not produce high-quality conformance tests
@@ -1124,12 +1124,10 @@ whose length is $\norm{\pat} = 3$.
 
 \subsection{Graph Coverage Criteria}\label{sec:cov}
 
-We formulate graph coverage criteria by referring to their well-known
-definitions~\cite{cov-def}.
-%
-For a given directed graph, we specify a \textit{graph coverage} criterion by 1)
-a set of \textit{test requirements} and 2) a \textit{cover relation} between
-paths and test requirements:
+We formulate \textit{graph coverage} criteria by referring to their well-known
+definitions~\cite{cov-def}, and they are defined by 1) a set of \textit{test
+requirements} and 2) a \textit{cover relation} between paths and test
+requirements:
 
 %----------------------------------------%
 
@@ -1187,6 +1185,12 @@ The subsumption relation between graph coverage criteria is a preorder.
     \item a path $\pat$ \textbf{covers} a node $\node$ when it ends with the
       node $\node$:
       $  \pat \cover \node \iff \getlast(\pat) = \node $
+      \footnote{
+        Another way to define node coverage is using a \textit{visit relation}
+        between paths and any nodes in the paths. However, we use a
+        \textit{cover relation} between paths and the last nodes in the paths
+        because it is suitable for further extensions of graph coverage.
+      }
   \end{itemize}
 \end{definition}
 
@@ -1807,20 +1811,6 @@ annotated with equations in Theorem~\ref{thm:subs}.
   %
   Finally, $k$-FS coverage criteria subsume $(k-1)$-FS coverage criteria.
 \end{proof}
-
-
-%----------------------------------------%
-%----------------------------------------%
-%
-%\subsection{Overall Structure}\label{sec:overall}
-
-\begin{figure}
-  \includegraphics[width=.9\textwidth]{img/overall}
-\vspace*{-.5em}
-  \caption{Overall structure of $\tool$}
-  \label{fig:overall}
-\vspace*{-1em}
-\end{figure}
 
 \section{Implementation}\label{sec:impl}
 

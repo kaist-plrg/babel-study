@@ -138,12 +138,10 @@ whose length is $\norm{\pat} = 3$.
 
 \subsection{Graph Coverage Criteria}\label{sec:cov}
 
-We formulate graph coverage criteria by referring to their well-known
-definitions~\cite{cov-def}.
-%
-For a given directed graph, we specify a \textit{graph coverage} criterion by 1)
-a set of \textit{test requirements} and 2) a \textit{cover relation} between
-paths and test requirements:
+We formulate \textit{graph coverage} criteria by referring to their well-known
+definitions~\cite{cov-def}, and they are defined by 1) a set of \textit{test
+requirements} and 2) a \textit{cover relation} between paths and test
+requirements:
 
 %----------------------------------------%
 
@@ -201,6 +199,12 @@ The subsumption relation between graph coverage criteria is a preorder.
     \item a path $\pat$ \textbf{covers} a node $\node$ when it ends with the
       node $\node$:
       $  \pat \cover \node \iff \getlast(\pat) = \node $
+      \footnote{
+        Another way to define node coverage is using a \textit{visit relation}
+        between paths and any nodes in the paths. However, we use a
+        \textit{cover relation} between paths and the last nodes in the paths
+        because it is suitable for further extensions of graph coverage.
+      }
   \end{itemize}
 \end{definition}
 

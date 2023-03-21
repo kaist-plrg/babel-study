@@ -1,7 +1,7 @@
 \documentclass[acmsmall,review,screen]{acmart}
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL old.tex   Mon Mar 20 22:27:53 2023
-%DIF ADD new.tex   Mon Mar 20 22:30:30 2023
+%DIF ADD new.tex   Tue Mar 21 11:47:49 2023
 
 %% TODO during camera-ready
 %% copyright
@@ -426,7 +426,7 @@ programming languages is cumbersome and labor-intensive,
 researchers have presented various ways to make conformance tests effective and efficient.
 One such approach is to use graph coverage, one of the most widely-used coverage criteria,
 to generate tests that reach different parts of a \textit{mechanized language specification}.
-Since mechanized specifications use functions to describe
+Since mechanized specifications use functions \DIFaddbegin \DIFadd{or inductive definitions }\DIFaddend to describe
 the semantics of language features, traditional graph coverage
 criteria for software work as they are.
 However, they may not produce high-quality conformance tests
@@ -1223,12 +1223,13 @@ whose length is $\norm{\pat} = 3$.
 
 \subsection{Graph Coverage Criteria}\label{sec:cov}
 
-We formulate graph coverage criteria by referring to their well-known
-definitions~\cite{cov-def}.
-%
-For a given directed graph, we specify a \textit{graph coverage} criterion by 1)
-a set of \textit{test requirements} and 2) a \textit{cover relation} between
-paths and test requirements:
+We formulate \DIFdelbegin \DIFdel{graph coverage }\DIFdelend \DIFaddbegin \textit{\DIFadd{graph coverage}} \DIFaddend criteria by referring to their well-known
+definitions~\cite{cov-def}\DIFdelbegin \DIFdel{.
+%DIF < 
+For a given directed graph, we specify a }\textit{\DIFdel{graph coverage}} %DIFAUXCMD
+\DIFdel{criterion }\DIFdelend \DIFaddbegin \DIFadd{, and they are defined }\DIFaddend by 1) a set of \textit{test
+requirements} and 2) a \textit{cover relation} between paths and test
+requirements:
 
 %----------------------------------------%
 
@@ -1287,7 +1288,13 @@ The subsumption relation between graph coverage criteria is a \DIFdelbegin \DIFd
     \item a path $\pat$ \textbf{covers} a node $\node$ when it ends with the
       node $\node$:
       $  \pat \cover \node \iff \getlast(\pat) = \node $
-  \end{itemize}
+      \DIFaddbegin \footnote{
+        \DIFadd{Another way to define node coverage is using a }\textit{\DIFadd{visit relation}}
+        \DIFadd{between paths and any nodes in the paths. However, we use a
+        }\textit{\DIFadd{cover relation}} \DIFadd{between paths and the last nodes in the paths
+        because it is suitable for further extensions of graph coverage.
+      }}
+  \DIFaddend \end{itemize}
 \end{definition}
 
 %----------------------------------------%
@@ -1910,21 +1917,27 @@ annotated with equations in Theorem~\ref{thm:subs}.
   Finally, $k$-FS coverage criteria subsume $(k-1)$-FS coverage criteria.
 \end{proof}
 
+%DIF < ----------------------------------------%
+%DIF < ----------------------------------------%
+%DIF < 
+%DIF < \subsection{Overall Structure}\label{sec:overall}
+\DIFdelbegin %DIFDELCMD < 
 
-%----------------------------------------%
-%----------------------------------------%
-%
-%\subsection{Overall Structure}\label{sec:overall}
+%DIFDELCMD < \begin{figure}
+%DIFDELCMD <   \includegraphics[width=.9\textwidth]{img/overall}
+%DIFDELCMD < \vspace*{-.5em}
+%DIFDELCMD <   %%%
+%DIFDELCMD < \caption{%
+{%DIFAUXCMD
+\DIFdelFL{Overall structure of $\tool$}}
+  %DIFAUXCMD
+%DIFDELCMD < \label{fig:overall}
+%DIFDELCMD < \vspace*{-1em}
+%DIFDELCMD < \end{figure}
+%DIFDELCMD < 
 
-\begin{figure}
-  \includegraphics[width=.9\textwidth]{img/overall}
-\vspace*{-.5em}
-  \caption{Overall structure of $\tool$}
-  \label{fig:overall}
-\vspace*{-1em}
-\end{figure}
-
-\section{Implementation}\label{sec:impl}
+%DIFDELCMD < %%%
+\DIFdelend \section{Implementation}\label{sec:impl}
 
 This section introduces our JavaScript
 conformance test synthesizer supporting $k$-FS and $k$-FCPS coverage criteria,
