@@ -81,7 +81,8 @@ Reviewer D suggested including more illustrative figures and examples in the
 paper. We agree that the paper would be more understandable if we included more
 illustrative figures and examples. However, because of the page limitation of
 the conference (still 20 pages), we decided not to include more illustrative
-figures and examples in the final version.
+figures and examples in the final version. However, we plan to include them in
+the extended version of the paper.
 
 ## Comment D5
 
@@ -91,4 +92,5 @@ interesting and give more insights into the applicability of our technique
 because it would show how the coverage criteria can be used to find bugs in
 different implementations. However, because of the page limitation of the
 conference (still 20 pages), we decided not to include a more detailed
-evaluation in the final version.
+evaluation in the final version. However, we plan to include them in the
+extended version of the paper.
