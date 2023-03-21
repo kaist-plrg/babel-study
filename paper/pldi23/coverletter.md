@@ -1,6 +1,6 @@
 # Cover Letter
 
-I want to thank the reviewers for providing valuable feedback and guidance
+We thank the reviewers for providing valuable feedback and guidance
 throughout the review process. Their comments have helped to improve the quality
 of the manuscript.
 
@@ -8,14 +8,12 @@ We have addressed the comments as follows:
 
 ## Title
 
-Two reviewers suggested a title change: "...of Programming Language
-Implementations" to "...of JavaScript Implementations."
+Two reviewers suggested a title change: "... of Programming Language
+Implementations" to "... of JavaScript Implementations."
 
-However, we have decided to keep the original title of our paper, as we believe
-it accurately reflects the scope and applicability of our technique. The
-_feature-sensitive coverage criteria_ are general graph coverage criteria
-applicable to mechanized specifications of any programming languages after
-adapting them into graphs.
+We considered changing the title, but we decided to keep the original title 
+because the _feature-sensitive coverage criteria_ are general graph coverage criteria
+applicable to mechanized specifications of any programming languages after adapting them into graphs.
 
 ## Comment B3
 
@@ -46,29 +44,19 @@ as follows:
 ## Comment B4
 
 Reviewer B suggested reducing the number of occurrences of "k-F(CP)S-TR" in the
-paper. While we agree that the term occurs too often, we found that it is
-difficult to remove or replace the term in the paper because our work is highly
-related to the test requirements for graph coverage criteria. Thus, we decided
-to keep the term in the final version of the paper.
+paper. We tried to remove or replace the term in the paper, but we decided to keep them
+because our work is highly related to the test requirements for graph coverage criteria.
 
 
 ## Comment C4
 
-Reviewer C suggested not renaming or redefining the well-known concepts in the
-other references. We agree that it is better to keep the original names of the
-concepts as much as possible. Thus, we have changed the following terms:
+Reviewer C suggested not renaming or redefining well-known concepts in the literature.
+Thus, we made the following changes:
 
 - `full paths` to `test paths`
 - `valid paths` to `feasible paths`
 
-However, we decided to use the term `covers` rather than `visits` because it
-slightly differs from the definition of `visits` in [4]. The definition of
-`covers` is defined based on the last node in the path, while the definition of
-`visits` is on any node in the path. Because it is much easier to define the
-feature-sensitive coverage criteria based on the last node in the path, we
-decided to use the term `covers` rather than `visits`. To be clear about the
-difference between `covers` and `visits`, we have added the following sentence
-as a footnote in the paper:
+In addition, to make the differences between `covers` and `visits` clear, we added the following footnote:
 
 > Another way to define node coverage is using a _visit relation_ between paths
 > and any nodes in the paths. However, we use a _cover relation_ between paths
@@ -78,19 +66,12 @@ as a footnote in the paper:
 ## Comment D2
 
 Reviewer D suggested including more illustrative figures and examples in the
-paper. We agree that the paper would be more understandable if we included more
-illustrative figures and examples. However, because of the page limitation of
-the conference (still 20 pages), we decided not to include more illustrative
-figures and examples in the final version. However, we plan to include them in
-the extended version of the paper.
+paper. While we agree that more figures and examples would make the paper more understandable,
+we could add them due to the page limit. We plan to include them in an extended version of the paper.
 
 ## Comment D5
 
 Reviewer D suggested analyzing the distribution of triggered bugs for each
-implementation for each coverage criterion. We agree that it would be
-interesting and give more insights into the applicability of our technique
-because it would show how the coverage criteria can be used to find bugs in
-different implementations. However, because of the page limitation of the
-conference (still 20 pages), we decided not to include a more detailed
-evaluation in the final version. However, we plan to include them in the
-extended version of the paper.
+implementation for each coverage criterion. While we agree that it would be
+interesting and give more insights into the applicability of our technique,
+the page limit does not allow us to add them. We plan to include them in an extended version of the paper.
