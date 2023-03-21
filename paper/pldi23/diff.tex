@@ -1,7 +1,7 @@
 \documentclass[acmsmall,review,screen]{acmart}
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL old.tex   Mon Mar 20 22:27:53 2023
-%DIF ADD new.tex   Tue Mar 21 11:47:49 2023
+%DIF ADD new.tex   Tue Mar 21 12:03:53 2023
 
 %% TODO during camera-ready
 %% copyright
@@ -1917,27 +1917,21 @@ annotated with equations in Theorem~\ref{thm:subs}.
   Finally, $k$-FS coverage criteria subsume $(k-1)$-FS coverage criteria.
 \end{proof}
 
-%DIF < ----------------------------------------%
-%DIF < ----------------------------------------%
-%DIF < 
-%DIF < \subsection{Overall Structure}\label{sec:overall}
-\DIFdelbegin %DIFDELCMD < 
 
-%DIFDELCMD < \begin{figure}
-%DIFDELCMD <   \includegraphics[width=.9\textwidth]{img/overall}
-%DIFDELCMD < \vspace*{-.5em}
-%DIFDELCMD <   %%%
-%DIFDELCMD < \caption{%
-{%DIFAUXCMD
-\DIFdelFL{Overall structure of $\tool$}}
-  %DIFAUXCMD
-%DIFDELCMD < \label{fig:overall}
-%DIFDELCMD < \vspace*{-1em}
-%DIFDELCMD < \end{figure}
-%DIFDELCMD < 
+%----------------------------------------%
+%----------------------------------------%
+%
+%\subsection{Overall Structure}\label{sec:overall}
 
-%DIFDELCMD < %%%
-\DIFdelend \section{Implementation}\label{sec:impl}
+\begin{figure}
+  \includegraphics[width=.9\textwidth]{img/overall}
+\vspace*{-.5em}
+  \caption{Overall structure of $\tool$}
+  \label{fig:overall}
+\vspace*{-1em}
+\end{figure}
+
+\section{Implementation}\label{sec:impl}
 
 This section introduces our JavaScript
 conformance test synthesizer supporting $k$-FS and $k$-FCPS coverage criteria,
