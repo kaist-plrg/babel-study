@@ -517,8 +517,10 @@ edge cases in JavaScript engines and transpilers because they are heavily
 optimized and handle even the same language features differently depending on which
 language features are used together.
 %
-For example, a \textit{destructuring pattern}~\cite{jsdp} helps developers easily declare
-variables with the values stored in the properties of an object or an array.
+For example, a \textit{destructuring pattern}\footnote{
+  \url{https://262.ecma-international.org/13.0/\#sec-destructuring-assignment}
+} helps developers easily declare variables with the values stored in the
+properties of an object or an array.
 %
 However, JavaScript engines and transpilers often have a different execution
 path to handle the pattern when it is declared in a \jscode{for-in/of} statement.
