@@ -14,14 +14,16 @@
 
 \section{Implementation}\label{sec:impl}
 
-This section introduces our JavaScript
-conformance test synthesizer supporting $k$-FS and $k$-FCPS coverage criteria,
-$\tool$, and explains how it can detect conformance bugs in JavaScript implementations.
+This section introduces $\tool$, our JavaScript conformance test synthesizer
+supporting $k$-FS and $k$-FCPS coverage criteria, and explains how it can detect
+conformance bugs in JavaScript implementations.
 Figure~\ref{fig:overall} illustrates its overall structure.
-$\tool$ takes 1) a mechanized specification extracted by $\esmeta$~\cite{esmeta}
-and 2) a coverage criterion $\cov{\graph}$ and performs
-coverage-guided fuzzing~\cite{afl} using the CFG of the mechanized specification.
-It uses the following four modules from $\jest$~\cite{jest}:
+$\tool$ takes 1) a mechanized specification extracted by $\esmeta$\footnote{
+  \url{https://github.com/es-meta/esmeta}
+}
+and 2) a coverage criterion $\cov{\graph}$ and performs coverage-guided fuzzing
+using the CFG of the mechanized specification. It uses the following four
+modules from $\jest$~\cite{jest}:
 \begin{itemize}
   \item \textsf{\textbf{Seed Synthesizer}}:
     As the first step, \textsf{Seed Synthesizer} automatically synthesizes a set

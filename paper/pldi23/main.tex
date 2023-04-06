@@ -1,20 +1,28 @@
-\documentclass[acmsmall,review,screen]{acmart}
+\documentclass[acmsmall,screen]{acmart}
 
-%% TODO during camera-ready
 %% copyright
-\setcopyright{acmcopyright}
-\copyrightyear{2023}
+\setcopyright{rightsretained}
+\acmPrice{}
+\acmDOI{10.1145/3591240}
 \acmYear{2023}
-\acmDOI{XXXXXXX.XXXXXXX}
-
-%% conference information
-\acmConference[PLDI'23]{Make sure to enter the correct conference title from
-your rights confirmation emai}{June 03--05, 2018}{Woodstock, NY}
-\acmPrice{15.00}
-\acmISBN{978-1-4503-XXXX-X/18/06}
+\copyrightyear{2023}
+\acmSubmissionID{pldi23main-p131-p}
+\acmJournal{PACMPL}
+\acmVolume{7}
+\acmNumber{PLDI}
+\acmArticle{126}
+\acmMonth{6}
+\received{2022-11-10}
+\received[accepted]{2023-03-31}
 
 %% macros with packages
 \input{macros}
+
+%% bibliography style
+\bibliographystyle{ACM-Reference-Format}
+
+%% Citation style
+\citestyle{acmauthoryear}
 
 %% start document
 \begin{document}
@@ -24,83 +32,65 @@ your rights confirmation emai}{June 03--05, 2018}{Woodstock, NY}
 {Feature-Sensitive Coverage for Conformance Testing of Programming Language
 Implementations}
 
-\author{Anonymous Author(s)}
-
 %% authors
-% \author{Jihyeok Park}
-% \email{jihyeok.park@oracle.com}
-% \orcid{0000-0001-8387-1984}
-% \affiliation{%
-%   \institution{Oracle Labs}
-%   \city{Brisbane}
-%   \country{Australia}
-% }
-%
-% \author{Dongjun Youn}
-% \email{f52985@kaist.ac.kr}
-% \orcid{0000-0002-5766-2035}
-% \affiliation{%
-%   \institution{KAIST}
-%   \city{Daejeon}
-%   \country{South Korea}
-% }
-%
-% \author{Kanguk Lee}
-% \email{p51lee@kaist.ac.kr}
-% \orcid{0000-0000-0000-0000} % TODO
-% \affiliation{%
-%   \institution{KAIST}
-%   \city{Daejeon}
-%   \country{South Korea}
-% }
-%
-% \author{Sukyoung Ryu}
-% \email{sryu.cs@kaist.ac.kr}
-% \orcid{0000-0002-0019-9772}
-% \affiliation{%
-%   \institution{KAIST}
-%   \city{Daejeon}
-%   \country{South Korea}
-% }
+\author{Jihyeok Park}
+\email{jihyeok_park@korea.ac.kr}
+\orcid{0000-0001-8387-1984}
+\affiliation{%
+  \institution{Korea University}
+  \state{Seoul}
+  \country{South Korea}
+}
+
+\author{Dongjun Youn}
+\email{f52985@kaist.ac.kr}
+\orcid{0000-0002-5766-2035}
+\affiliation{%
+  \institution{KAIST}
+  \state{Daejeon}
+  \country{South Korea}
+}
+
+\author{Kanguk Lee}
+\email{p51lee@kaist.ac.kr}
+\orcid{0009-0001-7846-8282}
+\affiliation{%
+  \institution{KAIST}
+  \state{Daejeon}
+  \country{South Korea}
+}
+
+\author{Sukyoung Ryu}
+\email{sryu.cs@kaist.ac.kr}
+\orcid{0000-0002-0019-9772}
+\affiliation{%
+  \institution{KAIST}
+  \state{Daejeon}
+  \country{South Korea}
+}
 
 %% abstract
 \input{abstract}
 
-%% TODO http://dl.acm.org/ccs.cfm during camera ready
-% \begin{CCSXML}
-% <ccs2012>
-%  <concept>
-%   <concept_id>10010520.10010553.10010562</concept_id>
-%   <concept_desc>Computer systems organization~Embedded systems</concept_desc>
-%   <concept_significance>500</concept_significance>
-%  </concept>
-%  <concept>
-%   <concept_id>10010520.10010575.10010755</concept_id>
-%   <concept_desc>Computer systems organization~Redundancy</concept_desc>
-%   <concept_significance>300</concept_significance>
-%  </concept>
-%  <concept>
-%   <concept_id>10010520.10010553.10010554</concept_id>
-%   <concept_desc>Computer systems organization~Robotics</concept_desc>
-%   <concept_significance>100</concept_significance>
-%  </concept>
-%  <concept>
-%   <concept_id>10003033.10003083.10003095</concept_id>
-%   <concept_desc>Networks~Network reliability</concept_desc>
-%   <concept_significance>100</concept_significance>
-%  </concept>
-% </ccs2012>
-% \end{CCSXML}
-%
-% \ccsdesc[500]{Computer systems organization~Embedded systems}
-% \ccsdesc[300]{Computer systems organization~Redundancy}
-% \ccsdesc{Computer systems organization~Robotics}
-% \ccsdesc[100]{Networks~Network reliability}
+%% http://dl.acm.org/ccs.cfm during camera ready
+\begin{CCSXML}
+  <ccs2012>
+  <concept>
+  <concept_id>10011007.10011074.10011099.10011102.10011103</concept_id>
+  <concept_desc>Software and its engineering~Software testing and debugging</concept_desc>
+  <concept_significance>500</concept_significance>
+  </concept>
+  </ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Software and its engineering~Software testing and debugging}
+
+%% keywords
 \keywords{
-  JavaScript,
+  mechanized specification,
   conformance test synthesis,
-  feature-sensitive coverage,
   coverage-guided fuzzing,
+  feature-sensitive coverage
 }
 
 \maketitle
@@ -114,14 +104,19 @@ Implementations}
 \input{related}
 \input{conclusion}
 
-%% TODO during the camera ready
 %% acknowledgements
-% \begin{acks}
-% This work was supported by National Research Foundation of
-% Korea (NRF) (Grants NRF-2017R1A2B3012020 and 2017M3C4A7068177).
+\begin{acks}
+This research was supported by National Research Foundation of Korea (NRF)
+(2022R1A2C200366011 and 2021R1A5A1021944), Institute for Information \&
+communications Technology Promotion (IITP) grant funded by the Korea government
+(MSIT) (2022-0-00460 and 2023-2020-0-01819), and Samsung Electronics Co., Ltd
+(G01210570).
+\end{acks}
 
-%% bibliography style
-\bibliographystyle{ACM-Reference-Format}
+\section{Data Availability Statement}\label{sec:data}
+
+The source code of $\tool$ and the dataset of our study are publicly available
+at \cite{artifact}.
 
 %% the bibliography file.
 \balance

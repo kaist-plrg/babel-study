@@ -20,15 +20,19 @@ First, we define notations used in the definition of graph coverage criteria.
 %
 A \textit{directed graph} $\graph = (\nodeset, \inodeset,
 \fnodeset, \edgeset)$ consists of:
-\begin{itemize}
-  \item a set of \textit{nodes} $\nodeset$
-  \item a set of \textit{initial nodes} $\inodeset \subseteq \nodeset$
-  \item a set of \textit{final nodes} $\fnodeset \subseteq \nodeset$
-  \item a set of \textit{edges} $\edgeset \subseteq \nodeset \times \nodeset
-    \times (\annotset \uplus \{ \bot \})$ with a set of \textit{annotations}
-    $\annotset$
-\end{itemize}
-%
+
+\begin{itemize*}
+  \item $\nodeset: \text{ a set of {\it nodes}}$ \quad \;
+  \item $\inodeset \subseteq \nodeset: \text{ a set of {\it initial nodes}}$ \quad \;
+  \item $\fnodeset \subseteq \nodeset: \text{ a set of {\it final nodes}}$
+\end{itemize*}
+
+\begin{itemize*}
+  \item $\edgeset \subseteq \nodeset \times \nodeset \times (\annotset \uplus \{
+    \bot \}): \text{ a set of {\it edges} optionally annotated with {\it
+    annotations} } \annotset$
+\end{itemize*}
+
 The notation $\node \edge{\annot} \node'$ denotes an edge from a node $\node$ to
 a node $\node'$ with an annotation $\annot \in \annotset$.
 %
@@ -69,8 +73,7 @@ $\patmap{\graph}(\test)$ the \textit{execution path} of $\test$.
 \paragraph{\textbf{Example}}
 %
 Consider the CFG $\graph$ in Figure~\ref{fig:spec-cfg}
-and the following JavaScript programs as a test set $T
-\subseteq \testset$:
+and the following JS programs as a test set $T \subseteq \testset$:
 \begin{equation}\label{equ:testset}
   T = \{
     \cdots,
@@ -268,16 +271,7 @@ The complete path coverage criterion might have infinite TRs because of
 recursions and loop structures.
 %
 To resolve this problem, \citet{cov-def} have presented a \textit{simple path
-coverage} criterion that considers only simple paths as TRs.
-%
-A path $\node_0 \edge{\annot_0} \cdots \edge{\annot_{m-1}} \node_m$ is
-\textit{simple} if there are no duplicated nodes in the path, with the exception that the
-first and last nodes may be identical: $\forall i, j. \; \node_i = \node_j
-\Rightarrow (i = j \vee \{ i, j \} = \{ 0, m \})$.
-%
-In addition, they extend it to a \textit{prime path coverage} criterion to
-reduce the number of TRs by filtering out duplicated simple paths, where a
-\textit{prime path} is a maximal length simple path in the graph.
+coverage} criterion or a \textit{prime path coverage} criterion.
 %
 However, even such advanced structural coverage criteria still need many
 TRs for the entire control-flow graphs.
@@ -290,7 +284,7 @@ with intra-procedural control-flow graphs.
 \paragraph{\textbf{Example}}
 %
 Consider the CFG $\graph$ in Figure~\ref{fig:spec-cfg} and the test
-set $T$ in (\ref{equ:testset}), including $\addtest$ and $\subtest$.
+set $T$ in (\ref{equ:testset}).
 %
 If we measure the 3-limiting path coverage $\kpathcov{3}{\graph}$ for
 $T$, both the node labeled 17 and the path $\pat$ in (\ref{equ:subpath}) are
@@ -529,14 +523,11 @@ variables with the values stored in the properties of an object or an array.
 However, JavaScript engines and transpilers often have a different execution
 path to handle the pattern when it is declared in a \jscode{for-in/of} statement.
 %
-Actually, the GraalJS~\cite{graaljs} engine and the Babel~\cite{babel}
-transpiler contain conformance bugs and crashing bugs, respectively, that are
-reproducible only with a combination of a destructuring pattern and a \jscode{for-in/of}
-statement.\footnote{
-  We anonymized links of bug reports for double-blinded reviewing.
-  % TODO during camera-ready
-  % See \url{https://github.com/oracle/graaljs/issues/656} and
-  % \url{https://github.com/babel/babel/issues/15100}
+Actually, the GraalJS engine and the Babel transpiler contain conformance bugs
+and crashing bugs, respectively, that are reproducible only with a combination
+of a destructuring pattern and a \jscode{for-in/of} statement.\footnote{
+  \url{https://github.com/oracle/graaljs/issues/656} and
+  \url{https://github.com/babel/babel/issues/15100}
 }
 
 %----------------------------------------%
@@ -627,7 +618,7 @@ $
 \paragraph{\textbf{Example}}
 
 \begin{figure}
-  \includegraphics[width=0.8\textwidth]{img/spec-cfg-id}
+  \includegraphics[width=0.7\textwidth]{img/spec-cfg-id}
 \vspace*{-.5em}
   \caption{
 Excerpt from the CFG of abstract algorithms for \esnt{IdentifierReference}
@@ -638,12 +629,8 @@ Excerpt from the CFG of abstract algorithms for \esnt{IdentifierReference}
 
 We show two examples for FCPS node coverage criteria.
 %
-First, consider the following two JavaScript programs as tests with the CFG in
-Figure~\ref{fig:spec-cfg}:
-%
-\begin{equation}\label{equ:fcps-example1}
-    \test_0 = \jscode{2n + 1} \qquad \test_1 = \jscode{1 + 2n}
-\end{equation}
+First, consider the two JS programs, $\test_0 = \jscode{2n + 1}$ and $\test_1 =
+\jscode{1 + 2n}$, as tests with the CFG in Figure~\ref{fig:spec-cfg}.
 %
 If we use FS node coverage criterion $\fnodecov{\graph}$, both tests $\test_0$
 and $\test_1$ cover the same FS-TR $(21, \addfeat)$, and one of them might be
@@ -658,21 +645,15 @@ Figure~\ref{fig:spec-cfg-id}.
 %
 It depicts an excerpt from the CFG of abstract algorithms in ES13 transitively
 used in $\idfeat$, a syntactic feature defined by the first alternative of
-\esnt{IdentifierReference} and its \textbf{Evaluation} SDO. 
+\esnt{IdentifierReference} and its \textbf{Evaluation} SDO.
 %
 Assume that we do not remove cycles in the feature-call-paths $\fcpset$ during
 the extraction algorithm $\extfcp$.
 %
 Then, since the algorithm \textbf{GetIdentifierReference} contains a
 self-recursion, there exists an infinite number of possible feature-call-paths
-from $\idfeat$ to the node labeled 29:
-%
-\begin{equation}\label{fcp-inf-example}
-  (\idfeat, [27, 28]) \qquad
-  (\idfeat, [27, 28, 30]) \qquad
-  (\idfeat, [27, 28, 30, 30]) \qquad
-  \cdots
-\end{equation}
+from $\idfeat$ to the node labeled 29: $(\idfeat, [27, 28])$, $(\idfeat, [27,
+28, 30])$, $(\idfeat, [27, 28, 30, 30])$, and so on.
 %
 Thus, we remove cycles in feature-call-paths to resolve this issue, and there
 exists only two possible feature-call-paths: $(\idfeat, [27, 28])$ and
@@ -738,13 +719,13 @@ extracted from $\pat$ bounded by $k$:
   \centering
 \scriptsize
   \begin{tikzpicture}[every node/.style={draw=none}]
-    \node (base)   at (0,1) {$\cov{\graph}=\kfcov{0}{\graph}=\kfcpcov{0}{\graph}$};
+    \node (base)   at (0,.5) {$\cov{\graph}=\kfcov{0}{\graph}=\kfcpcov{0}{\graph}$};
     \node (1-fs)   at (3,0) {$\fcov{\graph}=\kfcov{1}{\graph}$};
     \node (2-fs)   at (6,0) {$\kfcov{2}{\graph}$};
     \node (k-fs)   at (8,0) {$\cdots$};
-    \node (1-fcps) at (3,2) {$\fcpcov{\graph}=\kfcpcov{1}{\graph}$};
-    \node (2-fcps) at (6,2) {$\kfcpcov{2}{\graph}$};
-    \node (k-fcps) at (8,2) {$\cdots$};
+    \node (1-fcps) at (3,1) {$\fcpcov{\graph}=\kfcpcov{1}{\graph}$};
+    \node (2-fcps) at (6,1) {$\kfcpcov{2}{\graph}$};
+    \node (k-fcps) at (8,1) {$\cdots$};
     \path[->]
     (1-fs) edge node[auto] {(A)} (base)
     (2-fs) edge node[auto] {(A)} (1-fs)

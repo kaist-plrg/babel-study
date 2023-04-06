@@ -30,8 +30,8 @@ At the same time, general metalanguages or frameworks for mechanized language
 specifications have also emerge as.
 %
 For example, \citet{ott} presented Ott as a tool that compiles language
-semantics into proof assistant code for Coq, HOL, and Isabelle/HOL and supports
-a metalanguage used in defining language semantics as inference rules.
+semantics into proof assistant code and supports a metalanguage used in defining
+language semantics as inference rules.
 %
 The $\kframework$ framework~\cite{kframework} proposed a formalism for writing
 operational semantics and provides a derivation of verifiers directly from the
@@ -62,18 +62,15 @@ used in conformance test synthesis~\cite{jest}, specification type
 analysis~\cite{jstar}, and static analyzer derivation~\cite{jsaver}.
 %
 Hence, we implemented $\tool$ based on $\esmeta$ to synthesize conformance tests
-from the latest specification (ES13, 2022) with feature-sensitive coverages.
+from the latest version (ES13, 2022) with feature-sensitive coverages.
 
 %----------------------------------------%
 
 \paragraph{\textbf{Conformance Testing for JavaScript}}
 %
-Diverse host environments support JavaScript engines for server-side
-programming, cross-platform desktop or mobile applications, PDF files, and even
-embedded systems.
-%
-In addition, JavaScript transpilers become essential tools in the deployment
-process of JavaScript applications.
+Diverse host environments support JavaScript engines, and even JavaScript
+transpilers become essential tools in the deployment process of JavaScript
+applications.
 %
 Therefore, ensuring the conformance of engines and transpilers according to the
 language specification is crucial to consistent execution environments for
@@ -84,8 +81,8 @@ transpiler developers commonly utilize Test262~\cite{test262}, the official
 JavaScript conformance test suite.
 %
 Researchers have focused on testing JavaScript engines to detect bugs using
-generation-based fuzzing~\cite{die, codealchemist, favocado, sofi} and
-mutation-based fuzzing~\cite{die, codealchemist, ifuzzer, superion}.
+generation-based fuzzing~\cite{codealchemist, favocado, sofi} and
+mutation-based fuzzing~\cite{die, ifuzzer, superion}.
 %
 In addition, they often utilize deep learning~\cite{montage, comfort} to
 generate JavaScript programs in advance and differential
@@ -95,8 +92,7 @@ However, most existing techniques focused on detecting crashing bugs or security
 vulnerabilities rather than conformance bugs.
 %
 While $\comfort$~\cite{comfort} targets conformance bugs, it heavily relies on
-the results of differential testing instead of the language semantics described
-in ECMA-262.
+the results of differential testing instead of the language semantics.
 %
 On the other hand, $\jest$~\cite{jest} is the first tool that automatically
 synthesizes JavaScript conformance tests according to the language semantics

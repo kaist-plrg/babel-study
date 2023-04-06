@@ -28,6 +28,8 @@ and deep learning~\cite{comfort, deep-smith}.
 
 %----------------------------------------%
 
+\paragraph{\textbf{Graph Coverage}}
+
 \textit{Graph coverage}~\cite{cov-def} is one of the most widely-used coverage criteria
 in evaluating the quality of conformance tests.
 Higher coverage of a conformance test suite denotes that it covers more
@@ -42,19 +44,21 @@ to reduce the number of tests, and
 
 %----------------------------------------%
 
+\paragraph{\textbf{Graph Coverage for Mechanized Language Specifications}}
+
 One approach to making high-quality conformance tests is to use graph coverage
 to generate tests for \textit{mechanized language specifications}.
 %
-While we can use code coverage rather than graph coverage
+While we can use code coverage
 to generate tests for ``actual language implementations,''
-it will lead to different coverage information for different implementations.
+it leads to different coverage information for different implementations.
 On the contrary, graph coverage for mechanized language specifications
-will lead to uniform coverage information for multiple implementations.
+leads to uniform coverage for multiple implementations.
 %
 Various programming languages, such as OCaml~\cite{ocaml-light-spec},
 C~\cite{c-light-spec}, C++\cite{cpp-spec}, Java~\cite{k-java},
 JavaScript~\cite{jiset}, and POSIX shell~\cite{posix-shell-spec},
-have mechanized specifications that formally describe their
+have mechanized specifications that describe their
 semantics using diverse metalanguages and frameworks, such as Ott~\cite{ott}, Skel~\cite{skel}, and the
 $\kframework$ framework~\cite{kframework}.
 %
@@ -145,8 +149,7 @@ synthesizes 237,981 conformance tests in 50 hours with five coverage criteria.
 We evaluated the conformance of eight mainstream JavaScript implementations
 (four engines and four transpilers) with the synthesized conformance tests
 and discovered bugs in all of them.
-The tool detected 143 distinct conformance bugs (42 in engines
-and 101 in transpilers), 85 of which were confirmed by
+The tool detected 143 distinct conformance bugs, 85 of which were confirmed by
 the developers and 83 of which were newly discovered bugs.
 
 %----------------------------------------%
@@ -160,10 +163,10 @@ We summarize our contributions as follows:
     the quality of conformance testing for programming language implementations.
     It can resolve the problem of sharing the same helper
     functions for the semantics of different language features.
-  \item 
+  \item
     We also present \textit{feature-call-path-sensitive (FCPS) coverage} as its
-    variant with feature-call-paths from language features to test requirements
-    to distinguish different parts in the semantics of the same language feature.
+    variant to distinguish different parts in the semantics of the same language
+    feature.
   \item
     We experimentally show that the new coverage criteria outperform
     the traditional coverage criteria in the

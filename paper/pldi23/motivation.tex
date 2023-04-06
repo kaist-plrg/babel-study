@@ -82,7 +82,7 @@ The second (or third) alternative consists of three symbols: a nonterminal
 \begin{figure}
   \centering
   \begin{subfigure}{\textwidth}
-    \small
+    \footnotesize
     %----------------------------------------%
     $\fbox{\textsf{Syntax-directed operations (SDOs)}}$
     \vspace*{0.5em}\\
@@ -142,18 +142,17 @@ Their names are \textbf{Evaluation} with no optional parameters, and
 the bodies consist of a single step that invokes another normal algorithm
 \textbf{EvaluateStringOrNumericBinaryExpression}\footnote{
 \url{https://262.ecma-international.org/13.0/\#sec-evaluatestringornumericbinaryexpression}}.
-Note that the metavariables \esnt{AdditiveExpression} and
+Note that JavaScript ASTs are values, and the metavariables \esnt{AdditiveExpression} and
 \esnt{MultiplicativeExpression} in these SDOs store \textit{abstract syntax
 trees (ASTs)} of the left-hand and right-hand sides of given additive
 expressions, respectively.
 For instance, if the first SDO in Figure~\ref{fig:add-sdo} takes the additive
 expression in~(\ref{equ:add}), the two metavariables store ASTs of two Number
 literals, \jscode{1} and \jscode{2}, respectively.
-It means that abstract algorithms in ECMA-262 treat ASTs as values and can
-store them in variables or pass them as arguments of other algorithms.
-The ``?'' operator is a shorthand for the following sequence of steps to handle control flows:
-\vspace*{.5em}\\
+The ``?'' operator is a shorthand to handle control flows by following the steps:
+\vspace*{.3em}\\
 {
+  \small
   \noindent
   \null\qquad 1. If \esvar{argument} is an abrupt completion, return
   \esalg{Completion}(\esvar{argument}).
@@ -161,7 +160,7 @@ The ``?'' operator is a shorthand for the following sequence of steps to handle 
   \null\qquad 2. Else if \esvar{argument} is a Completion Record, set
   \esvar{argument} to \esvar{argument}.[[Value]].
 }
-\vspace*{.5em}\\
+\vspace*{.3em}\\
 where a completion record is \textit{abrupt} when it represents exceptional
 control flows, such as \jscode{throw}, \jscode{return}, \jscode{break}, and
 \jscode{continue}.
@@ -173,7 +172,7 @@ values are abrupt completions and directly returns them if so.
 \begin{figure}
   \centering
   \begin{subfigure}{\textwidth}
-    \small
+    \footnotesize
     %----------------------------------------%
     $\fbox{\textsf{Normal algorithms}}$
     \vspace*{0.5em}\\
@@ -231,7 +230,7 @@ values are abrupt completions and directly returns them if so.
 \begin{figure}
   \centering
   \begin{subfigure}{\textwidth}
-    \small
+    \footnotesize
     %----------------------------------------%
     $\fbox{\textsf{Built-in methods}}$
     \vspace*{0.5em}\\
@@ -305,7 +304,7 @@ The \textbf{Number} built-method describes the semantics of the built-in
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.87\textwidth]{img/spec-cfg}
+  \includegraphics[width=0.8\textwidth]{img/spec-cfg}
   \caption{
     Control-flow graph (CFG) of abstract algorithms in
     Figures~\ref{fig:add-sdo}, \ref{fig:normal-algos}, and

@@ -1,4 +1,5 @@
 ## Basic ignore files
+comment.cut
 *.class
 *.log
 *.iml

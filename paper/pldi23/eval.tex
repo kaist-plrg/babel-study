@@ -124,10 +124,8 @@ JavaScript engines must follow the execution order of each language feature
 described in the language specification.
 %
 However, we found a bug\footnote{
-  We anonymized links of bug reports for double-blinded reviewing.
-  % TODO during camera-ready
   % https://github.com/oracle/graaljs/issues/655
-  % https://github.com/oracle/graaljs/issues/671
+  \url{https://github.com/oracle/graaljs/issues/671}
 } related to the execution order of the \jscode{delete} operation that causes
 the execution of originally unreachable code in GraalJS.
 %
@@ -140,13 +138,11 @@ inside the arrow function in GraalJS:
 \end{lstlisting}
 %
 In addition, we detected another bug\footnote{
-  We anonymized links of bug reports for double-blinded reviewing.
-  % TODO during camera-ready
   % V8 - https://bugs.chromium.org/p/v8/issues/detail?id=13469
   % GraalJS - https://github.com/oracle/graaljs/issues/673
   % JSC - https://bugs.webkit.org/show_bug.cgi?id=247723
   % SpiderMonkey - https://bugzilla.mozilla.org/show_bug.cgi?id=1800062
-  % ECAM-262 - https://github.com/tc39/ecma262/issues/2659
+  \url{https://github.com/tc39/ecma262/issues/2659} % ECMA-262
 } related to the execution order of property reads
 %
 % For example, while the following code should throw an exception with
@@ -166,10 +162,8 @@ One of the complex language features in JavaScript is asynchronous functions and
 generators introduced in ES6 (2015).
 %
 We detected a bug\footnote{
-  We anonymized links of bug reports for double-blinded reviewing.
-  % TODO during camera-ready
   % https://github.com/tc39/proposal-async-await/issues/60
-  % https://bugzilla.mozilla.org/show_bug.cgi?id=1799288
+  \url{https://bugzilla.mozilla.org/show_bug.cgi?id=1799288}
 } in SpiderMonkey that breaks the logic of asynchronous function calls.
 %
 For example, the following code must return a rejected \jscode{Promise} object
@@ -189,9 +183,7 @@ this is also not covered by test262.''
 % We also detected other similar bugs related to generators in the SWC transpiler,
 % and its main developer appreciated our work and requested us to apply our tool
 % for SWC using the \scode{jsc.minify} option as well.\footnote{
-%   We anonymized links of bug reports for double-blinded reviewing.
-%   % TODO during camera-ready
-%   % https://github.com/swc-project/swc/issues/6375
+%   \url{https://github.com/swc-project/swc/issues/6375}
 % }
 
 %----------------------------------------%
@@ -351,9 +343,7 @@ name bindings using an empty object destructuring pattern \jscode{\{\}}.
 %
 However, Babel crashes when transpiling a \jscode{for}-loop with
 empty name bindings for \jscode{let}:\footnote{
-  We anonymized links of bug reports for double-blinded reviewing.
-  % TODO during camera-ready
-  % https://github.com/babel/babel/issues/15100
+  \url{https://github.com/babel/babel/issues/15100}
 }
 %
 \begin{lstlisting}[style=JS, basicstyle=\footnotesize\ttfamily]
@@ -391,9 +381,7 @@ is used for an \jscode{async} method inside classes.
 %
 For example, the following program checks whether the \jscode{name} property of
 the \jscode{async} method in the class \jscode{C} is \jscode{"f"}:\footnote{
-  We anonymized links of bug reports for double-blinded reviewing.
-  % TODO during camera-ready
-  % https://github.com/babel/babel/issues/15100
+  \url{https://github.com/babel/babel/issues/15100}
 }
 %
 \begin{lstlisting}[style=JS, basicstyle=\footnotesize\ttfamily]
@@ -442,16 +430,18 @@ with 2-FS and 2-FCPS coverage criteria.
     \includegraphics[width=\textwidth]{img/2-fcps-hist}
     \subcaption{2-FCPS-TRs vs 2-FS-TR}
   \end{subfigure}
+  \vspace*{-.5em}
   \caption{
     The histogram of numbers of $k$-FS or $k$-FCPS TRs per less sensitive $k$-FS
     or $k$-FCPS TR
   }
+  \vspace*{-.5em}
   \label{fig:hist}
 \end{figure}
 
 %----------------------------------------%
 
-We also evaluate the effectiveness of $k$-FCPS coverage criteria compared to $k$-FS
+We evaluate the effectiveness of $k$-FCPS coverage criteria compared to $k$-FS
 coverage criteria.
 %
 According to Table~\ref{tab:compare}, the number of covered 1-FCPS- and
@@ -464,23 +454,21 @@ It means that 2.22 and 1.91 feature-call-paths exist from the innermost
 language features to nodes or branches in each 1-FS-TR and 2-FS-TR,
 respectively.
 %
-For a more detailed information, we also draw a histogram of the number of
-covered 1-FCPS-TRs (or 2-FCPS-TRs) per each covered 1-FS-TR (or 2-FS-TR) in
-Figures~\ref{fig:hist} (c) and (d).
+We also draw a histogram of the number of covered 1-FCPS-TRs (or 2-FCPS-TRs) per
+each covered 1-FS-TR (or 2-FS-TR) in Figures~\ref{fig:hist} (c) and (d).
 %
 The largest number of covered 1-FCPS-TRs per 1-FS-TR is 70 for a node
 in the \jscode{Array.prototype.splice} built-in method.
 %
-It is a powerful built-in API feature that changes the contents of an array by
-removing or replacing existing elements and/or adding new elements in place.
+It is a powerful built-in API feature that changes the contents of an array
+having quite complex semantics.
 %
-Thus, its semantics is quite complex and uses diverse helper functions, and the
-number of possible feature-call-paths in this featuere is much larger than
-the others.
+Thus, the number of possible feature-call-paths in this feature is much larger
+than the others.
 %
-The largest number of 2-FCPS-TRs per 2-FS-TR is 53 for a node whose
-innermost enclosing feature is a syntactic feature for \jscode{yield} expressions
-because it touches various helper functions for asynchronous behaviors.
+The largest number of 2-FCPS-TRs per 2-FS-TR is 53 for a node whose innermost
+enclosing feature is a syntactic feature for \jscode{yield} expressions because
+it touches various helper functions for asynchronous behaviors.
 %
 Because of the increased number of TRs, the number of synthesized tests also
 increased 1.34x (9,092 / 6,766) from 1-FS to 1-FCPS coverage criteria and 1.26x
@@ -493,7 +481,7 @@ The conformance tests synthesized with 1-FCPS and 2-FCPS coverage criteria
 detected 4 (87 - 83) and 9 (111 - 102) more conformance bugs than
 1-FS and 2-FS coverage criteria, respectively.
 %
-Now, we introduce a conformance bug example that show the effectiveness of $k$-FCPS
+Now, we introduce a conformance bug that show the effectiveness of $k$-FCPS
 coverage criteria compared to the $k$-FS coverage criteria.
 
 %----------------------------------------%
@@ -536,10 +524,11 @@ while 1-FCPS and 2-FCPS coverage criteria can.
     \caption{Covered TRs over time}
   \end{subfigure}
 %
-  \caption{Covered $k$-FS-TRs and $k$-FCPS-TRs for synthesized tests via $\tool$ and Test262
-  }
+  \vspace*{-.5em}
+  \caption{Covered $k$-FS-TRs and $k$-FCPS-TRs for synthesized tests via $\tool$
+  and Test262}
+  \vspace*{-1em}
   \label{fig:test262}
-\vspace*{-1em}
 \end{figure}
 
 %----------------------------------------%
@@ -578,7 +567,3 @@ Figure~\ref{fig:test262}(b) also shows that the coverage of Test262 is
 better than that of synthesized tests without any feature-sensitive
 coverages, but the coverage of synthesized tests outperforms that of
 Test262 with $2$-FS-TRs and $2$-FCPS-TRs.
-%
-We believe that this is why $\tool$ successfully detected diverse new bugs in
-existing JavaScript implementations, even though they have been heavily tested
-using Test262 and various fuzzing techniques.
