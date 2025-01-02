@@ -202,3 +202,6 @@ script/
 module/
 compiled-script/
 compiled-module/
+
+# TSE ignore
+paper/tse/template_samples
